@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Spectral:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#0a0b10;color:#eceef4;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:oklch(0.8 0.11 265);text-decoration:none}
+  a:hover{color:oklch(0.88 0.1 265)}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.13);border-radius:8px}
+  ::-webkit-scrollbar-track{background:transparent}
+  .txscroll{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+  @keyframes txspin{to{transform:rotate(360deg)}}
+</style>
+<script src="data.js"></script>
+</helmet>
+<div style="position:fixed; inset:0; display:flex; flex-direction:column; background:radial-gradient(1300px 900px at 72% -12%, rgba(58,70,120,.20), transparent 60%), radial-gradient(1100px 760px at 8% 112%, rgba(120,60,92,.13), transparent 60%), #0a0b10; color:#eceef4; overflow:hidden;">
+
+  <header style="flex:0 0 auto; display:flex; align-items:center; gap:20px; padding:12px 20px; border-bottom:1px solid rgba(255,255,255,.08); background:rgba(15,17,25,.72); backdrop-filter:blur(10px); position:relative; z-index:30;">
+    <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+      <div style="width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#1e2233,#12141c);border:1px solid rgba(255,255,255,.10);font-size:17px;">✦</div>
+      <div style="min-width:0;">
+        <div style="font-family:'Spectral',serif; font-weight:600; font-size:19px; line-height:1.05; letter-spacing:.2px;">Атлас человека</div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#7a8098; letter-spacing:.4px; margin-top:2px; white-space:nowrap;">ТАКСОНОМИЯ · {{ statSections }} разделов · {{ statEntries }} тем</div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:4px; margin-left:4px; background:rgba(255,255,255,.04); padding:4px; border-radius:12px; border:1px solid rgba(255,255,255,.06);">
+      <button onClick="{{ onTabMap }}" style="position:relative; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 15px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+        <span>Карта</span>
+        <sc-if value="{{ mapMode }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; left:12px; right:12px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+      </button>
+      <button onClick="{{ onTabList }}" style="position:relative; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 15px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+        <span>Список</span>
+        <sc-if value="{{ listMode }}"><span style="position:absolute; left:12px; right:12px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+      </button>
+      <div style="display:flex; align-items:center; padding:0 10px; font-size:10.5px; color:#565c72; font-family:'IBM Plex Mono',monospace;">граф · скоро</div>
+    </div>
+
+    <div style="flex:1;"></div>
+
+    <div style="position:relative; width:min(370px,44vw);">
+      <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:11px; padding:8px 11px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+        <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Поиск по 33 635 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;"/>
+        <sc-if value="{{ search }}"><button onClick="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
+      </div>
+      <sc-if value="{{ showResults }}">
+        <div class="txscroll" style="position:absolute; top:47px; left:0; right:0; max-height:56vh; overflow:auto; background:rgba(18,20,29,.98); border:1px solid rgba(255,255,255,.10); border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,.55); padding:6px; z-index:40;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#6c7288; padding:6px 8px 4px;">{{ resultInfo }}</div>
+          <sc-for list="{{ results }}" as="r" hint-placeholder-count="5">
+            <button onClick="{{ r.onClick }}" style="display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:0; background:transparent; color:#dfe2ee; font:inherit; padding:8px 9px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+              <span style="width:8px;height:8px;border-radius:50%;flex:0 0 auto; background: {{ r.color }};"></span>
+              <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:13.5px;">{{ r.title }}</span>
+              <span style="font-size:11px; color:#6c7288; white-space:nowrap; max-width:42%; overflow:hidden; text-overflow:ellipsis;">{{ r.sub }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </header>
+
+  <sc-if value="{{ mapMode }}" hint-placeholder-val="{{ true }}">
+  <div class="txscroll" style="flex:0 0 auto; display:flex; align-items:center; gap:2px; padding:7px 18px; border-bottom:1px solid rgba(255,255,255,.055); background:rgba(12,14,20,.55); overflow-x:auto; white-space:nowrap; z-index:20;">
+    <sc-for list="{{ path }}" as="p" hint-placeholder-count="2">
+      <button onClick="{{ p.onClick }}" style="border:0; background:transparent; color:#aeb3c6; font:inherit; font-size:12.5px; padding:4px 8px; border-radius:7px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" style-hover="background:rgba(255,255,255,.06); color:#fff">
+        <span style="font-size:12px; opacity:.85;">{{ p.icon }}</span><span>{{ p.label }}</span>
+      </button>
+      <sc-if value="{{ p.notLast }}"><span style="color:#4a5068; font-size:12px;">›</span></sc-if>
+    </sc-for>
+  </div>
+  </sc-if>
+
+  <main style="flex:1; display:flex; min-height:0; position:relative;">
+    <div style="flex:1; position:relative; min-width:0; overflow:hidden;">
+      <div ref="{{ mapRef }}" style="position:absolute; inset:0; cursor:grab;"></div>
+
+      <div style="position:absolute; left:16px; top:14px; display:flex; flex-direction:column; gap:6px; z-index:5;">
+        <button onClick="{{ onZoomIn }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:18px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">+</button>
+        <button onClick="{{ onZoomOut }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:18px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">−</button>
+        <button onClick="{{ onFit }}" title="По размеру" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:15px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">⤢</button>
+        <button onClick="{{ onHome }}" title="К началу" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:15px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">⌂</button>
+      </div>
+
+      <div style="position:absolute; left:16px; bottom:14px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#6b7188; background:rgba(10,11,16,.55); padding:5px 9px; border-radius:8px; pointer-events:none; z-index:5;">клик — раскрыть · 2× клик — погрузиться · колесо — зум · тянуть — двигать</div>
+
+      <div style="position:absolute; right:16px; bottom:14px; display:flex; flex-wrap:wrap; gap:6px 8px; max-width:min(52%,540px); justify-content:flex-end; z-index:5;">
+        <sc-for list="{{ legend }}" as="d" hint-placeholder-count="8">
+          <button onClick="{{ d.onClick }}" style="display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.08); background:rgba(18,20,29,.62); color:#c4c8da; font:inherit; font-size:11.5px; padding:5px 9px; border-radius:20px; cursor:pointer;" style-hover="background:rgba(255,255,255,.09)">
+            <span style="width:8px;height:8px;border-radius:50%; background: {{ d.color }};"></span>{{ d.title }}
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ mapMode }}" hint-placeholder-val="{{ true }}">
+    <aside class="txscroll" style="flex:0 0 380px; width:380px; border-left:1px solid rgba(255,255,255,.08); background:rgba(14,16,23,.85); overflow:auto; z-index:15;">
+      <sc-if value="{{ hasSel }}">
+        <div style="padding:22px 22px 34px;">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.6px; text-transform:uppercase; color:#6c7288;">{{ sel.kindLabel }}</div>
+          <div style="display:flex; align-items:flex-start; gap:12px; margin-top:9px;">
+            <div style="width:13px;height:13px;border-radius:50%;margin-top:9px;flex:0 0 auto; background: {{ sel.color }};"></div>
+            <h2 style="margin:0; font-family:'Spectral',serif; font-weight:600; font-size:25px; line-height:1.15; color:#f2f4fb;">{{ sel.label }}</h2>
+          </div>
+          <sc-if value="{{ sel.hasCount }}"><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#7a8098; margin-top:9px;">{{ sel.countLabel }}</div></sc-if>
+          <sc-if value="{{ sel.hasPath }}"><div style="font-size:11.5px; color:#616780; margin-top:6px; line-height:1.5;">{{ sel.pathLabel }}</div></sc-if>
+
+          <sc-if value="{{ sel.canDive }}">
+            <button onClick="{{ sel.onDive }}" style="margin-top:16px; width:100%; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03)); color:#eef0f8; font:inherit; font-size:13px; font-weight:500; padding:10px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.12)">Погрузиться →</button>
+          </sc-if>
+
+          <sc-if value="{{ sel.hasDescription }}"><p style="margin:18px 0 0; font-size:14.5px; line-height:1.6; color:#d3d7e6;">{{ sel.description }}</p></sc-if>
+
+          <sc-if value="{{ sel.hasDetail }}">
+            <div style="margin-top:16px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); border-radius:13px; padding:14px 15px;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:#7a8098; margin-bottom:7px;">Механизм</div>
+              <p style="margin:0; font-size:13.5px; line-height:1.62; color:#cfd3e3; white-space:pre-line;">{{ sel.detail }}</p>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sel.hasMale }}">
+            <div style="margin-top:12px; background:linear-gradient(180deg,rgba(70,110,190,.14),rgba(70,110,190,.05)); border:1px solid rgba(90,130,210,.22); border-radius:13px; padding:14px 15px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:7px;"><span style="font-size:18px; color:oklch(0.75 0.12 250);">♂</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.6px; text-transform:uppercase; color:oklch(0.78 0.09 250);">Мужчина</span></div>
+              <p style="margin:0; font-size:13.5px; line-height:1.62; color:#dbe2f2; white-space:pre-line;">{{ sel.male }}</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sel.hasFemale }}">
+            <div style="margin-top:12px; background:linear-gradient(180deg,rgba(200,90,130,.14),rgba(200,90,130,.05)); border:1px solid rgba(210,110,150,.22); border-radius:13px; padding:14px 15px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:7px;"><span style="font-size:18px; color:oklch(0.76 0.13 5);">♀</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.6px; text-transform:uppercase; color:oklch(0.8 0.1 5);">Женщина</span></div>
+              <p style="margin:0; font-size:13.5px; line-height:1.62; color:#f3dde7; white-space:pre-line;">{{ sel.female }}</p>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ sel.hasChips }}">
+            <div style="margin-top:20px;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:#6c7288; margin-bottom:9px;">Внутри</div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                <sc-for list="{{ sel.chips }}" as="c" hint-placeholder-count="6">
+                  <button onClick="{{ c.onClick }}" style="display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); color:#c4c8da; font:inherit; font-size:12px; padding:5px 10px; border-radius:8px; cursor:pointer; max-width:100%;" style-hover="background:rgba(255,255,255,.08)">
+                    <span style="width:6px;height:6px;border-radius:50%;flex:0 0 auto; background: {{ c.color }};"></span>
+                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ c.label }}</span>
+                  </button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ sel.moreChips }}"><div style="font-size:11.5px; color:#6c7288; margin-top:8px;">…и ещё {{ sel.moreChips }}</div></sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noSel }}">
+        <div style="padding:40px 26px; color:#6c7288;">
+          <div style="font-family:'Spectral',serif; font-size:21px; color:#aeb3c6; line-height:1.3;">Карта человека</div>
+          <p style="font-size:13.5px; line-height:1.65; margin-top:12px;">От хромосом и гормонов — до психики, общества, культуры и тончайших черт личности. Кликайте по узлам, чтобы раскрывать ветви; двойной клик — чтобы погрузиться. Зоны уходят всё дальше — вплоть до отдельных тем и их граней ♂/♀.</p>
+          <p style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; line-height:1.7; margin-top:16px; color:#565c72;">{{ statSections }} разделов<br/>{{ statEntries }} тем<br/>8 больших доменов</p>
+        </div>
+      </sc-if>
+    </aside>
+    </sc-if>
+
+    <sc-if value="{{ listMode }}">
+    <div class="txscroll" style="position:absolute; inset:0; overflow:auto; background:#0a0b10; z-index:12;">
+      <div style="max-width:900px; margin:0 auto; padding:22px 20px 70px;">
+        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px;">
+          <sc-for list="{{ listDomains }}" as="d" hint-placeholder-count="9">
+            <button onClick="{{ d.onClick }}" style="position:relative; display:inline-flex; align-items:center; gap:7px; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03); color:#c4c8da; font:inherit; font-size:12.5px; padding:7px 13px; border-radius:22px; cursor:pointer;" style-hover="background:rgba(255,255,255,.08)">
+              <span style="width:8px;height:8px;border-radius:50%; background: {{ d.color }};"></span>{{ d.title }}
+              <sc-if value="{{ d.active }}"><span style="position:absolute; inset:0; border-radius:22px; border:1.5px solid rgba(255,255,255,.55); pointer-events:none;"></span></sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#6c7288; margin-bottom:12px;">{{ listInfo }}</div>
+
+        <div style="display:flex; flex-direction:column; gap:9px;">
+          <sc-for list="{{ listRows }}" as="r" hint-placeholder-count="8">
+            <div style="border:1px solid rgba(255,255,255,.08); border-radius:14px; background:rgba(16,18,26,.7); overflow:hidden;">
+              <button onClick="{{ r.onToggle }}" style="display:flex; align-items:flex-start; gap:13px; width:100%; text-align:left; border:0; background:transparent; color:inherit; font:inherit; padding:14px 16px; cursor:pointer;" style-hover="background:rgba(255,255,255,.03)">
+                <span style="width:10px;height:10px;border-radius:50%;margin-top:5px;flex:0 0 auto; background: {{ r.color }};"></span>
+                <span style="flex:1; min-width:0;">
+                  <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <span style="font-size:15px; font-weight:600; color:#eef0f7;">{{ r.title }}</span>
+                    <sc-if value="{{ r.hasTag }}"><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.4px; color:#8288a0; border:1px solid rgba(255,255,255,.12); border-radius:20px; padding:1px 7px;">{{ r.tag }}</span></sc-if>
+                  </span>
+                  <sc-if value="{{ r.hasDescription }}"><span style="display:block; font-size:13px; color:#9aa0b6; margin-top:3px;">{{ r.description }}</span></sc-if>
+                  <span style="display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#565c72; margin-top:5px;">{{ r.domainIcon }} {{ r.sub }}</span>
+                </span>
+                <sc-if value="{{ r.canOpen }}"><span style="color:#6c7288; font-size:12px; flex:0 0 auto; margin-top:3px;">{{ r.chev }}</span></sc-if>
+              </button>
+              <sc-if value="{{ r.open }}">
+                <div style="padding:0 16px 15px 39px; display:flex; flex-direction:column; gap:9px;">
+                  <sc-if value="{{ r.hasDetail }}"><div style="background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); border-radius:11px; padding:11px 13px; font-size:13px; line-height:1.6; color:#cfd3e3; white-space:pre-line;">{{ r.detail }}</div></sc-if>
+                  <sc-if value="{{ r.hasMale }}"><div style="background:linear-gradient(180deg,rgba(70,110,190,.13),rgba(70,110,190,.04)); border:1px solid rgba(90,130,210,.2); border-radius:11px; padding:11px 13px;"><div style="font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:oklch(0.78 0.09 250); margin-bottom:5px;">♂ Мужчина</div><div style="font-size:13px; line-height:1.6; color:#dbe2f2; white-space:pre-line;">{{ r.male }}</div></div></sc-if>
+                  <sc-if value="{{ r.hasFemale }}"><div style="background:linear-gradient(180deg,rgba(200,90,130,.13),rgba(200,90,130,.04)); border:1px solid rgba(210,110,150,.2); border-radius:11px; padding:11px 13px;"><div style="font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:oklch(0.8 0.1 5); margin-bottom:5px;">♀ Женщина</div><div style="font-size:13px; line-height:1.6; color:#f3dde7; white-space:pre-line;">{{ r.female }}</div></div></sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ hasMore }}"><button onClick="{{ onMore }}" style="margin:18px auto 0; display:block; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.1)">Показать ещё</button></sc-if>
+        <sc-if value="{{ listEmpty }}"><div style="text-align:center; color:#565c72; padding:60px 20px;">Ничего не найдено. Измените запрос или домен.</div></sc-if>
+      </div>
+    </div>
+    </sc-if>
+  </main>
+
+  <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:#0a0b10; z-index:60;">
+      <div style="width:34px;height:34px;border:3px solid rgba(255,255,255,.15); border-top-color:oklch(0.8 0.13 265); border-radius:50%; animation:txspin .8s linear infinite;"></div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 33 635 тем…</div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;linkOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:34,&quot;min&quot;:6,&quot;max&quot;:80,&quot;step&quot;:2,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Карта&quot;},&quot;nodeGlow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Карта&quot;},&quot;labelMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Все&quot;,&quot;options&quot;:[&quot;Все&quot;,&quot;Крупные&quot;,&quot;При наведении&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Карта&quot;}}">
+class Component extends DCLogic {
+  state = { loading:true, mode:'map', selected:null, path:[], search:'', results:[], listRows:[], listOpen:{}, listDomain:'all', listLimit:60, listTotal:null };
+
+  DOMAINS = [
+    { id:'body',      title:'Тело и биология',    icon:'🧬', hue:25 },
+    { id:'mind',      title:'Психика и личность', icon:'🧠', hue:288 },
+    { id:'traits',    title:'Черты человека',      icon:'🎭', hue:152 },
+    { id:'relations', title:'Пол, любовь, связь',  icon:'❤', hue:352 },
+    { id:'society',   title:'Общество',            icon:'🌍', hue:92 },
+    { id:'culture',   title:'Культура и смысл',    icon:'🏛', hue:218 },
+    { id:'life',      title:'Жизненный путь',      icon:'⏳', hue:190 },
+    { id:'skills',    title:'Навыки и призвание',  icon:'🛠', hue:50 },
+  ];
+
+  _moved = 0;
+
+  componentDidMount(){ this._load(); }
+  componentDidUpdate(prev){ if(this._inited && prev !== this.props){ this._refreshStyles(); } }
+  componentWillUnmount(){ cancelAnimationFrame(this._raf); cancelAnimationFrame(this._camRaf); if(this._ro) this._ro.disconnect(); }
+
+  async _load(){
+    let n=0; while(!window.__TAXONOMY__ && n<160){ await new Promise(r=>setTimeout(r,50)); n++; }
+    this.sections = window.__TAXONOMY__ || [];
+    this._buildIndex();
+    this.setState({ loading:false });
+    this._syncPath();
+    this._maybeInit();
+  }
+
+  // ---------- taxonomy mapping ----------
+  _domainOf(level){
+    const l=(level||'').toLowerCase();
+    if(l.indexOf('черт')>=0) return 'traits';
+    if(/сексолог|отношени|гендер|сексуальн/.test(l)) return 'relations';
+    if(/социолог|обществознан|социальн/.test(l)) return 'society';
+    if(/культуролог|философ/.test(l)) return 'culture';
+    if(/возрастн|биограф|экзистенц|синтез/.test(l)) return 'life';
+    if(/навык|профориент/.test(l)) return 'skills';
+    if(/анатом|физиолог|эндокрин|нейро|эволюц|психофизиолог/.test(l)) return 'body';
+    return 'mind';
+  }
+  _subOf(level){ const p=(level||'').split('/'); return (p[1]||p[0]||'Прочее').trim(); }
+  _domMeta(id){ return this.DOMAINS.find(d=>d.id===id) || this.DOMAINS[1]; }
+  _c(h,l,c){ return 'oklch('+l+' '+c+' '+h+')'; }
+  _ne(s){ return !!(s && (''+s).trim() && (''+s).trim() !== '—'); }
+  _short(s,n){ s=s||''; return s.length>n ? s.slice(0,n-1)+'…' : s; }
+
+  _buildIndex(){
+    this.byId = new Map(); this._nid = 0; this.domIndex = {};
+    for(const d of this.DOMAINS) this.domIndex[d.id] = { meta:d, subs:new Map() };
+    let ec=0;
+    this.sections.forEach((sec,si)=>{
+      ec += sec.entries.length;
+      const did=this._domainOf(sec.level), sub=this._subOf(sec.level);
+      const D=this.domIndex[did];
+      if(!D.subs.has(sub)) D.subs.set(sub,{ label:sub, sections:[] });
+      D.subs.get(sub).sections.push({ sec, si });
+    });
+    this._entryCount=ec;
+    this.root=this._mk({ kind:'root', label:'Человек', icon:'✦', hue:null, color:'#e8ebf6' });
+    this.root.parent=null; this.root.expanded=true;
+    this.root.children=this._children(this.root);
+    this.focus=this.root;
+  }
+
+  _mk(o){ o.id=++this._nid; if(o.expanded===undefined)o.expanded=false; this.byId.set(o.id,o); return o; }
+
+  _children(node){
+    const K=node.kind;
+    if(K==='root'){
+      return this.DOMAINS.filter(d=>this.domIndex[d.id].subs.size>0).map(d=>{
+        const cnt=[...this.domIndex[d.id].subs.values()].reduce((a,s)=>a+s.sections.length,0);
+        const n=this._mk({ kind:'domain', domainId:d.id, label:d.title, icon:d.icon, hue:d.hue, color:this._c(d.hue,0.8,0.13), count:cnt });
+        n.parent=node; return n;
+      });
+    }
+    if(K==='domain'){
+      const subs=[...this.domIndex[node.domainId].subs.values()].sort((a,b)=>b.sections.length-a.sections.length);
+      const arr=subs.map(s=>{ const n=this._mk({ kind:'sub', domainId:node.domainId, subKey:s.label, label:s.label, icon:'', hue:node.hue, color:this._c(node.hue,0.72,0.11), count:s.sections.length }); n.parent=node; n._sections=s.sections; return n; });
+      return this._cluster(arr,node);
+    }
+    if(K==='sub'){
+      const arr=node._sections.map(o=>{ const n=this._mk({ kind:'section', si:o.si, label:o.sec.title, icon:o.sec.icon, hue:node.hue, color:this._c(node.hue,0.66,0.10), count:o.sec.entries.length, sub:o.sec.subtitle, level:o.sec.level }); n.parent=node; return n; });
+      return this._cluster(arr,node);
+    }
+    if(K==='section'){
+      const sec=this.sections[node.si];
+      const arr=sec.entries.map(e=>{ const n=this._mk({ kind:'entry', si:node.si, entryId:e.id, label:e.title, icon:'', hue:node.hue, color:this._c(node.hue,0.7,0.055), entry:e, tag:e.tag }); n.parent=node; n._facets=this._facetsOf(e); n.count=n._facets.length; return n; });
+      return this._cluster(arr,node);
+    }
+    if(K==='bucket'){ return this._cluster(node._items,node); }
+    if(K==='entry'){ return node._facets.map(f=>{ const n=this._mk({ kind:'facet', label:f.label, icon:f.icon, hue:node.hue, color:f.color, text:f.text }); n.parent=node; return n; }); }
+    return [];
+  }
+
+  _facetsOf(e){
+    const F=[];
+    if(this._ne(e.detail)) F.push({ key:'detail', label:'Механизм', icon:'❉', color:'#c7cbdd', text:e.detail });
+    if(this._ne(e.male))   F.push({ key:'male', label:'Мужчина', icon:'♂', color:this._c(250,0.72,0.12), text:e.male });
+    if(this._ne(e.female)) F.push({ key:'female', label:'Женщина', icon:'♀', color:this._c(5,0.74,0.13), text:e.female });
+    return F;
+  }
+
+  _cluster(arr,parent){
+    const CAP=44;
+    if(arr.length<=CAP) return arr;
+    const groups=this._prefixGroups(arr);
+    let list = groups ? groups.map(g=>this._mkBucket(g.label,g.items,parent)) : this._rangeBuckets(arr,parent,CAP);
+    while(list.length>CAP) list=this._rangeBuckets(list,parent,CAP);
+    return list;
+  }
+  _rangeBuckets(arr,parent,CAP){
+    const nb=Math.ceil(arr.length/CAP), size=Math.ceil(arr.length/nb), out=[];
+    for(let i=0;i<arr.length;i+=size){ const chunk=arr.slice(i,i+size); out.push(this._mkBucket(this._rangeLabel(chunk),chunk,parent)); }
+    return out;
+  }
+  _mkBucket(label,items,parent){
+    const n=this._mk({ kind:'bucket', label:label, icon:'', hue:parent.hue, color:this._c(parent.hue||220,0.6,0.06), count:items.length });
+    n.parent=parent; for(const it of items) it.parent=n; n._items=items; return n;
+  }
+  _rangeLabel(chunk){ const a=(chunk[0].label||'?')[0]||'?', b=(chunk[chunk.length-1].label||'?')[0]||'?'; return a===b?a:a+'–'+b; }
+  _prefixGroups(arr){
+    const seps=[': ',' — ',' – ',' ('];
+    let withSep=0; const map=new Map(), order=[];
+    for(const n of arr){ const t=n.label||''; let idx=-1;
+      for(const s of seps){ const k=t.indexOf(s); if(k>0 && (idx<0||k<idx)) idx=k; }
+      let p; if(idx>0){ withSep++; p=t.slice(0,idx).trim(); } else p='∙прочее';
+      if(!map.has(p)){ map.set(p,[]); order.push(p); } map.get(p).push(n);
+    }
+    if(withSep < arr.length*0.6) return null;
+    const g=order.map(p=>({ label:p==='∙прочее'?'Прочее':p, items:map.get(p) }));
+    if(g.length<2 || g.length>arr.length*0.9) return null;
+    return g;
+  }
+
+  _hasKids(n){
+    if(n.kind==='entry') return n._facets && n._facets.length>0;
+    if(n.kind==='facet') return false;
+    return true;
+  }
+
+  // ---------- interaction ----------
+  _toggle=(n)=>{ if(!this._hasKids(n)) return; if(!n.children) n.children=this._children(n); n.expanded=!n.expanded; this._relayout(); this._renderMap(); };
+  _dive=(n)=>{
+    if(!this._hasKids(n)){ this._select(n); return; }
+    if(!n.children) n.children=this._children(n);
+    n.expanded=true; this.focus=n; this._select(n); this._syncPath();
+    this._relayout(); this._renderMap(); this._fit(true);
+  };
+  _diveTo=(domainId)=>{ if(!this.root.children) this.root.children=this._children(this.root); const d=this.root.children.find(x=>x.domainId===domainId); if(d){ this.setState({mode:'map'}); this._dive(d); } };
+  _diveById=(id)=>{ const n=this.byId.get(id); if(n) this._dive(n); };
+
+  _sectionNode(si){
+    const sec=this.sections[si], did=this._domainOf(sec.level), sub=this._subOf(sec.level);
+    if(!this.root.children) this.root.children=this._children(this.root);
+    const dN=this.root.children.find(n=>n.domainId===did); if(!dN) return null;
+    if(!dN.children) dN.children=this._children(dN);
+    const sN=this._findInTree(dN, n=>n.kind==='sub' && n.subKey===sub); if(!sN) return null;
+    return this._findInTree(sN, n=>n.kind==='section' && n.si===si);
+  }
+  _findInTree(node,pred){
+    if(pred(node)) return node;
+    if(node.kind==='entry'||node.kind==='facet') return null;
+    if(!node.children) node.children=this._children(node);
+    for(const c of node.children){ if(pred(c)) return c; if(c.kind==='bucket'||c.kind==='sub'||c.kind==='domain'){ const r=this._findInTree(c,pred); if(r) return r; } }
+    return null;
+  }
+  _openResult=(si,entryId)=>{
+    this.setState({ mode:'map', results:[] });
+    const sN=this._sectionNode(si); if(!sN) return;
+    let n=sN; const chain=[]; while(n){ chain.unshift(n); n=n.parent; }
+    for(const c of chain){ if(!c.children) c.children=this._children(c); c.expanded=true; }
+    this.focus=sN; this._syncPath(); this._relayout(); this._renderMap(); this._fit(true);
+    const eN=this._findInTree(sN, x=>x.kind==='entry' && x.entryId===entryId);
+    if(eN){ this._relayout(); this._renderMap(); this._select(eN); }
+  };
+
+  _select=(node)=>{
+    const prev=this._selId; this._selId=node.id;
+    this.setState({ selected:this._view(node) });
+    const a=this.els && this.els.get('N'+prev); if(a && a.node) this._styleNode(a,a.node);
+    const b=this.els && this.els.get('N'+node.id); if(b) this._styleNode(b,node);
+  };
+
+  _view(node){
+    const chain=[]; let p=node.parent; while(p){ chain.unshift(p.label); p=p.parent; }
+    const v={ id:node.id, kind:node.kind, color:node.color, label:node.label,
+      kindLabel:this._kindLabel(node.kind), pathLabel:chain.join('  ›  '), hasPath:chain.length>0,
+      hasCount:false, canDive:this._hasKids(node), onDive:()=>this._dive(node),
+      hasDescription:false, hasDetail:false, hasMale:false, hasFemale:false, chips:[], hasChips:false, moreChips:0 };
+    if(node.count!=null){ v.hasCount=true; v.countLabel=this._countLabel(node); }
+    if(node.kind==='entry' && node.entry){
+      const e=node.entry;
+      v.hasDescription=this._ne(e.description); v.description=e.description||'';
+      v.hasDetail=this._ne(e.detail); v.detail=e.detail||'';
+      v.hasMale=this._ne(e.male); v.male=e.male||'';
+      v.hasFemale=this._ne(e.female); v.female=e.female||'';
+    }
+    if(node.kind==='facet'){ v.hasDescription=true; v.description=node.text; }
+    if(node.kind!=='entry' && node.kind!=='facet'){
+      let chips=[], more=0;
+      if(node.kind==='section'){ const sec=this.sections[node.si]; chips=sec.entries.slice(0,16).map(e=>({label:e.title,color:node.color})); more=Math.max(0,sec.entries.length-16); }
+      else { if(!node.children) node.children=this._children(node); chips=node.children.slice(0,16).map(k=>({label:k.label,color:k.color,onClick:()=>this._dive(k)})); more=Math.max(0,node.children.length-16); }
+      v.chips=chips; v.hasChips=chips.length>0; v.moreChips=more;
+    }
+    return v;
+  }
+  _kindLabel(k){ return { root:'Корень', domain:'Домен', sub:'Дисциплина', section:'Раздел', bucket:'Группа', entry:'Тема', facet:'Грань' }[k]||''; }
+  _countLabel(n){ const c=n.count; if(n.kind==='section') return c+' тем'; if(n.kind==='bucket') return c+' позиций'; if(n.kind==='entry') return c+' граней'; return c+' разделов'; }
+
+  _syncPath(){ const p=[]; let n=this.focus; while(n){ p.unshift({ id:n.id, label:n.label, icon:n.icon||'' }); n=n.parent; } this.setState({ path:p }); }
+
+  // ---------- map render ----------
+  mapRef=(el)=>{ if(el){ this.mapEl=el; this._maybeInit(); } };
+  _maybeInit(){ if(this.mapEl && this.sections && !this._inited) this._initMap(this.mapEl); }
+
+  _initMap(el){
+    this._inited=true; const NS='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(NS,'svg'); svg.setAttribute('width','100%'); svg.setAttribute('height','100%'); svg.style.display='block'; svg.style.touchAction='none';
+    const vp=document.createElementNS(NS,'g'); const links=document.createElementNS(NS,'g'); const nodes=document.createElementNS(NS,'g');
+    vp.appendChild(links); vp.appendChild(nodes); svg.appendChild(vp); el.appendChild(svg);
+    this.svg=svg; this.vp=vp; this.linkLayer=links; this.nodeLayer=nodes; this.els=new Map(); this.cam={x:0,y:0,k:0.7}; this._fitted=false;
+    this._bindEvents();
+    this._ro=new ResizeObserver(()=>{ this._applyCam(); if(!this._fitted && this._dims().h>60){ this._fitted=true; this._fit(false); } }); this._ro.observe(el);
+    this._applyCam(); this._relayout(); this._renderMap();
+    requestAnimationFrame(()=>{ if(!this._fitted && this._dims().h>60){ this._fitted=true; this._fit(false); } });
+  }
+  _dims(){ return { w:this.mapEl.clientWidth||1200, h:this.mapEl.clientHeight||800 }; }
+  _applyCam(){ if(!this.vp) return; const {w,h}=this._dims(), c=this.cam; this.vp.setAttribute('transform','translate('+(w/2+c.x)+','+(h/2+c.y)+') scale('+c.k+')'); }
+  _bindEvents(){
+    const svg=this.svg;
+    svg.addEventListener('wheel',(e)=>{ e.preventDefault(); this._zoomAt(e, Math.exp(-e.deltaY*0.0016)); }, {passive:false});
+    let down=false, lx=0, ly=0;
+    const move=(e)=>{ if(!down) return; const dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX; ly=e.clientY; this._moved+=Math.abs(dx)+Math.abs(dy); this.cam.x+=dx; this.cam.y+=dy; this._applyCam(); };
+    const up=()=>{ if(down){ down=false; this.mapEl.style.cursor='grab'; window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up); } };
+    svg.addEventListener('pointerdown',(e)=>{ down=true; this._moved=0; lx=e.clientX; ly=e.clientY; this.mapEl.style.cursor='grabbing'; window.addEventListener('pointermove',move); window.addEventListener('pointerup',up); });
+  }
+  _zoomAt(e,f){ const r=this.mapEl.getBoundingClientRect(), {w,h}=this._dims(), c=this.cam; const px=e.clientX-r.left, py=e.clientY-r.top; const wx=(px-(w/2+c.x))/c.k, wy=(py-(h/2+c.y))/c.k; const k=Math.max(0.06,Math.min(4.5,c.k*f)); c.k=k; c.x=px-w/2-wx*k; c.y=py-h/2-wy*k; this._applyCam(); }
+  _zoomAtCenter(f){ const r=this.mapEl.getBoundingClientRect(), {w,h}=this._dims(); this._zoomAt({clientX:r.left+w/2, clientY:r.top+h/2}, f); }
+  onZoomIn=()=>this._zoomAtCenter(1.28);
+  onZoomOut=()=>this._zoomAtCenter(0.78);
+  onFit=()=>this._fit(true);
+  onHome=()=>{ this.focus=this.root; this._selId=null; this.setState({selected:null}); this._syncPath(); this._relayout(); this._renderMap(); this._fit(true); };
+
+  _fit(animate){
+    if(!this._visible||!this._visible.length) return;
+    let a=1e9,b=1e9,c=-1e9,d=-1e9;
+    for(const n of this._visible){ a=Math.min(a,n.x); c=Math.max(c,n.x); b=Math.min(b,n.y); d=Math.max(d,n.y); }
+    const {w,h}=this._dims(), pad=140; const bw=Math.max(1,c-a), bh=Math.max(1,d-b);
+    let k=Math.min((w-pad*2)/bw,(h-pad*2)/bh); k=Math.max(0.1,Math.min(1.5,k));
+    const cx=(a+c)/2, cy=(b+d)/2; const target={ k, x:-cx*k, y:-cy*k };
+    if(animate) this._camTo(target); else { this.cam=target; this._applyCam(); }
+  }
+  _camTo(t){ const s={...this.cam}, st=performance.now(), D=520; cancelAnimationFrame(this._camRaf);
+    const step=(now)=>{ const p=Math.min(1,(now-st)/D), e=1-Math.pow(1-p,3); this.cam.k=s.k+(t.k-s.k)*e; this.cam.x=s.x+(t.x-s.x)*e; this.cam.y=s.y+(t.y-s.y)*e; this._applyCam(); if(p<1) this._camRaf=requestAnimationFrame(step); };
+    this._camRaf=requestAnimationFrame(step);
+  }
+
+  _relayout(){ const r=this.focus; this._computeW(r); this._visible=[]; this._place(r,-Math.PI/2,-Math.PI/2+Math.PI*2,0); }
+  _computeW(n){ if(n.expanded && n.children && n.children.length){ let w=0; for(const k of n.children) w+=this._computeW(k); n._w=Math.max(w,1); } else n._w=1; return n._w; }
+  _radius(d){ return d<=0?0: 300 + (d-1)*250; }
+  _place(n,a0,a1,depth){
+    n.depth=depth; const mid=(a0+a1)/2, r=this._radius(depth);
+    n.x = depth===0?0:Math.cos(mid)*r; n.y = depth===0?0:Math.sin(mid)*r; n.angle=mid; this._visible.push(n);
+    if(n.expanded && n.children && n.children.length){
+      const kids=n.children, total=n._w, gap=Math.min((a1-a0)*0.16/kids.length,0.06), usable=(a1-a0)-gap*kids.length; let a=a0;
+      for(const k of kids){ const seg=usable*(k._w/total), c0=a+gap/2, c1=c0+seg; this._place(k,c0,c1,depth+1); a=c1+gap/2; }
+    }
+  }
+
+  _linkOpacity(){ const v=(this.props&&this.props.linkOpacity); return (v==null?34:v)/100; }
+  _labelMode(){ return (this.props&&this.props.labelMode)||'Все'; }
+  _labelVisible(n){ const m=this._labelMode(); if(m==='При наведении') return n.kind==='root'; if(m==='Крупные') return ['root','domain','sub','section'].indexOf(n.kind)>=0; return true; }
+
+  _renderMap(){
+    if(!this.nodeLayer) return;
+    const vis=this._visible||[], set=new Set();
+    for(const n of vis){ set.add('N'+n.id); if(!this.els.has('N'+n.id)) this._createNode(n); if(n.depth>0 && n.parent){ set.add('L'+n.id); if(!this.els.has('L'+n.id)) this._createLink(n); } }
+    this._removing=[]; for(const [id] of this.els){ if(!set.has(id)) this._removing.push(id); }
+    for(const n of vis){ const rec=this.els.get('N'+n.id); if(rec) this._styleNode(rec,n); }
+    this._startTween();
+  }
+  _createNode(n){
+    const NS='http://www.w3.org/2000/svg';
+    const g=document.createElementNS(NS,'g'); g.style.cursor='pointer';
+    const hit=document.createElementNS(NS,'circle'); hit.setAttribute('fill','transparent'); hit.setAttribute('r',16);
+    const c=document.createElementNS(NS,'circle');
+    const t=document.createElementNS(NS,'text'); t.style.fontFamily="'IBM Plex Sans',sans-serif"; t.style.pointerEvents='none'; t.setAttribute('dominant-baseline','middle'); t.style.paintOrder='stroke'; t.style.strokeLinejoin='round';
+    g.appendChild(hit); g.appendChild(c); g.appendChild(t); this.nodeLayer.appendChild(g);
+    const rec={ el:g, circle:c, text:t, hit:hit, node:n, kind:'node', _fresh:true };
+    this.els.set('N'+n.id, rec);
+    n._rx=(n.parent&&n.parent._rx!=null)?n.parent._rx:n.x; n._ry=(n.parent&&n.parent._ry!=null)?n.parent._ry:n.y;
+    g.setAttribute('transform','translate('+n._rx+','+n._ry+')'); g.style.opacity='0';
+    g.addEventListener('click',()=>{ if(this._moved>6) return; clearTimeout(g._ct); g._ct=setTimeout(()=>{ this._select(n); this._toggle(n); },200); });
+    g.addEventListener('dblclick',()=>{ clearTimeout(g._ct); this._dive(n); });
+    g.addEventListener('mouseenter',()=>{ rec._hover=true; this._styleNode(rec,n); });
+    g.addEventListener('mouseleave',()=>{ rec._hover=false; this._styleNode(rec,n); });
+    return rec;
+  }
+  _createLink(n){
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path'); p.setAttribute('fill','none'); this.linkLayer.appendChild(p);
+    const par=n.parent, ax=(par._rx!=null?par._rx:par.x), ay=(par._ry!=null?par._ry:par.y);
+    p.setAttribute('d','M'+ax+','+ay+'L'+ax+','+ay); p.style.opacity='0'; p.setAttribute('stroke',n.color);
+    this.els.set('L'+n.id, { el:p, node:n, kind:'link', _fresh:true });
+  }
+  _nodeR(n){ return n.kind==='root'?32:n.kind==='domain'?18:n.kind==='sub'?13:n.kind==='section'?10:n.kind==='bucket'?9:n.kind==='entry'?6.5:5.5; }
+  _fontFor(n){ return n.kind==='root'?25:n.kind==='domain'?18:n.kind==='sub'?15:n.kind==='section'?13:n.kind==='bucket'?12:n.kind==='entry'?11.5:11; }
+  _styleNode(rec,n){
+    const c=rec.circle, t=rec.text, hov=rec._hover, sel=(this._selId===n.id), r=this._nodeR(n)*(hov?1.32:1);
+    c.setAttribute('r',r); c.setAttribute('fill',n.color);
+    c.setAttribute('stroke', sel?'#ffffff':(hov?'rgba(255,255,255,.65)':'rgba(0,0,0,.28)'));
+    c.setAttribute('stroke-width', sel?2.5:(hov?1.5:1));
+    rec.hit.setAttribute('r', Math.max(r+8,14));
+    const glow=(this.props&&this.props.nodeGlow!==false);
+    if(glow && ['root','domain','sub','section'].indexOf(n.kind)>=0) c.style.filter='drop-shadow(0 0 '+Math.max(4,r*0.7)+'px '+n.color+')'; else c.style.filter='none';
+    const show=this._labelVisible(n)||hov||sel;
+    if(!show){ t.style.display='none'; return; }
+    t.style.display='';
+    const fs=this._fontFor(n)*(hov?1.05:1);
+    t.setAttribute('font-size',fs);
+    t.setAttribute('font-weight', (n.kind==='root'||n.kind==='domain')?'600':((sel||hov)?'600':'400'));
+    t.setAttribute('fill', sel?'#ffffff':(['entry','bucket','facet'].indexOf(n.kind)>=0?'#b7bccf':'#e7e9f2'));
+    t.setAttribute('stroke','rgba(6,7,11,.9)'); t.setAttribute('stroke-width', Math.max(2,fs*0.17));
+    const txt=this._short(n.label, n.kind==='root'?40:26); if(t.textContent!==txt) t.textContent=txt;
+    if(n.kind==='root'){ t.setAttribute('text-anchor','middle'); t.setAttribute('x',0); t.setAttribute('y',r+16); }
+    else if(Math.cos(n.angle||0)>=-0.15){ t.setAttribute('text-anchor','start'); t.setAttribute('x',r+7); t.setAttribute('y',0); }
+    else { t.setAttribute('text-anchor','end'); t.setAttribute('x',-(r+7)); t.setAttribute('y',0); }
+  }
+  _refreshStyles(){ if(!this.els) return; for(const [,rec] of this.els){ if(rec.kind==='node') this._styleNode(rec,rec.node); else { rec.el.style.opacity=String(this._linkOpacity()*(rec.node.depth<=1?1:0.7)); } } }
+
+  _startTween(){
+    const D=470, st=performance.now();
+    for(const [,rec] of this.els){ if(rec.kind==='node'){ const n=rec.node; n._fx=(n._rx!=null?n._rx:n.x); n._fy=(n._ry!=null?n._ry:n.y); } }
+    const rem=new Set(this._removing); cancelAnimationFrame(this._raf);
+    const step=(now)=>{
+      const p=Math.min(1,(now-st)/D), e=1-Math.pow(1-p,3);
+      for(const [id,rec] of this.els){ if(rec.kind!=='node') continue; const n=rec.node; let tx,ty; if(rem.has(id)){ const q=n.parent; tx=q?q.x:n.x; ty=q?q.y:n.y; } else { tx=n.x; ty=n.y; } n._rx=n._fx+(tx-n._fx)*e; n._ry=n._fy+(ty-n._fy)*e; rec.el.setAttribute('transform','translate('+n._rx+','+n._ry+')'); rec.el.style.opacity= rem.has(id)?(1-p):(rec._fresh?p:1); }
+      for(const [id,rec] of this.els){ if(rec.kind!=='link') continue; const n=rec.node, q=n.parent; const ax=(q._rx!=null?q._rx:q.x), ay=(q._ry!=null?q._ry:q.y), bx=(n._rx!=null?n._rx:n.x), by=(n._ry!=null?n._ry:n.y); rec.el.setAttribute('d','M'+ax+','+ay+'L'+bx+','+by); const base=this._linkOpacity()*(n.depth<=1?1:0.7); rec.el.style.opacity= rem.has(id)?base*(1-p):(rec._fresh?base*p:base); rec.el.setAttribute('stroke',n.color); rec.el.setAttribute('stroke-width',Math.max(0.4,3.2-n.depth*0.7)); }
+      if(p<1) this._raf=requestAnimationFrame(step);
+      else { for(const [,rec] of this.els) rec._fresh=false; for(const id of rem){ const rec=this.els.get(id); if(rec){ rec.el.remove(); this.els.delete(id); } } }
+    };
+    this._raf=requestAnimationFrame(step);
+  }
+
+  // ---------- search + list ----------
+  onSearch=(e)=>{ const q=e.target.value; this.setState({search:q}); clearTimeout(this._st); this._st=setTimeout(()=>this._runSearch(q),140); };
+  onSearchClear=()=>{ this.setState({search:'',results:[]}); this._rebuildList(''); };
+  _runSearch(q){
+    const query=(q||'').trim().toLowerCase();
+    if(!query){ this.setState({results:[]}); this._rebuildList(''); return; }
+    const res=[], cap=200;
+    for(let si=0; si<this.sections.length && res.length<cap; si++){
+      const sec=this.sections[si], did=this._domainOf(sec.level), col=this._c(this._domMeta(did).hue,0.74,0.12);
+      for(const e of sec.entries){
+        if((e.title&&e.title.toLowerCase().indexOf(query)>=0)||(e.description&&e.description.toLowerCase().indexOf(query)>=0)||(e.detail&&e.detail.toLowerCase().indexOf(query)>=0)||(e.male&&e.male.toLowerCase().indexOf(query)>=0)||(e.female&&e.female.toLowerCase().indexOf(query)>=0)){
+          res.push({ id:si+'-'+e.id, title:e.title, sub:sec.title, color:col, si, entryId:e.id }); if(res.length>=cap) break;
+        }
+      }
+    }
+    this.setState({results:res}); this._rebuildList(q);
+  }
+  onTabMap=()=>this.setState({mode:'map'});
+  onTabList=()=>{ this.setState({mode:'list'},()=>{ if(!this.state.listRows.length) this._rebuildList(); }); };
+  onListDomain=(id)=>this.setState({listDomain:id,listLimit:60},()=>this._rebuildList());
+  onMore=()=>this.setState({listLimit:this.state.listLimit+80},()=>this._rebuildList());
+  _rebuildList(qArg){
+    const q=((qArg!=null?qArg:this.state.search)||'').trim().toLowerCase();
+    const dom=this.state.listDomain||'all', limit=this.state.listLimit||60;
+    const rows=[]; let total=0;
+    for(let si=0; si<this.sections.length; si++){
+      const sec=this.sections[si], did=this._domainOf(sec.level);
+      if(dom!=='all' && did!==dom) continue;
+      const col=this._c(this._domMeta(did).hue,0.74,0.12);
+      for(const e of sec.entries){
+        if(q){ const hay=(e.title+' '+e.description+' '+(e.detail||'')+' '+(e.male||'')+' '+(e.female||'')).toLowerCase(); if(hay.indexOf(q)<0) continue; }
+        total++; if(rows.length<limit) rows.push(this._rowView(si,e,sec,col));
+      }
+    }
+    this.setState({ listRows:rows, listTotal:total, listHasMore: total>rows.length });
+  }
+  _rowView(si,e,sec,col){
+    const id='r'+si+'-'+e.id, open=!!this.state.listOpen[id];
+    const canOpen=this._ne(e.male)||this._ne(e.female)||this._ne(e.detail);
+    return { id, title:e.title, sub:sec.title, domainIcon:sec.icon, color:col, tag:e.tag||'', hasTag:!!e.tag, chev:open?'▾':'▸', canOpen,
+      hasDescription:this._ne(e.description), description:e.description||'',
+      hasMale:this._ne(e.male), male:e.male||'', hasFemale:this._ne(e.female), female:e.female||'', hasDetail:this._ne(e.detail), detail:e.detail||'', open,
+      onToggle:()=>{ if(!canOpen) return; const o={...this.state.listOpen}; o[id]=!o[id]; this.setState({listOpen:o},()=>this._rebuildList()); } };
+  }
+
+  renderVals(){
+    const s=this.state;
+    return {
+      loading:s.loading, mapMode:s.mode==='map', listMode:s.mode==='list',
+      onTabMap:this.onTabMap, onTabList:this.onTabList,
+      statSections:(this.sections?this.sections.length:419).toLocaleString('ru'),
+      statEntries:(this._entryCount||33635).toLocaleString('ru'),
+      mapRef:this.mapRef,
+      path:(s.path||[]).map((p,i,arr)=>({ id:p.id, label:p.label, icon:p.icon, notLast:i<arr.length-1, onClick:()=>this._diveById(p.id) })),
+      legend:(this.domIndex?this.DOMAINS.filter(d=>this.domIndex[d.id]&&this.domIndex[d.id].subs.size):[]).map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), onClick:()=>this._diveTo(d.id) })),
+      search:s.search, onSearch:this.onSearch, onSearchClear:this.onSearchClear,
+      results:(s.results||[]).slice(0,12).map(r=>({ title:r.title, sub:r.sub, color:r.color, onClick:()=>this._openResult(r.si,r.entryId) })),
+      resultInfo:(s.results||[]).length?('Найдено: '+s.results.length+(s.results.length>=200?'+':'')):'',
+      showResults: !!(s.search && (s.results||[]).length && s.mode==='map'),
+      sel:s.selected, hasSel:!!s.selected, noSel:!s.selected,
+      onZoomIn:this.onZoomIn, onZoomOut:this.onZoomOut, onFit:this.onFit, onHome:this.onHome,
+      listRows:s.listRows||[], listInfo: s.listTotal!=null?('Показано '+(s.listRows||[]).length+' из '+s.listTotal.toLocaleString('ru')):'',
+      hasMore:!!s.listHasMore, onMore:this.onMore, listEmpty: s.mode==='list' && s.listTotal===0,
+      listDomains:[{ id:'all', title:'Все', color:'#aeb4c8', active:(s.listDomain||'all')==='all', onClick:()=>this.onListDomain('all') }].concat(this.DOMAINS.map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), active:s.listDomain===d.id, onClick:()=>this.onListDomain(d.id) }))),
+    };
+  }
+}
+</script>
+</body>
+</html>

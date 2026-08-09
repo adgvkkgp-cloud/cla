@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@keyframes slidein {
+  from { transform: translateX(-100%); opacity: 0.4; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+html { scroll-behavior: smooth; }
