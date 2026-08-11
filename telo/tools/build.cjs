@@ -16,7 +16,7 @@ const patch2 = require(path.join(root, "src/data/patch2.cjs"));
 const patch3 = require(path.join(root, "src/data/patch3.cjs"));
 
 let additions = [];
-for (const f of ["src/data/additions.cjs", "src/data/additions2.cjs"]) {
+for (const f of ["src/data/additions.cjs", "src/data/additions2.cjs", "src/data/additions3.cjs"]) {
   const p = path.join(root, f);
   if (fs.existsSync(p)) additions = additions.concat(require(p));
 }
