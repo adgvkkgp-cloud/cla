@@ -13,10 +13,13 @@ const root = path.resolve(__dirname, "..");
 const base = JSON.parse(fs.readFileSync(path.join(root, "src/data/base.json"), "utf8"));
 const patch = require(path.join(root, "src/data/patch.cjs"));
 const patch2 = require(path.join(root, "src/data/patch2.cjs"));
+const patch3 = require(path.join(root, "src/data/patch3.cjs"));
 
 let additions = [];
-const addPath = path.join(root, "src/data/additions.cjs");
-if (fs.existsSync(addPath)) additions = require(addPath);
+for (const f of ["src/data/additions.cjs", "src/data/additions2.cjs"]) {
+  const p = path.join(root, f);
+  if (fs.existsSync(p)) additions = additions.concat(require(p));
+}
 
 const report = [];
 const warn = (m) => report.push(m);
@@ -36,7 +39,7 @@ for (const [secId, names] of Object.entries(patch.dropItems || {})) {
 }
 
 // правки позиций (обе части патча)
-for (const table of [patch.itemPatches, patch2.itemPatches]) {
+for (const table of [patch.itemPatches, patch2.itemPatches, patch3.itemPatches]) {
   for (const [secId, map] of Object.entries(table || {})) {
     const sec = data.find((s) => s.id === secId);
     if (!sec) { warn(`itemPatches: нет раздела ${secId}`); continue; }
@@ -163,9 +166,11 @@ if (problems.length) {
 console.log("Проверки пройдены.");
 
 // ── 5. Сборка HTML ──────────────────────────────────────────
+// data.json пишется всегда: он же используется для проверок и выгрузок
+fs.writeFileSync(path.join(root, "data.json"), JSON.stringify(data));
+
 const tplPath = path.join(root, "src/template.html");
 if (!fs.existsSync(tplPath)) {
-  fs.writeFileSync(path.join(root, "data.json"), JSON.stringify(data));
   console.log("Шаблон не найден — записан только data.json");
   process.exit(0);
 }
