@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Шифроблокнот</title>
+<style>
+  :root {
+    --ground: #eceef0;
+    --surface: #fbfcfd;
+    --surface-sunken: #f1f3f5;
+    --ink: #14181b;
+    --muted: #5c696f;
+    --line: #d2d9dd;
+    --accent: #0d7a6f;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(13, 122, 111, 0.13);
+    --accent-strong: rgba(13, 122, 111, 0.26);
+    --shadow: 0 1px 2px rgba(20, 24, 27, 0.06), 0 8px 24px -16px rgba(20, 24, 27, 0.35);
+    --mono: ui-monospace, "JetBrains Mono", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0f1315;
+      --surface: #171d20;
+      --surface-sunken: #12181a;
+      --ink: #e4eaec;
+      --muted: #8a969c;
+      --line: #262e32;
+      --accent: #45c2b1;
+      --accent-ink: #06211e;
+      --accent-soft: rgba(69, 194, 177, 0.15);
+      --accent-strong: rgba(69, 194, 177, 0.3);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -20px rgba(0, 0, 0, 0.9);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0f1315;
+    --surface: #171d20;
+    --surface-sunken: #12181a;
+    --ink: #e4eaec;
+    --muted: #8a969c;
+    --line: #262e32;
+    --accent: #45c2b1;
+    --accent-ink: #06211e;
+    --accent-soft: rgba(69, 194, 177, 0.15);
+    --accent-strong: rgba(69, 194, 177, 0.3);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -20px rgba(0, 0, 0, 0.9);
+  }
+
+  * { box-sizing: border-box; }
+
+  [hidden] { display: none !important; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 40px 20px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  header { display: flex; flex-direction: column; gap: 6px; }
+
+  h1 {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .lede {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+
+  .controls {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 8px; }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .segmented {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    flex-wrap: wrap;
+  }
+
+  .seg {
+    flex: 1 1 200px;
+    appearance: none;
+    border: 0;
+    border-radius: 5px;
+    padding: 9px 12px;
+    background: transparent;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .seg:hover { color: var(--ink); }
+
+  .seg[aria-pressed="true"] {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .seg .seg-name { display: block; font-weight: 600; }
+  .seg .seg-hint { display: block; font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+  .row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .row .field { flex: 0 0 auto; }
+
+  input[type="text"] {
+    width: 120px;
+    padding: 8px 10px;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 15px;
+  }
+
+  .presets { display: flex; gap: 4px; }
+
+  .chip {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface-sunken);
+    color: var(--muted);
+    border-radius: 6px;
+    width: 30px;
+    height: 30px;
+    font-family: var(--mono);
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .chip:hover { color: var(--ink); border-color: var(--accent); }
+
+  .switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    padding-bottom: 6px;
+  }
+
+  .switch input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+  .panes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .pane-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    min-height: 44px;
+  }
+
+  .pane-body {
+    flex: 1;
+    display: flex;
+    min-height: 210px;
+  }
+
+  textarea, .out {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    padding: 14px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.75;
+    resize: none;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+  }
+
+  textarea:focus { outline: none; }
+  .pane:focus-within { border-color: var(--accent); }
+
+  .out .ins {
+    background: var(--accent-soft);
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px var(--accent-soft);
+  }
+
+  .out .ins-strong {
+    background: var(--accent-strong);
+    border-radius: 2px;
+  }
+
+  .out:empty::after {
+    content: "Результат появится здесь";
+    color: var(--muted);
+  }
+
+  .btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--surface-sunken);
+    color: var(--ink);
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .btn:hover { border-color: var(--accent); }
+
+  .btn-accent {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+
+  .btn-accent:hover { filter: brightness(1.08); }
+
+  .btn-group { display: flex; gap: 8px; }
+
+  :is(button, input, textarea):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .legend { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 11px; height: 11px; border-radius: 2px; background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+
+  @media (max-width: 760px) {
+    .panes { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Шифроблокнот</h1>
+    <p class="lede">Два способа изуродовать текст так, чтобы его всё ещё можно было прочитать: вставить символ в середину каждого слова или растащить слова по буквам. Обратное преобразование — тем же движком.</p>
+  </header>
+
+  <section class="panel controls">
+    <div class="field">
+      <span class="label" id="mode-label">Режим</span>
+      <div class="segmented" role="group" aria-labelledby="mode-label">
+        <button type="button" class="seg" data-mode="insert" aria-pressed="true">
+          <span class="seg-name">Символ в середину слова</span>
+          <span class="seg-hint">привет → при-вет</span>
+        </button>
+        <button type="button" class="seg" data-mode="spread" aria-pressed="false">
+          <span class="seg-name">Слово по буквам</span>
+          <span class="seg-hint">как дела → к а к·· д е л а</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="label" id="dir-label">Направление</span>
+      <div class="segmented" role="group" aria-labelledby="dir-label">
+        <button type="button" class="seg" data-dir="encode" aria-pressed="true">
+          <span class="seg-name">Кодировать</span>
+        </button>
+        <button type="button" class="seg" data-dir="decode" aria-pressed="false">
+          <span class="seg-name">Раскодировать</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field" id="symbol-field">
+        <label class="label" for="symbol">Символ</label>
+        <div class="row" style="gap: 8px; align-items: center;">
+          <input type="text" id="symbol" value="-" maxlength="6" autocomplete="off" spellcheck="false">
+          <div class="presets" id="presets"></div>
+        </div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="hl" checked>
+        Подсвечивать вставки
+      </label>
+    </div>
+  </section>
+
+  <div class="panes">
+    <section class="panel pane">
+      <div class="pane-head">
+        <span class="label">Исходный текст</span>
+        <div class="btn-group">
+          <button type="button" class="btn" id="sample">Пример</button>
+          <button type="button" class="btn" id="clear">Очистить</button>
+        </div>
+      </div>
+      <div class="pane-body">
+        <textarea id="in" spellcheck="false" placeholder="Введите текст…"></textarea>
+      </div>
+    </section>
+
+    <section class="panel pane">
+      <div class="pane-head">
+        <span class="label">Результат</span>
+        <div class="btn-group">
+          <button type="button" class="btn" id="swap" title="Перенести результат во ввод">↰ В ввод</button>
+          <button type="button" class="btn btn-accent" id="copy">Копировать</button>
+        </div>
+      </div>
+      <div class="pane-body">
+        <div class="out" id="out" aria-live="polite"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="meta">
+    <span id="stats">0 знаков → 0 знаков</span>
+    <span class="legend" id="legend"><span class="swatch"></span> вставленные символы</span>
+  </div>
+</div>
+
+<script>
+  const el = {
+    in: document.getElementById('in'),
+    out: document.getElementById('out'),
+    symbol: document.getElementById('symbol'),
+    symbolField: document.getElementById('symbol-field'),
+    presets: document.getElementById('presets'),
+    hl: document.getElementById('hl'),
+    stats: document.getElementById('stats'),
+    legend: document.getElementById('legend'),
+    copy: document.getElementById('copy'),
+    swap: document.getElementById('swap'),
+    sample: document.getElementById('sample'),
+    clear: document.getElementById('clear')
+  };
+
+  const SAMPLE = 'Съешь ещё этих мягких французских булок, да выпей чаю.';
+  const PRESETS = ['-', '*', '.', '_', '~'];
+
+  let mode = 'insert';
+  let dir = 'encode';
+  let plainResult = '';
+
+  for (const p of PRESETS) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.textContent = p;
+    b.title = 'Символ «' + p + '»';
+    b.addEventListener('click', () => { el.symbol.value = p; render(); });
+    el.presets.appendChild(b);
+  }
+
+  const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\\-]/g, '\\$&');
+
+  // Каждый кусок результата: {s: текст, k: 'plain' | 'ins' | 'ins2'}
+  function insertEncode(text, sym) {
+    const parts = [];
+    const re = /[\p{L}\p{N}]+/gu;
+    let last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      parts.push({ s: text.slice(last, m.index), k: 'plain' });
+      const w = m[0];
+      if ([...w].length < 2) {
+        parts.push({ s: w, k: 'plain' });
+      } else {
+        const chars = [...w];
+        const mid = Math.floor(chars.length / 2);
+        parts.push({ s: chars.slice(0, mid).join(''), k: 'plain' });
+        parts.push({ s: sym, k: 'ins' });
+        parts.push({ s: chars.slice(mid).join(''), k: 'plain' });
+      }
+      last = m.index + m[0].length;
+    }
+    parts.push({ s: text.slice(last), k: 'plain' });
+    return parts;
+  }
+
+  function insertDecode(text, sym) {
+    const out = [];
+    const re = new RegExp('[\\p{L}\\p{N}' + escapeRe(sym) + ']+', 'gu');
+    let last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      out.push(text.slice(last, m.index));
+      const t = m[0];
+      const chars = [...t];
+      const symChars = [...sym];
+      const n = chars.length - symChars.length;
+      const mid = Math.floor(n / 2);
+      const hit = n >= 2 && chars.slice(mid, mid + symChars.length).join('') === sym;
+      out.push(hit ? chars.slice(0, mid).join('') + chars.slice(mid + symChars.length).join('') : t);
+      last = m.index + m[0].length;
+    }
+    out.push(text.slice(last));
+    return [{ s: out.join(''), k: 'plain' }];
+  }
+
+  function spreadEncode(text) {
+    const parts = [];
+    text.split('\n').forEach((line, li) => {
+      if (li) parts.push({ s: '\n', k: 'plain' });
+      line.split(' ').forEach((word, wi) => {
+        if (wi) parts.push({ s: '  ', k: 'ins2' });
+        // Пробелы между буквами не подсвечиваем — иначе рябит; отмечаем только границы слов.
+        parts.push({ s: [...word].join(' '), k: 'plain' });
+      });
+    });
+    return parts;
+  }
+
+  function spreadDecode(text) {
+    const lines = text.split('\n').map((line) =>
+      line.split('  ').map((word) => word.split(' ').join('')).join(' ')
+    );
+    return [{ s: lines.join('\n'), k: 'plain' }];
+  }
+
+  function transform(text) {
+    if (mode === 'insert') {
+      const sym = el.symbol.value.replace(/\s/g, '');
+      if (!sym) return [{ s: text, k: 'plain' }];
+      return dir === 'encode' ? insertEncode(text, sym) : insertDecode(text, sym);
+    }
+    return dir === 'encode' ? spreadEncode(text) : spreadDecode(text);
+  }
+
+  function render() {
+    const src = el.in.value;
+    const parts = transform(src);
+    plainResult = parts.map((p) => p.s).join('');
+
+    el.out.textContent = '';
+    const highlight = el.hl.checked && dir === 'encode';
+    for (const p of parts) {
+      if (!p.s) continue;
+      if (highlight && p.k !== 'plain') {
+        const span = document.createElement('span');
+        span.className = p.k === 'ins2' ? 'ins-strong' : 'ins';
+        span.textContent = p.s;
+        el.out.appendChild(span);
+      } else {
+        el.out.appendChild(document.createTextNode(p.s));
+      }
+    }
+
+    el.stats.textContent = [...src].length + ' знаков → ' + [...plainResult].length + ' знаков';
+    el.legend.hidden = !highlight;
+    el.legend.firstElementChild.style.background =
+      mode === 'spread' ? 'var(--accent-strong)' : 'var(--accent-soft)';
+    el.legend.lastChild.textContent =
+      mode === 'spread' ? ' разделители слов' : ' вставленные символы';
+  }
+
+  function setPressed(selector, attr, value) {
+    for (const b of document.querySelectorAll(selector)) {
+      b.setAttribute('aria-pressed', String(b.dataset[attr] === value));
+    }
+  }
+
+  for (const b of document.querySelectorAll('[data-mode]')) {
+    b.addEventListener('click', () => {
+      mode = b.dataset.mode;
+      setPressed('[data-mode]', 'mode', mode);
+      el.symbolField.hidden = mode !== 'insert';
+      render();
+    });
+  }
+
+  for (const b of document.querySelectorAll('[data-dir]')) {
+    b.addEventListener('click', () => {
+      dir = b.dataset.dir;
+      setPressed('[data-dir]', 'dir', dir);
+      render();
+    });
+  }
+
+  el.in.addEventListener('input', render);
+  el.symbol.addEventListener('input', render);
+  el.hl.addEventListener('change', render);
+
+  el.sample.addEventListener('click', () => { el.in.value = SAMPLE; el.in.focus(); render(); });
+  el.clear.addEventListener('click', () => { el.in.value = ''; el.in.focus(); render(); });
+
+  el.swap.addEventListener('click', () => {
+    el.in.value = plainResult;
+    dir = dir === 'encode' ? 'decode' : 'encode';
+    setPressed('[data-dir]', 'dir', dir);
+    render();
+  });
+
+  el.copy.addEventListener('click', async () => {
+    const label = el.copy.textContent;
+    try {
+      await navigator.clipboard.writeText(plainResult);
+      el.copy.textContent = 'Скопировано';
+    } catch (e) {
+      el.copy.textContent = 'Не вышло — выделите вручную';
+    }
+    setTimeout(() => { el.copy.textContent = label; }, 1600);
+  });
+
+  el.in.value = SAMPLE;
+  render();
+</script>
+</body>
+</html>
