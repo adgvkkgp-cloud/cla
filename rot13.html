@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROT13 · шифр-барабан</title>
+<style>
+:root{
+  --paper:#E6E9E0;
+  --panel:#F2F4EE;
+  --edge:#C6CCBC;
+  --edge-soft:#D6DBCD;
+  --ink:#17201D;
+  --ink-soft:#5C665F;
+  --lat:#1C6570;
+  --cyr:#7A3B87;
+  --brass:#9C6F1E;
+  --brass-wash:#EFE2C6;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"DejaVu Sans Mono","Liberation Mono",monospace;
+  --sans:"Trebuchet MS","Segoe UI",Tahoma,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121714;
+    --panel:#1A211C;
+    --edge:#2E3730;
+    --edge-soft:#232B26;
+    --ink:#E6EBE1;
+    --ink-soft:#93A096;
+    --lat:#64C0CB;
+    --cyr:#C795D6;
+    --brass:#D9A845;
+    --brass-wash:#33291452;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121714;
+  --panel:#1A211C;
+  --edge:#2E3730;
+  --edge-soft:#232B26;
+  --ink:#E6EBE1;
+  --ink-soft:#93A096;
+  --lat:#64C0CB;
+  --cyr:#C795D6;
+  --brass:#D9A845;
+  --brass-wash:#33291452;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:clamp(1rem,4vw,2.5rem) clamp(0.85rem,3vw,2rem) 3rem}
+
+/* ── шапка ───────────────────────────────── */
+.bar{
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:0.35rem 1.1rem;
+  padding-bottom:0.9rem;border-bottom:1px solid var(--edge);
+}
+.mark{
+  font-family:var(--mono);font-size:clamp(1.6rem,5.2vw,2.4rem);font-weight:700;
+  letter-spacing:-0.055em;line-height:1;
+}
+.mark b{color:var(--brass);font-weight:700}
+.tag{margin:0;color:var(--ink-soft);font-size:0.9rem}
+
+/* ── барабан ─────────────────────────────── */
+.dial{margin:clamp(1.4rem,4vw,2.2rem) 0}
+.ring + .ring{margin-top:clamp(1.1rem,3vw,1.6rem)}
+.ring-head{
+  display:flex;flex-wrap:wrap;gap:0.2rem 0.7rem;align-items:baseline;
+  font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:0.5rem;
+}
+.ring-head em{font-style:normal;font-weight:700;letter-spacing:0.1em}
+.ring[data-script="lat"] .ring-head em{color:var(--lat)}
+.ring[data-script="cyr"] .ring-head em{color:var(--cyr)}
+
+.cols{display:grid;gap:2px}
+.ring[data-script="lat"] .cols{grid-template-columns:repeat(13,minmax(0,1fr))}
+.ring[data-script="cyr"] .cols{grid-template-columns:repeat(16,minmax(0,1fr))}
+
+.col{
+  display:grid;grid-template-rows:1fr auto 1fr;justify-items:center;
+  background:var(--panel);border:1px solid var(--edge-soft);border-radius:3px;
+  padding:0.2rem 0;font-family:var(--mono);
+  font-size:clamp(0.66rem,2.05vw,1.02rem);line-height:1.3;
+  transition:background 140ms ease,border-color 140ms ease;
+}
+.col .link{width:58%;height:1px;background:var(--edge);margin:0.16rem 0}
+.ring[data-script="lat"] .col{color:var(--lat)}
+.ring[data-script="cyr"] .col{color:var(--cyr)}
+.col.hot{background:var(--brass-wash);border-color:var(--brass);color:var(--brass)}
+.col.hot .link{background:var(--brass)}
+@keyframes tick{from{transform:translateY(-3px)}to{transform:none}}
+.col.tick{animation:tick 180ms ease-out}
+@media (prefers-reduced-motion:reduce){
+  .col.tick{animation:none}
+  .col{transition:none}
+}
+
+/* ── стол ────────────────────────────────── */
+.desk{display:grid;gap:clamp(0.8rem,2.5vw,1.25rem);grid-template-columns:1fr}
+@media (min-width:760px){.desk{grid-template-columns:1fr 1fr}}
+.pane{display:flex;flex-direction:column;min-width:0}
+.pane-head{
+  display:flex;justify-content:space-between;align-items:baseline;gap:0.75rem;
+  font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:0.4rem;
+}
+#hint{text-transform:none;letter-spacing:0}
+@media (max-width:759px){#hint{display:none}}
+.field{
+  font-family:var(--mono);font-size:0.94rem;line-height:1.6;
+  background:var(--panel);color:var(--ink);
+  border:1px solid var(--edge);border-radius:4px;
+  padding:0.75rem 0.85rem;min-height:9rem;
+  white-space:pre-wrap;overflow-wrap:anywhere;overflow-y:auto;
+}
+@media (min-width:760px){.field{min-height:13rem}}
+textarea.field{width:100%;resize:vertical;display:block}
+textarea.field::placeholder{color:var(--ink-soft)}
+.field:focus-visible,.btn:focus-visible,.seg-btn:focus-visible{
+  outline:2px solid var(--brass);outline-offset:2px;
+}
+#out .g-lat{color:var(--lat)}
+#out .g-cyr{color:var(--cyr)}
+#out .g-other{color:var(--ink-soft)}
+
+.row{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.55rem}
+.btn{
+  font-family:var(--sans);font-size:0.85rem;color:var(--ink);
+  background:var(--panel);border:1px solid var(--edge);border-radius:3px;
+  padding:0.4rem 0.75rem;cursor:pointer;
+}
+.btn:hover{border-color:var(--brass);color:var(--brass)}
+.seg{display:inline-flex;border:1px solid var(--edge);border-radius:3px;overflow:hidden}
+.seg-btn{
+  font-family:var(--sans);font-size:0.8rem;color:var(--ink-soft);
+  background:var(--panel);border:0;padding:0.34rem 0.7rem;cursor:pointer;
+}
+.seg-btn + .seg-btn{border-left:1px solid var(--edge)}
+.seg-btn[aria-checked="true"]{background:var(--brass-wash);color:var(--brass);font-weight:700}
+
+.tally{
+  display:flex;flex-wrap:wrap;gap:0.15rem 1rem;margin:0.55rem 0 0;
+  font-size:0.78rem;color:var(--ink-soft);font-family:var(--mono);
+}
+.tally .n{font-weight:700}
+.tally .lat .n{color:var(--lat)}
+.tally .cyr .n{color:var(--cyr)}
+
+.note{
+  margin:clamp(1.6rem,4vw,2.4rem) 0 0;padding-top:1rem;
+  border-top:1px solid var(--edge);
+  font-size:0.85rem;color:var(--ink-soft);max-width:62ch;
+}
+.note p{margin:0 0 0.55rem}
+.note code{font-family:var(--mono);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="bar">
+    <div class="mark">ROT<b>13</b></div>
+    <p class="tag">Шифрует латиницу и кириллицу в одном тексте, сразу и вместе.</p>
+  </header>
+
+  <section class="dial" aria-label="Таблица замены букв">
+    <div class="ring" data-script="lat">
+      <div class="ring-head"><span><em>латиница</em></span><span>26 букв · сдвиг 13 · 13 пар</span></div>
+      <div class="cols" id="ring-lat"></div>
+    </div>
+    <div class="ring" data-script="cyr">
+      <div class="ring-head"><span><em>кириллица</em></span><span>32 буквы · сдвиг 16 · 16 пар</span></div>
+      <div class="cols" id="ring-cyr"></div>
+    </div>
+  </section>
+
+  <section class="desk">
+    <div class="pane">
+      <div class="pane-head">
+        <label for="src">Исходный текст</label>
+        <div class="seg" role="radiogroup" aria-label="Как обходиться с буквой ё">
+          <button class="seg-btn" type="button" role="radio" aria-checked="true" data-yo="fold">ё как е</button>
+          <button class="seg-btn" type="button" role="radio" aria-checked="false" data-yo="keep">ё не трогать</button>
+        </div>
+      </div>
+      <textarea id="src" class="field" spellcheck="false" placeholder="Наберите или вставьте текст"></textarea>
+      <p class="tally">
+        <span class="lat">латиница <span class="n" id="n-lat">0</span></span>
+        <span class="cyr">кириллица <span class="n" id="n-cyr">0</span></span>
+        <span>без изменений <span class="n" id="n-other">0</span></span>
+      </p>
+    </div>
+
+    <div class="pane">
+      <div class="pane-head"><span>Результат</span><span id="hint">повторное шифрование вернёт исходник</span></div>
+      <div id="out" class="field" tabindex="0" role="textbox" aria-readonly="true" aria-label="Результат"></div>
+      <div class="row">
+        <button class="btn" type="button" id="copy">Копировать</button>
+        <button class="btn" type="button" id="swap">Перенести в ввод</button>
+        <button class="btn" type="button" id="clear">Очистить</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="note">
+    <p>ROT13 сдвигает букву на половину алфавита, поэтому шифрование и расшифровка — одно и то же действие. В латинице это 13 из 26 букв, в кириллице — 16 из 32.</p>
+    <p>В русском алфавите 33 буквы — нечётное число, и ровно пополам он не делится. Режим <code>ё как е</code> убирает ё из алфавита и шифрует её как е: замена остаётся обратимой, но ё в исходнике не восстановится. Режим <code>ё не трогать</code> оставляет ё на месте — текст восстанавливается буква в букву.</p>
+    <p>Цифры, знаки препинания, пробелы и буквы других алфавитов (<code>і ї є ґ ў</code>) проходят насквозь. Регистр сохраняется.</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LAT = "abcdefghijklmnopqrstuvwxyz";
+  var CYR = "абвгдежзийклмнопрстуфхцчшщъыьэюя"; // 32 буквы, без ё
+
+  function buildMap(alpha){
+    var n = alpha.length, shift = n / 2, map = Object.create(null), i, lo, to;
+    for(i = 0; i < n; i++){
+      lo = alpha[i];
+      to = alpha[(i + shift) % n];
+      map[lo] = to;
+      map[lo.toUpperCase()] = to.toUpperCase();
+    }
+    return map;
+  }
+
+  var latMap = buildMap(LAT);
+  var cyrMap = buildMap(CYR);
+  var yoMode = "fold";
+
+  function script(ch){
+    if(latMap[ch]) return "lat";
+    if(cyrMap[ch]) return "cyr";
+    if(yoMode === "fold" && (ch === "ё" || ch === "Ё")) return "cyr";
+    return "other";
+  }
+
+  function encode(ch){
+    if(latMap[ch]) return latMap[ch];
+    if(cyrMap[ch]) return cyrMap[ch];
+    if(yoMode === "fold"){
+      if(ch === "ё") return cyrMap["е"];
+      if(ch === "Ё") return cyrMap["Е"];
+    }
+    return ch;
+  }
+
+  /* ── барабан ── */
+  var cells = Object.create(null); // буква (нижний регистр) → элемент колонки
+
+  function drawRing(hostId, alpha){
+    var host = document.getElementById(hostId);
+    var half = alpha.length / 2, frag = document.createDocumentFragment(), i;
+    for(i = 0; i < half; i++){
+      var a = alpha[i], b = alpha[i + half];
+      var col = document.createElement("div");
+      col.className = "col";
+      var top = document.createElement("span"); top.textContent = a;
+      var link = document.createElement("span"); link.className = "link";
+      var bot = document.createElement("span"); bot.textContent = b;
+      col.appendChild(top); col.appendChild(link); col.appendChild(bot);
+      col.title = a + " ⇄ " + b;
+      frag.appendChild(col);
+      cells[a] = col;
+      cells[b] = col;
+    }
+    host.appendChild(frag);
+  }
+
+  drawRing("ring-lat", LAT);
+  drawRing("ring-cyr", CYR);
+
+  var src = document.getElementById("src");
+  var out = document.getElementById("out");
+  var nLat = document.getElementById("n-lat");
+  var nCyr = document.getElementById("n-cyr");
+  var nOther = document.getElementById("n-other");
+  var lastHot = [];
+  var ticking = null;
+
+  function render(){
+    var text = src.value;
+    var counts = {lat:0, cyr:0, other:0};
+    var used = Object.create(null);
+    var lastLetter = "";
+    var span = null, spanCls = null, buf = "";
+    var i, ch, cls, key;
+
+    out.textContent = "";
+
+    function flush(){
+      if(span){ span.textContent = buf; buf = ""; }
+    }
+
+    for(i = 0; i < text.length; i++){
+      ch = text[i];
+      cls = script(ch);
+      counts[cls]++;
+
+      if(cls !== "other"){
+        key = ch.toLowerCase();
+        if(key === "ё") key = "е";
+        if(cells[key]){ used[key] = true; lastLetter = key; }
+      }
+
+      if(cls !== spanCls){
+        flush();
+        span = document.createElement("span");
+        span.className = "g-" + cls;
+        out.appendChild(span);
+        spanCls = cls;
+      }
+      buf += encode(ch);
+    }
+    flush();
+
+    nLat.textContent = counts.lat;
+    nCyr.textContent = counts.cyr;
+    nOther.textContent = counts.other;
+
+    for(i = 0; i < lastHot.length; i++) lastHot[i].classList.remove("hot");
+    lastHot = [];
+    for(key in used){
+      cells[key].classList.add("hot");
+      lastHot.push(cells[key]);
+    }
+
+    if(lastLetter && cells[lastLetter]){
+      var col = cells[lastLetter];
+      if(ticking) ticking.classList.remove("tick");
+      void col.offsetWidth;
+      col.classList.add("tick");
+      ticking = col;
+    }
+  }
+
+  src.addEventListener("input", render);
+
+  /* ── буква ё ── */
+  var segButtons = document.querySelectorAll(".seg-btn");
+  Array.prototype.forEach.call(segButtons, function(btn){
+    btn.addEventListener("click", function(){
+      yoMode = btn.getAttribute("data-yo");
+      Array.prototype.forEach.call(segButtons, function(b){
+        b.setAttribute("aria-checked", String(b === btn));
+      });
+      render();
+    });
+  });
+
+  /* ── кнопки ── */
+  var copyBtn = document.getElementById("copy");
+  copyBtn.addEventListener("click", function(){
+    var text = out.textContent;
+    if(!text) return;
+    var done = function(ok){
+      copyBtn.textContent = ok ? "Скопировано" : "Не вышло — выделите вручную";
+      setTimeout(function(){ copyBtn.textContent = "Копировать"; }, 1600);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ done(false); });
+    } else {
+      done(false);
+    }
+  });
+
+  document.getElementById("swap").addEventListener("click", function(){
+    src.value = out.textContent;
+    render();
+    src.focus();
+  });
+
+  document.getElementById("clear").addEventListener("click", function(){
+    src.value = "";
+    render();
+    src.focus();
+  });
+
+  src.value = "Привет, world! Это ROT13 — работает и для кириллицы, и для латиницы.";
+  render();
+})();
+</script>
+</body>
+</html>
