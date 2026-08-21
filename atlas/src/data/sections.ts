@@ -34,10 +34,12 @@ import { extra12Sections } from "./extra12";
 import { extra13Sections } from "./extra13";
 import { extra14Sections } from "./extra14";
 import { extra15Sections } from "./extra15";
+import { extra16Sections } from "./extra16";
 import { additions1 } from "./additions";
 import { additions2 } from "./additions2";
 import { additions3 } from "./additions3";
 import { additions4 } from "./additions4";
+import { additions5 } from "./additions5";
 
 const baseSections: Section[] = [
   {
@@ -950,11 +952,12 @@ const allSections: Section[] = [
   ...extra13Sections,
   ...extra14Sections,
   ...extra15Sections,
+  ...extra16Sections,
 ];
 
 // Добор позиций в уже существующие разделы: записи дописываются
 // в конец своего раздела, нумерация продолжается без разрывов.
-for (const table of [additions1, additions2, additions3, additions4]) {
+for (const table of [additions1, additions2, additions3, additions4, additions5]) {
   for (const [sectionId, rows] of Object.entries(table)) {
     const section = allSections.find((s) => s.id === sectionId);
     if (!section) continue;
