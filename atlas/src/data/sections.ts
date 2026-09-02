@@ -40,6 +40,12 @@ import { extra18Sections } from "./extra18";
 import { extra19Sections } from "./extra19";
 import { extra20Sections } from "./extra20";
 import { extra21Sections } from "./extra21";
+import { extra22Sections } from "./extra22";
+import { extra23Sections } from "./extra23";
+import { extra24Sections } from "./extra24";
+import { extra25Sections } from "./extra25";
+import { extra26Sections } from "./extra26";
+import { extra27Sections } from "./extra27";
 import { additions1 } from "./additions";
 import { additions2 } from "./additions2";
 import { additions3 } from "./additions3";
@@ -48,6 +54,7 @@ import { additions5 } from "./additions5";
 import { additions6 } from "./additions6";
 import { additions7 } from "./additions7";
 import { additions8 } from "./additions8";
+import { additions9 } from "./additions9";
 
 const baseSections: Section[] = [
   {
@@ -966,11 +973,17 @@ const allSections: Section[] = [
   ...extra19Sections,
   ...extra20Sections,
   ...extra21Sections,
+  ...extra22Sections,
+  ...extra23Sections,
+  ...extra24Sections,
+  ...extra25Sections,
+  ...extra26Sections,
+  ...extra27Sections,
 ];
 
 // Добор позиций в уже существующие разделы: записи дописываются
 // в конец своего раздела, нумерация продолжается без разрывов.
-for (const table of [additions1, additions2, additions3, additions4, additions5, additions6, additions7, additions8]) {
+for (const table of [additions1, additions2, additions3, additions4, additions5, additions6, additions7, additions8, additions9]) {
   for (const [sectionId, rows] of Object.entries(table)) {
     const section = allSections.find((s) => s.id === sectionId);
     if (!section) continue;
