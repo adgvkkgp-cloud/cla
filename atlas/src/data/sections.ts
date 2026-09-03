@@ -46,6 +46,8 @@ import { extra24Sections } from "./extra24";
 import { extra25Sections } from "./extra25";
 import { extra26Sections } from "./extra26";
 import { extra27Sections } from "./extra27";
+import { extra28Sections } from "./extra28";
+import { extra29Sections } from "./extra29";
 import { additions1 } from "./additions";
 import { additions2 } from "./additions2";
 import { additions3 } from "./additions3";
@@ -979,6 +981,8 @@ const allSections: Section[] = [
   ...extra25Sections,
   ...extra26Sections,
   ...extra27Sections,
+  ...extra28Sections,
+  ...extra29Sections,
 ];
 
 // Добор позиций в уже существующие разделы: записи дописываются
