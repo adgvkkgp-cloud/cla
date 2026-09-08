@@ -48,6 +48,18 @@ import { extra26Sections } from "./extra26";
 import { extra27Sections } from "./extra27";
 import { extra28Sections } from "./extra28";
 import { extra29Sections } from "./extra29";
+import { extra30Sections } from "./extra30";
+import { extra31Sections } from "./extra31";
+import { extra32Sections } from "./extra32";
+import { extra33Sections } from "./extra33";
+import { extra34Sections } from "./extra34";
+import { extra35Sections } from "./extra35";
+import { extra36Sections } from "./extra36";
+import { extra37Sections } from "./extra37";
+import { extra38Sections } from "./extra38";
+import { extra39Sections } from "./extra39";
+import { extra40Sections } from "./extra40";
+import { extra41Sections } from "./extra41";
 import { additions1 } from "./additions";
 import { additions2 } from "./additions2";
 import { additions3 } from "./additions3";
@@ -983,6 +995,18 @@ const allSections: Section[] = [
   ...extra27Sections,
   ...extra28Sections,
   ...extra29Sections,
+  ...extra30Sections,
+  ...extra31Sections,
+  ...extra32Sections,
+  ...extra33Sections,
+  ...extra34Sections,
+  ...extra35Sections,
+  ...extra36Sections,
+  ...extra37Sections,
+  ...extra38Sections,
+  ...extra39Sections,
+  ...extra40Sections,
+  ...extra41Sections,
 ];
 
 // Добор позиций в уже существующие разделы: записи дописываются
