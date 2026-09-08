@@ -52,7 +52,7 @@
     <div style="position:relative; width:min(370px,44vw);">
       <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:11px; padding:8px 11px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-        <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Поиск по 43 950 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;"/>
+        <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Поиск по 44 310 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;"/>
         <sc-if value="{{ search }}"><button onClick="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
       </div>
       <sc-if value="{{ showResults }}">
@@ -216,7 +216,7 @@
   <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
     <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:#0a0b10; z-index:60;">
       <div style="width:34px;height:34px;border:3px solid rgba(255,255,255,.15); border-top-color:oklch(0.8 0.13 265); border-radius:50%; animation:txspin .8s linear infinite;"></div>
-      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 43 950 тем…</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 44 310 тем…</div>
     </div>
   </sc-if>
 </div>
@@ -616,8 +616,8 @@ class Component extends DCLogic {
     return {
       loading:s.loading, mapMode:s.mode==='map', listMode:s.mode==='list',
       onTabMap:this.onTabMap, onTabList:this.onTabList,
-      statSections:(this.sections?this.sections.length:580).toLocaleString('ru'),
-      statEntries:(this._entryCount||43950).toLocaleString('ru'),
+      statSections:(this.sections?this.sections.length:586).toLocaleString('ru'),
+      statEntries:(this._entryCount||44310).toLocaleString('ru'),
       mapRef:this.mapRef,
       path:(s.path||[]).map((p,i,arr)=>({ id:p.id, label:p.label, icon:p.icon, notLast:i<arr.length-1, onClick:()=>this._diveById(p.id) })),
       legend:(this.domIndex?this.DOMAINS.filter(d=>this.domIndex[d.id]&&this.domIndex[d.id].subs.size):[]).map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), onClick:()=>this._diveTo(d.id) })),
