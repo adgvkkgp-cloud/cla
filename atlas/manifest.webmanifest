@@ -1,0 +1,17 @@
+{
+  "name": "Атлас человека",
+  "short_name": "Атлас",
+  "description": "Интерактивная карта знаний о человеке: от хромосом и гормонов до психики, общества и культуры.",
+  "start_url": "./Atlas.dc.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0b10",
+  "theme_color": "#0a0b10",
+  "lang": "ru",
+  "dir": "ltr",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
