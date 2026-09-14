@@ -14,6 +14,7 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="manifest" href="manifest.webmanifest">
 <script src="./support.js"></script>
+
 </head>
 <body>
 <x-dc>
@@ -34,6 +35,8 @@
 
   /* ── мобильная раскладка: ниже 820px шапка переносится, панель становится
      нижней шторкой, управление картой уходит под большой палец ── */
+  .tx-narrow .tx-pane{right:380px !important}
+  @media (max-width:820px){ .tx-narrow .tx-pane{right:0 !important} }
   .tx-sheetbar{display:none}
   .tx-brand-sub-s{display:none}
   @media (max-width:820px){
@@ -108,6 +111,29 @@
   @media (max-width:820px) and (orientation:landscape){
     .tx-aside{max-height:82dvh !important}
   }
+  @media (max-width:1300px){
+    .tx-brand-sub{display:none !important}
+    .tx-tabs button{padding:7px 9px !important; font-size:12.5px !important}
+    .tx-search{flex:0 1 250px !important; width:auto !important; min-width:150px !important}
+  }
+  @media (max-width:1080px){
+    .tx-brand-title{font-size:16px !important}
+    .tx-search{flex:0 1 180px !important; width:auto !important}
+  }
+  @media (max-width:980px){
+    .tx-rail{flex:0 0 176px !important; padding:8px 6px 30px !important}
+  }
+  @media (max-width:820px){
+    .tx-rail{display:none !important}
+    .tx-filters{gap:6px !important; padding:7px 10px !important}
+    .tx-sel{max-width:150px !important; font-size:12px !important}
+    .tx-cols{overflow-x:auto !important}
+    .tx-cols > div{flex:0 0 76vw !important; max-width:none !important}
+    .tx-pairgrid{grid-template-columns:1fr !important}
+    .tx-tabs button{padding:7px 11px !important}
+    .tx-search{flex:1 0 100% !important; width:100% !important; min-width:0 !important; order:3 !important}
+    .tx-search input{font-size:16px !important}
+  }
 </style>
 <script src="data.js"></script>
 </helmet>
@@ -123,31 +149,50 @@
       </div>
     </div>
 
-    <div class="tx-tabs" style="display:flex; gap:4px; margin-left:4px; background:rgba(255,255,255,.04); padding:4px; border-radius:12px; border:1px solid rgba(255,255,255,.06);">
-      <button onClick="{{ onTabMap }}" style="position:relative; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 15px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+    <div class="txscroll tx-tabs" style="display:flex; gap:2px; margin-left:4px; background:rgba(255,255,255,.04); padding:4px; border-radius:12px; border:1px solid rgba(255,255,255,.06); overflow-x:auto; flex:1 1 auto; min-width:0;">
+      <button sc-camel-on-click="{{ onTabMap }}" style="position:relative; flex:0 0 auto; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 12px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.06)">
         <span>Карта</span>
-        <sc-if value="{{ mapMode }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; left:12px; right:12px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+        <sc-if value="{{ mapMode }}" hint-placeholder-val="{{ true }}"><span style="position:absolute; left:10px; right:10px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
       </button>
-      <button onClick="{{ onTabList }}" style="position:relative; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 15px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+      <button sc-camel-on-click="{{ onTabList }}" style="position:relative; flex:0 0 auto; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 12px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.06)">
         <span>Список</span>
-        <sc-if value="{{ listMode }}"><span style="position:absolute; left:12px; right:12px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+        <sc-if value="{{ listMode }}"><span style="position:absolute; left:10px; right:10px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
       </button>
-      <div class="tx-soon" style="display:flex; align-items:center; padding:0 10px; font-size:10.5px; color:#565c72; font-family:'IBM Plex Mono',monospace;">граф · скоро</div>
+      <button sc-camel-on-click="{{ onTabTable }}" style="position:relative; flex:0 0 auto; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 12px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.06)">
+        <span>Таблица</span>
+        <sc-if value="{{ tableMode }}"><span style="position:absolute; left:10px; right:10px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+      </button>
+      <button sc-camel-on-click="{{ onTabTiles }}" style="position:relative; flex:0 0 auto; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 12px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.06)">
+        <span>Плитка</span>
+        <sc-if value="{{ tileMode }}"><span style="position:absolute; left:10px; right:10px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+      </button>
+      <button sc-camel-on-click="{{ onTabCols }}" style="position:relative; flex:0 0 auto; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 12px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.06)">
+        <span>Колонки</span>
+        <sc-if value="{{ colMode }}"><span style="position:absolute; left:10px; right:10px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+      </button>
+      <button sc-camel-on-click="{{ onTabGraph }}" style="position:relative; flex:0 0 auto; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 12px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.06)">
+        <span>Связи</span>
+        <sc-if value="{{ graphMode }}"><span style="position:absolute; left:10px; right:10px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+      </button>
+      <button sc-camel-on-click="{{ onTabPairs }}" style="position:relative; flex:0 0 auto; border:0; background:transparent; color:#c9cde0; font:inherit; font-size:13px; font-weight:500; padding:7px 12px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.06)">
+        <span>♂♀</span>
+        <sc-if value="{{ pairMode }}"><span style="position:absolute; left:10px; right:10px; bottom:2px; height:2px; border-radius:2px; background:oklch(0.8 0.13 265);"></span></sc-if>
+      </button>
     </div>
 
-    <div class="tx-spacer" style="flex:1;"></div>
+    <div class="tx-spacer" style="flex:0 1 10px;"></div>
 
-    <div class="tx-search" style="position:relative; width:min(370px,44vw);">
+    <div class="tx-search" style="position:relative; flex:0 1 370px; min-width:160px; width:min(370px,44vw);">
       <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:11px; padding:8px 11px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-        <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Поиск по 45 285 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;"/>
-        <sc-if value="{{ search }}"><button onClick="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
+        <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 45 285 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
+        <sc-if value="{{ search }}"><button sc-camel-on-click="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
       </div>
       <sc-if value="{{ showResults }}">
         <div class="txscroll tx-results" style="position:absolute; top:47px; left:0; right:0; max-height:56vh; overflow:auto; background:rgba(18,20,29,.98); border:1px solid rgba(255,255,255,.10); border-radius:12px; box-shadow:0 24px 60px rgba(0,0,0,.55); padding:6px; z-index:40;">
           <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#6c7288; padding:6px 8px 4px;">{{ resultInfo }}</div>
           <sc-for list="{{ results }}" as="r" hint-placeholder-count="5">
-            <button onClick="{{ r.onClick }}" style="display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:0; background:transparent; color:#dfe2ee; font:inherit; padding:8px 9px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+            <button sc-camel-on-click="{{ r.onClick }}" style="display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:0; background:transparent; color:#dfe2ee; font:inherit; padding:8px 9px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
               <span style="width:8px;height:8px;border-radius:50%;flex:0 0 auto; background: {{ r.color }};"></span>
               <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:13.5px;">{{ r.title }}</span>
               <span style="font-size:11px; color:#6c7288; white-space:nowrap; max-width:42%; overflow:hidden; text-overflow:ellipsis;">{{ r.sub }}</span>
@@ -161,7 +206,7 @@
   <sc-if value="{{ mapMode }}" hint-placeholder-val="{{ true }}">
   <div class="txscroll tx-crumbs" style="flex:0 0 auto; display:flex; align-items:center; gap:2px; padding:7px 18px; border-bottom:1px solid rgba(255,255,255,.055); background:rgba(12,14,20,.55); overflow-x:auto; white-space:nowrap; z-index:20;">
     <sc-for list="{{ path }}" as="p" hint-placeholder-count="2">
-      <button onClick="{{ p.onClick }}" style="border:0; background:transparent; color:#aeb3c6; font:inherit; font-size:12.5px; padding:4px 8px; border-radius:7px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" style-hover="background:rgba(255,255,255,.06); color:#fff">
+      <button sc-camel-on-click="{{ p.onClick }}" style="border:0; background:transparent; color:#aeb3c6; font:inherit; font-size:12.5px; padding:4px 8px; border-radius:7px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" style-hover="background:rgba(255,255,255,.06); color:#fff">
         <span style="font-size:12px; opacity:.85;">{{ p.icon }}</span><span>{{ p.label }}</span>
       </button>
       <sc-if value="{{ p.notLast }}"><span style="color:#4a5068; font-size:12px;">›</span></sc-if>
@@ -169,34 +214,62 @@
   </div>
   </sc-if>
 
-  <main style="flex:1; display:flex; min-height:0; position:relative;">
+  <sc-if value="{{ dataMode }}">
+  <div class="txscroll tx-filters" style="flex:0 0 auto; display:flex; align-items:center; gap:7px; padding:8px 16px; border-bottom:1px solid rgba(255,255,255,.055); background:rgba(12,14,20,.62); overflow-x:auto; z-index:20;">
+    <div style="display:flex; gap:2px; flex:0 0 auto; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:9px; padding:2px;">
+      <button sc-camel-on-click="{{ onScopeTitle }}" style="border:0; background: {{ scopeTitleBg }}; color:#c9cde0; font:inherit; font-size:12px; padding:5px 10px; border-radius:7px; cursor:pointer; white-space:nowrap;">Заголовки</button>
+      <button sc-camel-on-click="{{ onScopeAll }}" style="border:0; background: {{ scopeAllBg }}; color:#c9cde0; font:inherit; font-size:12px; padding:5px 10px; border-radius:7px; cursor:pointer; white-space:nowrap;">Везде</button>
+    </div>
+    <div style="display:flex; align-items:center; gap:7px; flex:0 0 auto;">
+      <sc-raw-select value="{{ fDomain }}" sc-camel-on-change="{{ onSelDomain }}" class="tx-sel" style="max-width:210px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:9px; color:#dfe2ee; font:inherit; font-size:12.5px; padding:6px 8px; cursor:pointer;">
+        <sc-for list="{{ domainOpts }}" as="o" hint-placeholder-count="9"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+      </sc-raw-select>
+      <sc-raw-select value="{{ fLevel }}" sc-camel-on-change="{{ onSelLevel }}" class="tx-sel" style="max-width:210px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:9px; color:#dfe2ee; font:inherit; font-size:12.5px; padding:6px 8px; cursor:pointer;">
+        <sc-for list="{{ levelOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+      </sc-raw-select>
+      <sc-raw-select value="{{ fSection }}" sc-camel-on-change="{{ onSelSection }}" class="tx-sel" style="max-width:210px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:9px; color:#dfe2ee; font:inherit; font-size:12.5px; padding:6px 8px; cursor:pointer;">
+        <sc-for list="{{ sectionOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+      </sc-raw-select>
+      <sc-if value="{{ hasTags }}"><sc-raw-select value="{{ fTag }}" sc-camel-on-change="{{ onSelTag }}" class="tx-sel" style="max-width:210px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:9px; color:#dfe2ee; font:inherit; font-size:12.5px; padding:6px 8px; cursor:pointer;">
+        <sc-for list="{{ tagOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+      </sc-raw-select></sc-if>
+      <button sc-camel-on-click="{{ onTglDetail }}" style="border:1px solid rgba(255,255,255,.09); background: {{ detailBg }}; color: {{ detailCol }}; font:inherit; font-size:12.5px; padding:6px 11px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.09)">❉ Механизм</button>
+      <button sc-camel-on-click="{{ onTglSex }}" style="border:1px solid rgba(255,255,255,.09); background: {{ sexBg }}; color: {{ sexCol }}; font:inherit; font-size:12.5px; padding:6px 11px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.09)">♂♀ Грани пола</button>
+    </div>
+    <span style="flex:1 0 12px;"></span>
+    <span style="flex:0 0 auto; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#7a8098; white-space:nowrap;">{{ foundInfo }}</span>
+    <sc-if value="{{ anyFilter }}"><button sc-camel-on-click="{{ onReset }}" style="flex:0 0 auto; border:1px solid rgba(255,255,255,.09); background:transparent; color:#9aa0b6; font:inherit; font-size:12px; padding:6px 10px; border-radius:9px; cursor:pointer; white-space:nowrap;" style-hover="background:rgba(255,255,255,.07); color:#fff">Сбросить</button></sc-if>
+  </div>
+  </sc-if>
+
+  <main class="{{ mainCls }}" style="flex:1; display:flex; min-height:0; position:relative;">
     <div style="flex:1; position:relative; min-width:0; overflow:hidden;">
       <div ref="{{ mapRef }}" style="position:absolute; inset:0; cursor:grab;"></div>
 
       <div class="tx-mapctl" style="position:absolute; left:16px; top:14px; display:flex; flex-direction:column; gap:6px; z-index:5;">
-        <button onClick="{{ onZoomIn }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:18px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">+</button>
-        <button onClick="{{ onZoomOut }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:18px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">−</button>
-        <button onClick="{{ onFit }}" title="По размеру" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:15px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">⤢</button>
-        <button onClick="{{ onHome }}" title="К началу" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:15px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">⌂</button>
+        <button sc-camel-on-click="{{ onZoomIn }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:18px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">+</button>
+        <button sc-camel-on-click="{{ onZoomOut }}" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:18px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">−</button>
+        <button sc-camel-on-click="{{ onFit }}" title="По размеру" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:15px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">⤢</button>
+        <button sc-camel-on-click="{{ onHome }}" title="К началу" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.09);background:rgba(18,20,29,.7);color:#c9cde0;border-radius:10px;cursor:pointer;font-size:15px;line-height:1;backdrop-filter:blur(6px);" style-hover="background:rgba(255,255,255,.1)">⌂</button>
       </div>
 
       <div class="tx-hint" style="position:absolute; left:16px; bottom:14px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#6b7188; background:rgba(10,11,16,.55); padding:5px 9px; border-radius:8px; pointer-events:none; z-index:5;">{{ hintText }}</div>
 
       <div class="tx-legend" style="position:absolute; right:16px; bottom:14px; display:flex; flex-wrap:wrap; gap:6px 8px; max-width:min(52%,540px); justify-content:flex-end; z-index:5;">
         <sc-for list="{{ legend }}" as="d" hint-placeholder-count="8">
-          <button onClick="{{ d.onClick }}" style="display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.08); background:rgba(18,20,29,.62); color:#c4c8da; font:inherit; font-size:11.5px; padding:5px 9px; border-radius:20px; cursor:pointer;" style-hover="background:rgba(255,255,255,.09)">
+          <button sc-camel-on-click="{{ d.onClick }}" style="display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.08); background:rgba(18,20,29,.62); color:#c4c8da; font:inherit; font-size:11.5px; padding:5px 9px; border-radius:20px; cursor:pointer;" style-hover="background:rgba(255,255,255,.09)">
             <span style="width:8px;height:8px;border-radius:50%; background: {{ d.color }};"></span>{{ d.title }}
           </button>
         </sc-for>
       </div>
     </div>
 
-    <sc-if value="{{ mapMode }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ showAside }}" hint-placeholder-val="{{ true }}">
     <aside class="txscroll tx-aside {{ asideCls }}" style="flex:0 0 380px; width:380px; border-left:1px solid rgba(255,255,255,.08); background:rgba(14,16,23,.85); overflow:auto; z-index:15;">
       <sc-if value="{{ hasSel }}">
         <div class="tx-sheetbar">
           <span class="tx-grabber"></span>
-          <button onClick="{{ onCloseSel }}" aria-label="Закрыть" style="flex:0 0 auto; width:34px; height:34px; border:0; background:rgba(255,255,255,.06); color:#aeb3c6; border-radius:10px; cursor:pointer; font-size:15px; line-height:1;">✕</button>
+          <button sc-camel-on-click="{{ onCloseSel }}" aria-label="Закрыть" style="flex:0 0 auto; width:34px; height:34px; border:0; background:rgba(255,255,255,.06); color:#aeb3c6; border-radius:10px; cursor:pointer; font-size:15px; line-height:1;">✕</button>
         </div>
         <div class="tx-panel" style="padding:22px 22px 34px;">
           <div style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.6px; text-transform:uppercase; color:#6c7288;">{{ sel.kindLabel }}</div>
@@ -208,7 +281,13 @@
           <sc-if value="{{ sel.hasPath }}"><div style="font-size:11.5px; color:#616780; margin-top:6px; line-height:1.5;">{{ sel.pathLabel }}</div></sc-if>
 
           <sc-if value="{{ sel.canDive }}">
-            <button onClick="{{ sel.onDive }}" style="margin-top:16px; width:100%; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03)); color:#eef0f8; font:inherit; font-size:13px; font-weight:500; padding:10px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.12)">Погрузиться →</button>
+            <button sc-camel-on-click="{{ sel.onDive }}" style="margin-top:16px; width:100%; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03)); color:#eef0f8; font:inherit; font-size:13px; font-weight:500; padding:10px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.12)">Погрузиться →</button>
+          </sc-if>
+          <sc-if value="{{ sel.hasMap }}">
+            <div style="display:flex; gap:8px; margin-top:16px;">
+              <button sc-camel-on-click="{{ sel.onMap }}" style="flex:1; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03)); color:#eef0f8; font:inherit; font-size:12.5px; font-weight:500; padding:10px 8px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.12)">На карте →</button>
+              <button sc-camel-on-click="{{ sel.onGraph }}" style="flex:1; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03)); color:#eef0f8; font:inherit; font-size:12.5px; font-weight:500; padding:10px 8px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.12)">Связи →</button>
+            </div>
           </sc-if>
 
           <sc-if value="{{ sel.hasDescription }}"><p style="margin:18px 0 0; font-size:14.5px; line-height:1.6; color:#d3d7e6;">{{ sel.description }}</p></sc-if>
@@ -235,10 +314,10 @@
 
           <sc-if value="{{ sel.hasChips }}">
             <div style="margin-top:20px;">
-              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:#6c7288; margin-bottom:9px;">Внутри</div>
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:#6c7288; margin-bottom:9px;">{{ sel.chipsLabel }}</div>
               <div style="display:flex; flex-wrap:wrap; gap:6px;">
                 <sc-for list="{{ sel.chips }}" as="c" hint-placeholder-count="6">
-                  <button onClick="{{ c.onClick }}" style="display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); color:#c4c8da; font:inherit; font-size:12px; padding:5px 10px; border-radius:8px; cursor:pointer; max-width:100%;" style-hover="background:rgba(255,255,255,.08)">
+                  <button sc-camel-on-click="{{ c.onClick }}" style="display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); color:#c4c8da; font:inherit; font-size:12px; padding:5px 10px; border-radius:8px; cursor:pointer; max-width:100%;" style-hover="background:rgba(255,255,255,.08)">
                     <span style="width:6px;height:6px;border-radius:50%;flex:0 0 auto; background: {{ c.color }};"></span>
                     <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ c.label }}</span>
                   </button>
@@ -253,56 +332,279 @@
         <div class="tx-intro" style="padding:40px 26px; color:#6c7288;">
           <div style="font-family:'Spectral',serif; font-size:21px; color:#aeb3c6; line-height:1.3;">Карта человека</div>
           <p style="font-size:13.5px; line-height:1.65; margin-top:12px;">От хромосом и гормонов — до психики, общества, культуры и тончайших черт личности. Кликайте по узлам, чтобы раскрывать ветви; двойной клик — чтобы погрузиться. Зоны уходят всё дальше — вплоть до отдельных тем и их граней ♂/♀.</p>
-          <p style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; line-height:1.7; margin-top:16px; color:#565c72;">{{ statSections }} разделов<br/>{{ statEntries }} тем<br/>8 больших доменов</p>
+          <p style="font-family:'IBM Plex Mono',monospace; font-size:11.5px; line-height:1.7; margin-top:16px; color:#565c72;">{{ statSections }} разделов<br>{{ statEntries }} тем<br>8 больших доменов</p>
         </div>
       </sc-if>
     </aside>
     </sc-if>
 
     <sc-if value="{{ listMode }}">
-    <div class="txscroll" style="position:absolute; inset:0; overflow:auto; background:#0a0b10; z-index:12;">
-      <div class="tx-listwrap" style="max-width:900px; margin:0 auto; padding:22px 20px 70px;">
-        <div style="display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px;">
-          <sc-for list="{{ listDomains }}" as="d" hint-placeholder-count="9">
-            <button onClick="{{ d.onClick }}" style="position:relative; display:inline-flex; align-items:center; gap:7px; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03); color:#c4c8da; font:inherit; font-size:12.5px; padding:7px 13px; border-radius:22px; cursor:pointer;" style-hover="background:rgba(255,255,255,.08)">
-              <span style="width:8px;height:8px;border-radius:50%; background: {{ d.color }};"></span>{{ d.title }}
-              <sc-if value="{{ d.active }}"><span style="position:absolute; inset:0; border-radius:22px; border:1.5px solid rgba(255,255,255,.55); pointer-events:none;"></span></sc-if>
-            </button>
-          </sc-for>
-        </div>
-        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#6c7288; margin-bottom:12px;">{{ listInfo }}</div>
-
-        <div style="display:flex; flex-direction:column; gap:9px;">
-          <sc-for list="{{ listRows }}" as="r" hint-placeholder-count="8">
-            <div class="tx-listrow" style="border:1px solid rgba(255,255,255,.08); border-radius:14px; background:rgba(16,18,26,.7); overflow:hidden;">
-              <button onClick="{{ r.onToggle }}" style="display:flex; align-items:flex-start; gap:13px; width:100%; text-align:left; border:0; background:transparent; color:inherit; font:inherit; padding:14px 16px; cursor:pointer;" style-hover="background:rgba(255,255,255,.03)">
-                <span style="width:10px;height:10px;border-radius:50%;margin-top:5px;flex:0 0 auto; background: {{ r.color }};"></span>
+    <div class="tx-pane" style="position:absolute; inset:0; display:flex; min-width:0; background:#0a0b10; z-index:12;">
+      <div class="txscroll tx-rail" style="flex:0 0 236px; border-right:1px solid rgba(255,255,255,.07); overflow:auto; padding:10px 9px 40px; background:rgba(12,14,20,.55);">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.6px; text-transform:uppercase; color:#565c72; padding:5px 9px 7px;">Домены и дисциплины</div>
+        <sc-for list="{{ railDomains }}" as="d" hint-placeholder-count="9">
+          <button sc-camel-on-click="{{ d.onClick }}" style="display:flex; align-items:center; gap:9px; width:100%; text-align:left; border:0; background: {{ d.bg }}; color:#c9cde0; font:inherit; font-size:13px; padding:8px 9px; border-radius:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+            <span style="width:8px;height:8px;border-radius:50%;flex:0 0 auto; background: {{ d.color }};"></span>
+            <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ d.title }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#6c7288;">{{ d.n }}</span>
+          </button>
+          <sc-if value="{{ d.open }}">
+            <div style="padding:2px 0 7px 17px; display:flex; flex-direction:column; gap:1px;">
+              <sc-for list="{{ d.levels }}" as="l" hint-placeholder-count="3">
+                <button sc-camel-on-click="{{ l.onClick }}" style="display:flex; align-items:center; gap:8px; width:100%; text-align:left; border:0; background: {{ l.bg }}; color:#9aa0b6; font:inherit; font-size:12px; padding:6px 8px; border-radius:7px; cursor:pointer;" style-hover="background:rgba(255,255,255,.05)">
+                  <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ l.title }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#565c72;">{{ l.n }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </sc-for>
+      </div>
+      <div class="txscroll" style="flex:1; min-width:0; overflow:auto;">
+        <div class="tx-listwrap" style="max-width:930px; margin:0 auto; padding:16px 20px 80px;">
+          <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:12px;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#6c7288;">{{ listInfo }}</span>
+            <span style="flex:1;"></span>
+            <button sc-camel-on-click="{{ onCollapseAll }}" style="border:0; background:transparent; color:#7a8098; font:inherit; font-size:11.5px; cursor:pointer;" style-hover="color:#fff">свернуть всё</button>
+            <button sc-camel-on-click="{{ onExpandAll }}" style="border:0; background:transparent; color:#7a8098; font:inherit; font-size:11.5px; cursor:pointer;" style-hover="color:#fff">раскрыть всё</button>
+          </div>
+          <sc-for list="{{ secRows }}" as="s" hint-placeholder-count="7">
+            <div style="border:1px solid rgba(255,255,255,.08); border-radius:14px; background:rgba(16,18,26,.7); overflow:hidden; margin-bottom:9px;">
+              <button sc-camel-on-click="{{ s.onToggle }}" style="display:flex; align-items:center; gap:12px; width:100%; text-align:left; border:0; background:transparent; color:inherit; font:inherit; padding: {{ secPad }}; cursor:pointer;" style-hover="background:rgba(255,255,255,.03)">
+                <span style="flex:0 0 auto; width:20px; text-align:center; font-size:15px;">{{ s.icon }}</span>
                 <span style="flex:1; min-width:0;">
-                  <span style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                    <span style="font-size:15px; font-weight:600; color:#eef0f7;">{{ r.title }}</span>
-                    <sc-if value="{{ r.hasTag }}"><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.4px; color:#8288a0; border:1px solid rgba(255,255,255,.12); border-radius:20px; padding:1px 7px;">{{ r.tag }}</span></sc-if>
+                  <span style="display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;">
+                    <span style="font-family:'Spectral',serif; font-size:16.5px; font-weight:600; color:#eef0f7;">{{ s.title }}</span>
+                    <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#6c7288;">{{ s.meta }}</span>
                   </span>
-                  <sc-if value="{{ r.hasDescription }}"><span style="display:block; font-size:13px; color:#9aa0b6; margin-top:3px;">{{ r.description }}</span></sc-if>
-                  <span style="display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#565c72; margin-top:5px;">{{ r.domainIcon }} {{ r.sub }}</span>
+                  <sc-if value="{{ s.hasSub }}"><span style="display:block; font-size:12.5px; color:#8288a0; margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ s.subtitle }}</span></sc-if>
                 </span>
-                <sc-if value="{{ r.canOpen }}"><span style="color:#6c7288; font-size:12px; flex:0 0 auto; margin-top:3px;">{{ r.chev }}</span></sc-if>
+                <span style="width:9px;height:9px;border-radius:50%;flex:0 0 auto; background: {{ s.color }};"></span>
+                <span style="flex:0 0 auto; color:#6c7288; font-size:12px;">{{ s.chev }}</span>
               </button>
-              <sc-if value="{{ r.open }}">
-                <div class="tx-listopen" style="padding:0 16px 15px 39px; display:flex; flex-direction:column; gap:9px;">
-                  <sc-if value="{{ r.hasDetail }}"><div style="background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); border-radius:11px; padding:11px 13px; font-size:13px; line-height:1.6; color:#cfd3e3; white-space:pre-line;">{{ r.detail }}</div></sc-if>
-                  <sc-if value="{{ r.hasMale }}"><div style="background:linear-gradient(180deg,rgba(70,110,190,.13),rgba(70,110,190,.04)); border:1px solid rgba(90,130,210,.2); border-radius:11px; padding:11px 13px;"><div style="font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:oklch(0.78 0.09 250); margin-bottom:5px;">♂ Мужчина</div><div style="font-size:13px; line-height:1.6; color:#dbe2f2; white-space:pre-line;">{{ r.male }}</div></div></sc-if>
-                  <sc-if value="{{ r.hasFemale }}"><div style="background:linear-gradient(180deg,rgba(200,90,130,.13),rgba(200,90,130,.04)); border:1px solid rgba(210,110,150,.2); border-radius:11px; padding:11px 13px;"><div style="font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:oklch(0.8 0.1 5); margin-bottom:5px;">♀ Женщина</div><div style="font-size:13px; line-height:1.6; color:#f3dde7; white-space:pre-line;">{{ r.female }}</div></div></sc-if>
+              <sc-if value="{{ s.open }}">
+                <div style="display:flex; flex-direction:column; border-top:1px solid rgba(255,255,255,.06);">
+                  <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="5">
+                    <button sc-camel-on-click="{{ r.onClick }}" style="display:flex; align-items:baseline; gap:11px; width:100%; text-align:left; border:0; border-top:1px solid rgba(255,255,255,.04); background: {{ r.bg }}; color:inherit; font:inherit; padding: {{ rowPad }}; cursor:pointer;" style-hover="background:rgba(255,255,255,.045)">
+                      <span style="flex:0 0 auto; width:26px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#4d5368;">{{ r.num }}</span>
+                      <span style="flex:1; min-width:0;">
+                        <span style="display:block; font-size: {{ rowFs }}; font-weight:500; color:#e7e9f2; line-height:1.4;"><sc-for list="{{ r.parts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.28); color:#fff; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span>
+                        <sc-if value="{{ r.hasDesc }}"><span style="display:block; font-size: {{ rowDfs }}; line-height:1.5; color:#8f95ab; margin-top:2px;"><sc-for list="{{ r.dparts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.18); color:#dfe3f2; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span></sc-if>
+                      </span>
+                      <span style="flex:0 0 auto; font-size:11px; letter-spacing:1px; color:#6c7288;">{{ r.badges }}</span>
+                    </button>
+                  </sc-for>
+                  <sc-if value="{{ s.hasMore }}">
+                    <button sc-camel-on-click="{{ s.onMore }}" style="border:0; border-top:1px solid rgba(255,255,255,.04); background:rgba(255,255,255,.02); color:#8f95ab; font:inherit; font-size:12px; padding:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06); color:#fff">Ещё {{ s.moreN }} в разделе</button>
+                  </sc-if>
                 </div>
               </sc-if>
             </div>
           </sc-for>
+          <sc-if value="{{ secMore }}"><button sc-camel-on-click="{{ onSecMore }}" style="margin:16px auto 0; display:block; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.1)">Ещё разделы</button></sc-if>
+          <sc-if value="{{ listEmpty }}"><div style="text-align:center; color:#565c72; padding:70px 20px; font-size:13.5px; line-height:1.7;">Ничего не найдено.<br>Измените запрос или снимите фильтры.</div></sc-if>
         </div>
-
-        <sc-if value="{{ hasMore }}"><button onClick="{{ onMore }}" style="margin:18px auto 0; display:block; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.1)">Показать ещё</button></sc-if>
-        <sc-if value="{{ listEmpty }}"><div style="text-align:center; color:#565c72; padding:60px 20px;">Ничего не найдено. Измените запрос или домен.</div></sc-if>
       </div>
     </div>
     </sc-if>
+
+    <sc-if value="{{ tableMode }}">
+    <div class="tx-pane" style="position:absolute; inset:0; display:flex; flex-direction:column; background:#0a0b10; z-index:12;">
+      <div style="flex:0 0 auto; display:flex; align-items:center; gap:12px; padding:8px 16px; border-bottom:1px solid rgba(255,255,255,.06);">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#7a8098;">{{ tblInfo }}</span>
+        <span style="flex:1;"></span>
+        <button sc-camel-on-click="{{ onExport }}" style="border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer; font-size:12px; padding:6px 12px; border-radius:9px; white-space:nowrap;" style-hover="background:rgba(255,255,255,.1)">Экспорт CSV</button>
+      </div>
+      <div class="txscroll" style="flex:1; overflow:auto;">
+        <div style="min-width:880px;">
+          <div style="display:grid; grid-template-columns:40px minmax(190px,1.15fr) minmax(210px,1.6fr) minmax(140px,.95fr) 120px 62px; align-items:center; position:sticky; top:0; z-index:2; background:rgba(14,16,23,.98); border-bottom:1px solid rgba(255,255,255,.11); font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.6px; text-transform:uppercase; color:#7a8098;">
+            <div style="padding:9px 10px;">№</div>
+            <button sc-camel-on-click="{{ onSortTitle }}" style="text-align:left; border:0; background:transparent; color:inherit; font:inherit; padding:9px 10px; cursor:pointer;" style-hover="color:#fff">Тема {{ sortTitle }}</button>
+            <div style="padding:9px 10px;">Описание</div>
+            <button sc-camel-on-click="{{ onSortSec }}" style="text-align:left; border:0; background:transparent; color:inherit; font:inherit; padding:9px 10px; cursor:pointer;" style-hover="color:#fff">Раздел {{ sortSec }}</button>
+            <button sc-camel-on-click="{{ onSortLev }}" style="text-align:left; border:0; background:transparent; color:inherit; font:inherit; padding:9px 10px; cursor:pointer;" style-hover="color:#fff">Дисциплина {{ sortLev }}</button>
+            <div style="padding:9px 10px;">Грани</div>
+          </div>
+          <sc-for list="{{ tblRows }}" as="r" hint-placeholder-count="14">
+            <button sc-camel-on-click="{{ r.onClick }}" style="display:grid; grid-template-columns:40px minmax(190px,1.15fr) minmax(210px,1.6fr) minmax(140px,.95fr) 120px 62px; align-items:center; width:100%; text-align:left; border:0; border-bottom:1px solid rgba(255,255,255,.045); background: {{ r.bg }}; color:inherit; font:inherit; cursor:pointer;" style-hover="background:rgba(255,255,255,.05)">
+              <span style="padding:7px 10px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#4d5368;">{{ r.n }}</span>
+              <span style="padding:7px 10px; font-size: {{ rowFs }}; font-weight:500; color:#e7e9f2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"><sc-for list="{{ r.parts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.28); color:#fff; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span>
+              <span style="padding:7px 10px; font-size: {{ rowDfs }}; color:#8f95ab; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.desc }}</span>
+              <span style="padding:7px 10px; font-size:11.5px; color:#aeb3c6; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:flex; align-items:center; gap:7px;"><span style="width:7px;height:7px;border-radius:50%;flex:0 0 auto; background: {{ r.color }};"></span>{{ r.sec }}</span>
+              <span style="padding:7px 10px; font-size:11px; color:#7a8098; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.lev }}</span>
+              <span style="padding:7px 10px; font-size:12px; letter-spacing:1px; color:#6c7288;">{{ r.facets }}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ tblMore }}"><button sc-camel-on-click="{{ onTblMore }}" style="margin:14px auto 40px; display:block; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.1)">Ещё 150 строк</button></sc-if>
+          <sc-if value="{{ listEmpty }}"><div style="text-align:center; color:#565c72; padding:60px 20px;">Ничего не найдено.</div></sc-if>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ tileMode }}">
+    <div class="txscroll tx-pane" style="position:absolute; inset:0; overflow:auto; background:#0a0b10; z-index:12;">
+      <div style="max-width:1180px; margin:0 auto; padding:20px 22px 80px;">
+        <sc-if value="{{ tilesRoot }}">
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(252px,1fr)); gap:12px;">
+            <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="8">
+              <button sc-camel-on-click="{{ t.onClick }}" style="text-align:left; border:1px solid rgba(255,255,255,.08); background:rgba(16,18,26,.72); color:inherit; font:inherit; border-radius:16px; padding:16px 17px 15px; cursor:pointer; display:flex; flex-direction:column; gap:10px;" style-hover="background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.18)">
+                <span style="display:flex; align-items:center; gap:10px;">
+                  <span style="font-size:20px;">{{ t.icon }}</span>
+                  <span style="font-family:'Spectral',serif; font-size:18px; font-weight:600; color:#f2f4fb; flex:1; min-width:0;">{{ t.title }}</span>
+                </span>
+                <span style="display:block; height:4px; border-radius:3px; background:rgba(255,255,255,.07); overflow:hidden;"><span style="display:block; height:4px; border-radius:3px; width: {{ t.w }}; background: {{ t.color }};"></span></span>
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#7a8098;">{{ t.n }} тем · {{ t.secs }}</span>
+                <span style="display:flex; flex-direction:column; gap:3px; margin-top:2px;">
+                  <sc-for list="{{ t.levels }}" as="l" hint-placeholder-count="4">
+                    <span style="display:flex; gap:8px; font-size:12px; color:#9aa0b6;"><span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ l.t }}</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#565c72;">{{ l.n }}</span></span>
+                  </sc-for>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ tilesInner }}">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+            <button sc-camel-on-click="{{ onTileBack }}" style="border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer; font-size:12.5px; padding:7px 12px; border-radius:9px;" style-hover="background:rgba(255,255,255,.1)">← Все домены</button>
+            <span style="font-size:19px;">{{ tileIcon }}</span>
+            <span style="font-family:'Spectral',serif; font-size:21px; font-weight:600; color:#f2f4fb;">{{ tileName }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#6c7288;">{{ tileMeta }}</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:10px;">
+            <sc-for list="{{ tileSecs }}" as="s" hint-placeholder-count="9">
+              <button sc-camel-on-click="{{ s.onClick }}" style="text-align:left; border:1px solid rgba(255,255,255,.08); background:rgba(16,18,26,.7); color:inherit; font:inherit; border-radius:13px; padding:13px 14px; cursor:pointer; display:flex; gap:11px; align-items:flex-start;" style-hover="background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.18)">
+                <span style="flex:0 0 auto; font-size:15px; width:18px; text-align:center;">{{ s.icon }}</span>
+                <span style="flex:1; min-width:0;">
+                  <span style="display:block; font-size:14px; font-weight:600; color:#eef0f7;">{{ s.title }}</span>
+                  <sc-if value="{{ s.hasSub }}"><span style="display:block; font-size:12px; color:#8288a0; margin-top:3px; line-height:1.45;">{{ s.subtitle }}</span></sc-if>
+                  <span style="display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#565c72; margin-top:6px;">{{ s.lev }} · {{ s.n }}</span>
+                </span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ colMode }}">
+    <div class="tx-cols tx-pane" style="position:absolute; inset:0; display:flex; background:#0a0b10; z-index:12;">
+      <div class="txscroll" style="flex:1 1 0; min-width:132px; max-width:230px; border-right:1px solid rgba(255,255,255,.07); overflow:auto; padding:8px 8px 30px;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.6px; text-transform:uppercase; color:#565c72; padding:5px 9px 7px;">Домен</div>
+        <sc-for list="{{ colD }}" as="c" hint-placeholder-count="8">
+          <button sc-camel-on-click="{{ c.onClick }}" style="display:flex; align-items:center; gap:9px; width:100%; text-align:left; border:0; background: {{ c.bg }}; color:#c9cde0; font:inherit; font-size:12.5px; padding:8px 9px; border-radius:8px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+            <span style="flex:0 0 auto;">{{ c.icon }}</span><span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ c.title }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#6c7288;">{{ c.n }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <div class="txscroll" style="flex:1 1 0; min-width:132px; max-width:248px; border-right:1px solid rgba(255,255,255,.07); overflow:auto; padding:8px 8px 30px;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.6px; text-transform:uppercase; color:#565c72; padding:5px 9px 7px;">Дисциплина</div>
+        <sc-for list="{{ colL }}" as="c" hint-placeholder-count="5">
+          <button sc-camel-on-click="{{ c.onClick }}" style="display:flex; align-items:center; gap:9px; width:100%; text-align:left; border:0; background: {{ c.bg }}; color:#c9cde0; font:inherit; font-size:12.5px; padding:8px 9px; border-radius:8px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+            <span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ c.title }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#6c7288;">{{ c.n }}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ colLEmpty }}"><div style="padding:14px 9px; font-size:12px; color:#4d5368;">Выберите домен</div></sc-if>
+      </div>
+      <div class="txscroll" style="flex:1.2 1 0; min-width:140px; max-width:290px; border-right:1px solid rgba(255,255,255,.07); overflow:auto; padding:8px 8px 30px;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.6px; text-transform:uppercase; color:#565c72; padding:5px 9px 7px;">Раздел</div>
+        <sc-for list="{{ colS }}" as="c" hint-placeholder-count="6">
+          <button sc-camel-on-click="{{ c.onClick }}" style="display:flex; align-items:center; gap:9px; width:100%; text-align:left; border:0; background: {{ c.bg }}; color:#c9cde0; font:inherit; font-size:12.5px; padding:8px 9px; border-radius:8px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+            <span style="flex:0 0 auto;">{{ c.icon }}</span><span style="flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ c.title }}</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#6c7288;">{{ c.n }}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ colSEmpty }}"><div style="padding:14px 9px; font-size:12px; color:#4d5368;">Выберите дисциплину</div></sc-if>
+      </div>
+      <div class="txscroll" style="flex:1.6 1 0; min-width:150px; overflow:auto; padding:8px 8px 40px;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.6px; text-transform:uppercase; color:#565c72; padding:5px 9px 7px;">Темы {{ colEInfo }}</div>
+        <sc-for list="{{ colE }}" as="c" hint-placeholder-count="10">
+          <button sc-camel-on-click="{{ c.onClick }}" style="display:flex; align-items:baseline; gap:9px; width:100%; text-align:left; border:0; background: {{ c.bg }}; color:#c9cde0; font:inherit; font-size:12.5px; padding:7px 9px; border-radius:8px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06)">
+            <span style="flex:1; min-width:0;"><sc-for list="{{ c.parts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.28); color:#fff; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span>
+            <span style="flex:0 0 auto; font-size:10.5px; letter-spacing:1px; color:#565c72;">{{ c.badges }}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{ colEEmpty }}"><div style="padding:14px 9px; font-size:12px; color:#4d5368;">Выберите раздел</div></sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ graphMode }}">
+    <div class="tx-pane" style="position:absolute; inset:0; display:flex; flex-direction:column; background:#0a0b10; z-index:12;">
+      <div style="flex:0 0 auto; display:flex; align-items:center; gap:12px; padding:8px 16px; border-bottom:1px solid rgba(255,255,255,.06);">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#7a8098; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ gInfo }}</span>
+        <span style="flex:1;"></span>
+        <button sc-camel-on-click="{{ onRandom }}" style="border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer; font-size:12px; padding:6px 12px; border-radius:9px; white-space:nowrap;" style-hover="background:rgba(255,255,255,.1)">Случайная тема</button>
+      </div>
+      <div class="txscroll" style="flex:1; overflow:auto; position:relative;">
+        <sc-if value="{{ gHas }}">
+          <div style="position:absolute; inset:0; min-height:380px;">
+            <svg sc-camel-view-box="0 0 1000 660" sc-camel-preserve-aspect-ratio="none" style="position:absolute; inset:0; width:100%; height:100%;">
+              <sc-for list="{{ gEdges }}" as="e" hint-placeholder-count="10">
+                <line x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" stroke="{{ e.color }}" stroke-width="{{ e.w }}" stroke-opacity="{{ e.o }}"></line>
+              </sc-for>
+            </svg>
+            <sc-for list="{{ gNodes }}" as="n" hint-placeholder-count="10">
+              <button sc-camel-on-click="{{ n.onClick }}" style="position:absolute; left: {{ n.left }}; top: {{ n.top }}; transform:translate(-50%,-50%); max-width:216px; display:flex; align-items:center; gap:7px; border:1px solid {{ n.border }}; background: {{ n.bg }}; color:#e7e9f2; font:inherit; font-size: {{ n.fs }}; font-weight: {{ n.fw }}; padding:6px 11px; border-radius:20px; cursor:pointer;" style-hover="background:rgba(255,255,255,.14); border-color:rgba(255,255,255,.4)">
+                <span style="width:7px;height:7px;border-radius:50%;flex:0 0 auto; background: {{ n.color }};"></span>
+                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ n.label }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ gEmpty }}">
+          <div style="max-width:760px; margin:0 auto; padding:54px 24px;">
+            <div style="font-family:'Spectral',serif; font-size:22px; color:#c9cde0;">Связи по смыслу</div>
+            <p style="font-size:13.5px; line-height:1.7; color:#8288a0; margin-top:10px;">Темы соединены общими словами и тегами: в центре — выбранная тема, вокруг — ближайшие к ней по формулировке. Клик по узлу переносит центр на него. Начните с любой темы ниже или найдите свою через поиск.</p>
+            <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:20px;">
+              <sc-for list="{{ gSuggest }}" as="g" hint-placeholder-count="12">
+                <button sc-camel-on-click="{{ g.onClick }}" style="display:inline-flex; align-items:center; gap:7px; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03); color:#c4c8da; font:inherit; font-size:12.5px; padding:6px 11px; border-radius:20px; cursor:pointer; max-width:100%;" style-hover="background:rgba(255,255,255,.08)">
+                  <span style="width:7px;height:7px;border-radius:50%;flex:0 0 auto; background: {{ g.color }};"></span>
+                  <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ g.label }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ pairMode }}">
+    <div class="txscroll tx-pane" style="position:absolute; inset:0; overflow:auto; background:#0a0b10; z-index:12;">
+      <div style="max-width:1060px; margin:0 auto; padding:16px 20px 80px;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#6c7288; margin-bottom:12px;">{{ pairInfo }}</div>
+        <sc-for list="{{ pairRows }}" as="p" hint-placeholder-count="4">
+          <div style="border:1px solid rgba(255,255,255,.08); border-radius:15px; background:rgba(16,18,26,.7); padding:14px 16px 16px; margin-bottom:10px;">
+            <button sc-camel-on-click="{{ p.onClick }}" style="display:flex; align-items:baseline; gap:10px; width:100%; text-align:left; border:0; background:transparent; color:inherit; font:inherit; padding:0; cursor:pointer;" style-hover="opacity:.82">
+              <span style="width:9px;height:9px;border-radius:50%;flex:0 0 auto; background: {{ p.color }};"></span>
+              <span style="flex:1; min-width:0;">
+                <span style="display:block; font-family:'Spectral',serif; font-size:17px; font-weight:600; color:#f2f4fb; line-height:1.25;"><sc-for list="{{ p.parts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.28); color:#fff; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span>
+                <span style="display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#565c72; margin-top:4px;">{{ p.meta }}</span>
+              </span>
+            </button>
+            <sc-if value="{{ p.hasDesc }}"><div style="font-size:13px; line-height:1.55; color:#9aa0b6; margin-top:8px;">{{ p.desc }}</div></sc-if>
+            <div class="tx-pairgrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:11px;">
+              <div style="background:linear-gradient(180deg,rgba(70,110,190,.14),rgba(70,110,190,.04)); border:1px solid rgba(90,130,210,.2); border-radius:12px; padding:12px 13px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:oklch(0.78 0.09 250); margin-bottom:6px;">♂ Мужчина</div>
+                <div style="font-size:13px; line-height:1.6; color:#dbe2f2; white-space:pre-line;">{{ p.male }}</div>
+              </div>
+              <div style="background:linear-gradient(180deg,rgba(200,90,130,.14),rgba(200,90,130,.04)); border:1px solid rgba(210,110,150,.2); border-radius:12px; padding:12px 13px;">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:oklch(0.8 0.1 5); margin-bottom:6px;">♀ Женщина</div>
+                <div style="font-size:13px; line-height:1.6; color:#f3dde7; white-space:pre-line;">{{ p.female }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ pairMore }}"><button sc-camel-on-click="{{ onPairMore }}" style="margin:16px auto 0; display:block; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); color:#dfe2ee; font:inherit; font-size:13px; padding:10px 22px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(255,255,255,.1)">Показать ещё</button></sc-if>
+        <sc-if value="{{ pairEmpty }}"><div style="text-align:center; color:#565c72; padding:70px 20px; font-size:13.5px; line-height:1.7;">Нет тем с гранями пола под этот запрос.</div></sc-if>
+      </div>
+    </div>
+    </sc-if>
+
   </main>
 
   <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
@@ -313,9 +615,14 @@
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;linkOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:34,&quot;min&quot;:6,&quot;max&quot;:80,&quot;step&quot;:2,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Карта&quot;},&quot;nodeGlow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Карта&quot;},&quot;labelMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Все&quot;,&quot;options&quot;:[&quot;Все&quot;,&quot;Крупные&quot;,&quot;При наведении&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Карта&quot;}}">
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Средне&quot;,&quot;options&quot;:[&quot;Компактно&quot;,&quot;Средне&quot;,&quot;Просторно&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Списки&quot;},&quot;showDesc&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Списки&quot;},&quot;graphNeighbors&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:18,&quot;min&quot;:6,&quot;max&quot;:34,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Связи&quot;},&quot;linkOpacity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:34,&quot;min&quot;:6,&quot;max&quot;:80,&quot;step&quot;:2,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Карта&quot;},&quot;nodeGlow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Карта&quot;},&quot;labelMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Все&quot;,&quot;options&quot;:[&quot;Все&quot;,&quot;Крупные&quot;,&quot;При наведении&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Карта&quot;}}">
 class Component extends DCLogic {
-  state = { loading:true, mode:'map', selected:null, path:[], search:'', results:[], listRows:[], listOpen:{}, listDomain:'all', listLimit:60, listTotal:null };
+  state = { loading:true, mode:'map', selected:null, path:[], search:'', q:'', scope:'all',
+    fDomain:'all', fLevel:'all', fSection:'all', fTag:'all', fDetail:false, fSex:false,
+    openSec:{}, secLim:{}, secPage:25, railOpen:null,
+    tblSort:'nat', tblDir:1, tblLimit:150, tileDomain:null,
+    colDomain:null, colLevel:null, colSection:null,
+    gFocus:null, pairLimit:20, detail:null, detailKey:null };
 
   DOMAINS = [
     { id:'body',      title:'Тело и биология',    icon:'🧬', hue:25 },
@@ -339,7 +646,9 @@ class Component extends DCLogic {
     let n=0; while(!window.__TAXONOMY__ && n<160){ await new Promise(r=>setTimeout(r,50)); n++; }
     this.sections = window.__TAXONOMY__ || [];
     this._buildIndex();
+    this._buildFlat();
     this.setState({ loading:false });
+    setTimeout(()=>{ try{ this._buildTok(); }catch(err){} },900);
     this._syncPath();
     this._maybeInit();
   }
@@ -492,7 +801,7 @@ class Component extends DCLogic {
     if(eN){ this._relayout(); this._renderMap(); this._select(eN); }
   };
 
-  onCloseSel=()=>{ const prev=this._selId; this._selId=null; this.setState({selected:null});
+  onCloseSel=()=>{ const prev=this._selId; this._selId=null; this.setState({selected:null, detail:null, detailKey:null});
     const a=this.els && this.els.get('N'+prev); if(a && a.node) this._styleNode(a,a.node); };
 
   _select=(node)=>{
@@ -507,7 +816,8 @@ class Component extends DCLogic {
     const v={ id:node.id, kind:node.kind, color:node.color, label:node.label,
       kindLabel:this._kindLabel(node.kind), pathLabel:chain.join('  ›  '), hasPath:chain.length>0,
       hasCount:false, canDive:this._hasKids(node), onDive:()=>this._dive(node),
-      hasDescription:false, hasDetail:false, hasMale:false, hasFemale:false, chips:[], hasChips:false, moreChips:0 };
+      hasDescription:false, hasDetail:false, hasMale:false, hasFemale:false, chips:[], hasChips:false, moreChips:0,
+      chipsLabel:'Внутри', hasMap:false };
     if(node.count!=null){ v.hasCount=true; v.countLabel=this._countLabel(node); }
     if(node.kind==='entry' && node.entry){
       const e=node.entry;
@@ -694,78 +1004,390 @@ class Component extends DCLogic {
     this._raf=requestAnimationFrame(step);
   }
 
-  // ---------- search + list ----------
-  onSearch=(e)=>{ const q=e.target.value; this.setState({search:q}); clearTimeout(this._st); this._st=setTimeout(()=>this._runSearch(q),140); };
-  onSearchClear=()=>{ this.setState({search:'',results:[]}); this._rebuildList(''); };
-  _runSearch(q){
-    const query=(q||'').trim().toLowerCase();
-    if(!query){ this.setState({results:[]}); this._rebuildList(''); return; }
-    const res=[], cap=200;
-    for(let si=0; si<this.sections.length && res.length<cap; si++){
-      const sec=this.sections[si], did=this._domainOf(sec.level), col=this._c(this._domMeta(did).hue,0.74,0.12);
+  // ---------- индекс, поиск, фильтры ----------
+  _norm(s){ return (s||'').toLowerCase().replace(/ё/g,'е'); }
+  _fmt(n){ return (n||0).toLocaleString('ru'); }
+
+  _buildFlat(){
+    this.flat=[]; this.secMeta=[]; this.fidx=new Map();
+    const lv=new Map(), tg=new Map();
+    this.sections.forEach((sec,si)=>{
+      const did=this._domainOf(sec.level), sub=this._subOf(sec.level);
+      const m={ si:si, title:sec.title||'', subtitle:sec.subtitle||'', icon:sec.icon||'▪',
+        level:sec.level||'', sub:sub, did:did, color:this._c(this._domMeta(did).hue,0.74,0.12), n:sec.entries.length };
+      this.secMeta.push(m);
+      const lk=did+'::'+sub;
+      if(!lv.has(lk)) lv.set(lk,{ key:lk, did:did, label:sub, secs:0, n:0 });
+      const L=lv.get(lk); L.secs++; L.n+=sec.entries.length;
       for(const e of sec.entries){
-        if((e.title&&e.title.toLowerCase().indexOf(query)>=0)||(e.description&&e.description.toLowerCase().indexOf(query)>=0)||(e.detail&&e.detail.toLowerCase().indexOf(query)>=0)||(e.male&&e.male.toLowerCase().indexOf(query)>=0)||(e.female&&e.female.toLowerCase().indexOf(query)>=0)){
-          res.push({ id:si+'-'+e.id, title:e.title, sub:sec.title, color:col, si, entryId:e.id }); if(res.length>=cap) break;
+        const r={ si:si, e:e, t:e.title||'', tl:this._norm(e.title), did:did, tag:e.tag||'',
+          hasD:this._ne(e.detail), hasM:this._ne(e.male), hasF:this._ne(e.female), fl:null, tk:null };
+        this.fidx.set(si+':'+e.id, this.flat.length); this.flat.push(r);
+        if(r.tag) tg.set(r.tag,(tg.get(r.tag)||0)+1);
+      }
+    });
+    this.levelList=[...lv.values()].sort((a,b)=>b.n-a.n);
+    this.tagList=[...tg.entries()].sort((a,b)=>b[1]-a[1]).map(p=>({ t:p[0], n:p[1] }));
+  }
+  _fl(r){ if(r.fl===null){ const e=r.e; r.fl=this._norm(e.title+' '+(e.description||'')+' '+(e.detail||'')+' '+(e.male||'')+' '+(e.female||'')+' '+(e.tag||'')+' '+this.secMeta[r.si].title); } return r.fl; }
+
+  _tokens(q){ return this._norm(q).split(/[^a-zа-я0-9-]+/).filter(w=>w.length>1); }
+  _stem(w){ if(w.length<5) return w;
+    const m=w.match(/^(.+?)(ами|ями|ого|его|ому|ему|ыми|ими|ах|ях|ам|ям|ов|ев|ей|ий|ый|ой|ая|яя|ое|ее|ые|ие|ию|ья|ия|ью|у|ю|а|я|о|е|ы|и|ь|й)$/);
+    return (m && m[1].length>=4) ? m[1] : w; }
+  _near(a,b){ const max=a.length>=7?2:1;
+    if(Math.abs(a.length-b.length)>max) return false;
+    let i=0,j=0,d=0;
+    while(i<a.length && j<b.length){
+      if(a[i]===b[j]){ i++; j++; continue; }
+      d++; if(d>max) return false;
+      if(a.length===b.length){ i++; j++; } else if(a.length>b.length) i++; else j++;
+    }
+    return d+(a.length-i)+(b.length-j)<=max; }
+
+  _sig(){ const s=this.state; return [s.q,s.scope,s.fDomain,s.fLevel,s.fSection,s.fTag,s.fDetail?1:0,s.fSex?1:0].join('|'); }
+  _pass(r,s){ const m=this.secMeta[r.si];
+    if(s.fDomain!=='all' && r.did!==s.fDomain) return false;
+    if(s.fLevel!=='all' && m.sub!==s.fLevel) return false;
+    if(s.fSection!=='all' && r.si!==+s.fSection) return false;
+    if(s.fTag!=='all' && r.tag!==s.fTag) return false;
+    if(s.fDetail && !r.hasD) return false;
+    if(s.fSex && !r.hasM && !r.hasF) return false;
+    return true; }
+  _res(){ const sg=this._sig(); if(this._rsig===sg && this._rv) return this._rv; this._rv=this._compute(); this._rsig=sg; return this._rv; }
+  _compute(){
+    const s=this.state, q=(s.q||'').trim(), F=this.flat, out=[];
+    const stems=q?this._tokens(q).map(w=>this._stem(w)):[];
+    const titleOnly=s.scope==='title'; let fuzzy=false;
+    if(!stems.length){
+      for(let i=0;i<F.length;i++) if(this._pass(F[i],s)) out.push(F[i]);
+    } else {
+      const sc=[];
+      for(let i=0;i<F.length;i++){
+        const r=F[i]; if(!this._pass(r,s)) continue;
+        const hay=titleOnly?r.tl:this._fl(r);
+        let ok=true, v=0;
+        for(const t of stems){
+          if(hay.indexOf(t)<0){ ok=false; break; }
+          const k=r.tl.indexOf(t);
+          v += k===0?8:(k>0?(r.tl[k-1]===' '?5:3):1);
+        }
+        if(ok) sc.push([v-r.t.length*0.004, r]);
+      }
+      if(sc.length<4 && stems.length===1 && stems[0].length>=4){
+        fuzzy=true; const t0=stems[0], seen=new Set(sc.map(p=>p[1]));
+        for(let i=0;i<F.length && sc.length<400;i++){
+          const r=F[i]; if(seen.has(r)||!this._pass(r,s)) continue;
+          for(const w of r.tl.split(/[^a-zа-я0-9]+/)){ if(w.length>2 && this._near(t0,this._stem(w))){ sc.push([0.5,r]); break; } }
         }
       }
+      sc.sort((a,b)=>b[0]-a[0]);
+      for(const p of sc) out.push(p[1]);
     }
-    this.setState({results:res}); this._rebuildList(q);
+    const gm=new Map();
+    for(const r of out){ let a=gm.get(r.si); if(!a){ a=[]; gm.set(r.si,a); } a.push(r); }
+    const groups=[]; for(const p of gm) groups.push({ si:p[0], recs:p[1] });
+    return { recs:out, groups:groups, fuzzy:fuzzy, stems:stems };
   }
-  onTabMap=()=>this.setState({mode:'map'});
-  onTabList=()=>{ this.setState({mode:'list'},()=>{ if(!this.state.listRows.length) this._rebuildList(); }); };
-  onListDomain=(id)=>this.setState({listDomain:id,listLimit:60},()=>this._rebuildList());
-  onMore=()=>this.setState({listLimit:this.state.listLimit+80},()=>this._rebuildList());
-  _rebuildList(qArg){
-    const q=((qArg!=null?qArg:this.state.search)||'').trim().toLowerCase();
-    const dom=this.state.listDomain||'all', limit=this.state.listLimit||60;
-    const rows=[]; let total=0;
-    for(let si=0; si<this.sections.length; si++){
-      const sec=this.sections[si], did=this._domainOf(sec.level);
-      if(dom!=='all' && did!==dom) continue;
-      const col=this._c(this._domMeta(did).hue,0.74,0.12);
-      for(const e of sec.entries){
-        if(q){ const hay=(e.title+' '+e.description+' '+(e.detail||'')+' '+(e.male||'')+' '+(e.female||'')).toLowerCase(); if(hay.indexOf(q)<0) continue; }
-        total++; if(rows.length<limit) rows.push(this._rowView(si,e,sec,col));
-      }
+  _agg(){ const sg=this._sig(); if(this._asig===sg && this._av) return this._av;
+    const dom=new Map(), lev=new Map(), sec=new Map();
+    for(const r of this._res().recs){ const m=this.secMeta[r.si];
+      dom.set(r.did,(dom.get(r.did)||0)+1);
+      const lk=r.did+'::'+m.sub; lev.set(lk,(lev.get(lk)||0)+1);
+      sec.set(r.si,(sec.get(r.si)||0)+1); }
+    this._av={ dom:dom, lev:lev, sec:sec }; this._asig=sg; return this._av; }
+  _tbl(){ const s=this.state, k=this._sig()+'|'+s.tblSort+'|'+s.tblDir;
+    if(this._tsig===k && this._tv) return this._tv;
+    let a=this._res().recs;
+    if(s.tblSort!=='nat'){
+      const kind=s.tblSort, dir=s.tblDir;
+      const keyed=a.map(r=>[ kind==='title'?r.tl : kind==='sec'?this.secMeta[r.si].title : this.secMeta[r.si].sub, r ]);
+      keyed.sort((x,y)=> x[0]<y[0]?-dir : x[0]>y[0]?dir : 0);
+      a=keyed.map(p=>p[1]);
     }
-    this.setState({ listRows:rows, listTotal:total, listHasMore: total>rows.length });
-  }
-  _rowView(si,e,sec,col){
-    const id='r'+si+'-'+e.id, open=!!this.state.listOpen[id];
-    const canOpen=this._ne(e.male)||this._ne(e.female)||this._ne(e.detail);
-    return { id, title:e.title, sub:sec.title, domainIcon:sec.icon, color:col, tag:e.tag||'', hasTag:!!e.tag, chev:open?'▾':'▸', canOpen,
+    this._tsig=k; this._tv=a; return a; }
+  _pairs(){ const k=this._sig(); if(this._psig===k && this._pv) return this._pv;
+    this._pv=this._res().recs.filter(r=>r.hasM||r.hasF); this._psig=k; return this._pv; }
+
+  _parts(text,stems){
+    if(!text) return [{ t:'', plain:true }];
+    if(!stems||!stems.length) return [{ t:text, plain:true }];
+    const low=this._norm(text), marks=[];
+    for(const t of stems){ let i=low.indexOf(t);
+      while(i>=0 && marks.length<40){
+        let end=i+t.length, k=0;
+        while(end<low.length && k<4 && /[a-zа-я0-9]/.test(low[end])){ end++; k++; }
+        marks.push([i,end]); i=low.indexOf(t,i+t.length);
+      } }
+    if(!marks.length) return [{ t:text, plain:true }];
+    marks.sort((a,b)=>a[0]-b[0]);
+    const mg=[]; for(const m of marks){ const l=mg[mg.length-1]; if(l && m[0]<=l[1]) l[1]=Math.max(l[1],m[1]); else mg.push([m[0],m[1]]); }
+    const out=[]; let p=0;
+    for(const m of mg){ if(m[0]>p) out.push({ t:text.slice(p,m[0]), plain:true }); out.push({ t:text.slice(m[0],m[1]), hl:true }); p=m[1]; }
+    if(p<text.length) out.push({ t:text.slice(p), plain:true });
+    return out; }
+
+  // ---------- связи ----------
+  _buildTok(){ if(this.tok||!this.flat) return; const tok=new Map();
+    for(let i=0;i<this.flat.length;i++){ const r=this.flat[i], seen=[];
+      for(let w of r.tl.split(/[^a-zа-я0-9]+/)){
+        if(w.length<4) continue; w=this._stem(w);
+        if(w.length<4 || seen.indexOf(w)>=0) continue; seen.push(w);
+        let a=tok.get(w); if(!a){ a=[]; tok.set(w,a); } a.push(i); }
+      r.tk=seen; }
+    this.tok=tok; }
+  _related(idx,lim){ this._buildTok();
+    const r=this.flat[idx]; if(!r) return [];
+    const N=this.flat.length, sc=new Map();
+    for(const w of (r.tk||[])){ const post=this.tok.get(w); if(!post||post.length>1200) continue;
+      const idf=Math.log(N/post.length);
+      for(const j of post){ if(j!==idx) sc.set(j,(sc.get(j)||0)+idf); } }
+    const arr=[];
+    for(const p of sc){ const o=this.flat[p[0]]; let v=p[1];
+      if(r.tag && o.tag===r.tag) v*=1.18;
+      if(o.si!==r.si) v*=1.1;
+      if(v>1.3) arr.push([p[0],v]); }
+    arr.sort((a,b)=>b[1]-a[1]);
+    return arr.slice(0,lim).map(p=>({ idx:p[0], sc:p[1] })); }
+  _graphView(){
+    const idx=this.state.gFocus; if(idx==null||!this.flat||!this.flat[idx]) return null;
+    const lim=Math.round((this.props&&this.props.graphNeighbors)||18);
+    const rel=this._related(idx,lim), f=this.flat[idx], fm=this.secMeta[f.si];
+    const cx=500, cy=330, nodes=[], edges=[];
+    const px=(x)=>(x/1000*100).toFixed(2)+'%', py=(y)=>(y/660*100).toFixed(2)+'%';
+    nodes.push({ key:'c', left:px(cx), top:py(cy), label:this._short(f.t,40), color:fm.color,
+      bg:'rgba(255,255,255,.13)', border:'rgba(255,255,255,.42)', fs:'14.5px', fw:'600', onClick:()=>this.onPick(f) });
+    const max=rel.length?rel[0].sc:1;
+    const ring=(arr,rad,off)=>{ arr.forEach((o,i)=>{
+      const a=off+(i/Math.max(1,arr.length))*Math.PI*2;
+      const x=cx+Math.cos(a)*rad*1.34, y=cy+Math.sin(a)*rad;
+      const r2=this.flat[o.idx], m2=this.secMeta[r2.si], q=o.sc/max;
+      edges.push({ x1:cx, y1:cy, x2:Math.round(x), y2:Math.round(y), color:m2.color, w:(0.6+q*2).toFixed(2), o:(0.14+q*0.34).toFixed(2) });
+      nodes.push({ key:'n'+o.idx, left:px(x), top:py(y), label:this._short(r2.t,30),
+        color:m2.color, bg:'rgba(18,20,29,.88)', border:'rgba(255,255,255,.12)',
+        fs:(11.5+q*1.6).toFixed(1)+'px', fw:'400', onClick:()=>this.onFocus(o.idx) }); }); };
+    ring(rel.slice(0,9),176,-Math.PI/2);
+    ring(rel.slice(9),292,-Math.PI/2+0.34);
+    return { nodes:nodes, edges:edges, info:f.t+'  ·  '+this.secMeta[f.si].title+'  ·  соседей: '+rel.length }; }
+
+  _entryView(r){
+    const e=r.e, m=this.secMeta[r.si], dm=this._domMeta(m.did), idx=this.fidx.get(r.si+':'+e.id);
+    const rel=this.tok?this._related(idx,8):[];
+    return { id:'e'+r.si+'-'+e.id, kind:'entry', kindLabel:'Тема', color:m.color, label:e.title,
+      hasPath:true, pathLabel:dm.title+'  ›  '+m.sub+'  ›  '+m.title,
+      hasCount:!!e.tag, countLabel:e.tag||'', canDive:false,
+      hasMap:true, onMap:()=>this._openResult(r.si,e.id),
+      onGraph:()=>this.setState({ mode:'graph', gFocus:idx }),
       hasDescription:this._ne(e.description), description:e.description||'',
-      hasMale:this._ne(e.male), male:e.male||'', hasFemale:this._ne(e.female), female:e.female||'', hasDetail:this._ne(e.detail), detail:e.detail||'', open,
-      onToggle:()=>{ if(!canOpen) return; const o={...this.state.listOpen}; o[id]=!o[id]; this.setState({listOpen:o},()=>this._rebuildList()); } };
-  }
+      hasDetail:this._ne(e.detail), detail:e.detail||'',
+      hasMale:this._ne(e.male), male:e.male||'', hasFemale:this._ne(e.female), female:e.female||'',
+      chipsLabel:'Рядом по смыслу', hasChips:rel.length>0, moreChips:0,
+      chips:rel.map(o=>({ label:this._short(this.flat[o.idx].t,44), color:this.secMeta[this.flat[o.idx].si].color, onClick:()=>this.onFocus(o.idx) })) }; }
+
+  onPick=(r)=>{ this.setState({ detail:this._entryView(r), detailKey:r.si+':'+r.e.id }); };
+  onFocus=(idx)=>{ const r=this.flat[idx]; if(!r) return;
+    this.setState({ gFocus:idx, detail:this._entryView(r), detailKey:r.si+':'+r.e.id }); };
+  onRandom=()=>{ if(this.flat) this.onFocus(Math.floor(Math.random()*this.flat.length)); };
+
+  _mode=(m)=>()=>this.setState({ mode:m });
+  onTabMap=this._mode('map'); onTabList=this._mode('list'); onTabTable=this._mode('table');
+  onTabTiles=this._mode('tiles'); onTabCols=this._mode('cols'); onTabGraph=this._mode('graph');
+  onTabPairs=this._mode('pairs');
+
+  _rp(extra){ return Object.assign({ secPage:25, tblLimit:150, pairLimit:20, openSec:{}, secLim:{} }, extra||{}); }
+  onSearch=(e)=>{ const v=e.target.value; this.setState({ search:v }); clearTimeout(this._st);
+    this._st=setTimeout(()=>this.setState(this._rp({ q:v })),150); };
+  onSearchClear=()=>{ clearTimeout(this._st); this.setState(this._rp({ search:'', q:'' })); };
+  onScopeTitle=()=>this.setState(this._rp({ scope:'title' }));
+  onScopeAll=()=>this.setState(this._rp({ scope:'all' }));
+  onDomain=(id)=>this.setState(this._rp({ fDomain:id, fLevel:'all', fSection:'all', railOpen:id }));
+  onLevel=(l)=>this.setState(this._rp({ fLevel:l, fSection:'all' }));
+  onSelDomain=(e)=>this.onDomain(e.target.value);
+  onSelLevel=(e)=>this.onLevel(e.target.value);
+  onSelSection=(e)=>this.setState(this._rp({ fSection:e.target.value }));
+  onSelTag=(e)=>this.setState(this._rp({ fTag:e.target.value }));
+  onTglDetail=()=>this.setState(this._rp({ fDetail:!this.state.fDetail }));
+  onTglSex=()=>this.setState(this._rp({ fSex:!this.state.fSex }));
+  onReset=()=>this.setState(this._rp({ search:'', q:'', fDomain:'all', fLevel:'all', fSection:'all', fTag:'all', fDetail:false, fSex:false }));
+  onSecMore=()=>this.setState({ secPage:(this.state.secPage||25)+25 });
+  onTblMore=()=>this.setState({ tblLimit:(this.state.tblLimit||150)+150 });
+  onPairMore=()=>this.setState({ pairLimit:(this.state.pairLimit||20)+20 });
+  onCollapseAll=()=>{ const o={}; for(const g of this._res().groups) o[g.si]=false; this.setState({ openSec:o }); };
+  onExpandAll=()=>{ const o={}; for(const g of this._res().groups.slice(0,this.state.secPage||25)) o[g.si]=true; this.setState({ openSec:o }); };
+  _sort=(k)=>()=>{ const s=this.state; this.setState(s.tblSort===k?{ tblDir:-s.tblDir }:{ tblSort:k, tblDir:1, tblLimit:150 }); };
+  onSortTitle=this._sort('title'); onSortSec=this._sort('sec'); onSortLev=this._sort('lev');
+  onTileBack=()=>this.setState({ tileDomain:null });
+
+  onExport=()=>{
+    const rows=this._tbl(), NL=String.fromCharCode(13,10);
+    const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
+    const out=[['Тема','Описание','Механизм','Мужчина','Женщина','Раздел','Дисциплина','Домен','Тег'].map(esc).join(',')];
+    for(const r of rows.slice(0,25000)){ const m=this.secMeta[r.si], e=r.e;
+      out.push([e.title,e.description,e.detail,e.male,e.female,m.title,m.sub,this._domMeta(m.did).title,e.tag].map(esc).join(',')); }
+    const blob=new Blob([String.fromCharCode(65279)+out.join(NL)],{ type:'text/csv;charset=utf-8' });
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='atlas.csv'; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),5000); };
+
+  _dens(){ const d=(this.props&&this.props.density)||'Средне';
+    if(d==='Компактно') return { pad:'6px 14px', fs:'12.5px', dfs:'11.5px', sec:'10px 15px' };
+    if(d==='Просторно') return { pad:'13px 16px', fs:'14.5px', dfs:'13px', sec:'16px 16px' };
+    return { pad:'9px 15px', fs:'13.5px', dfs:'12.5px', sec:'12px 15px' }; }
+  _wantDesc(){ return !(this.props && this.props.showDesc===false); }
+  _opts(){ const s=this.state, k=s.fDomain+'|'+s.fLevel;
+    if(this._osig===k && this._ov) return this._ov;
+    const dom=[{ v:'all', t:'Все домены' }].concat(this.DOMAINS.map(d=>({ v:d.id, t:d.icon+'  '+d.title })));
+    const lv=this.levelList.filter(l=>s.fDomain==='all'||l.did===s.fDomain);
+    const lev=[{ v:'all', t:'Все дисциплины' }].concat(lv.map(l=>({ v:l.label, t:this._short(l.label,38)+'  ('+l.n+')' })));
+    const sm=this.secMeta.filter(m=>(s.fDomain==='all'||m.did===s.fDomain)&&(s.fLevel==='all'||m.sub===s.fLevel));
+    const sec=[{ v:'all', t:'Все разделы' }].concat(sm.map(m=>({ v:String(m.si), t:this._short(m.title,40)+'  ('+m.n+')' })));
+    const tag=[{ v:'all', t:'Все теги' }].concat(this.tagList.slice(0,60).map(x=>({ v:x.t, t:x.t+'  ('+x.n+')' })));
+    this._ov={ dom:dom, lev:lev, sec:sec, tag:tag }; this._osig=k; return this._ov; }
 
   renderVals(){
-    const s=this.state;
-    return {
-      loading:s.loading, mapMode:s.mode==='map', listMode:s.mode==='list',
-      onTabMap:this.onTabMap, onTabList:this.onTabList,
+    const s=this.state, ready=!!this.flat, D=this._dens();
+    const R=ready?this._res():{ recs:[], groups:[], stems:[], fuzzy:false };
+    const AG=ready?this._agg():{ dom:new Map(), lev:new Map(), sec:new Map() };
+    const st=R.stems, total=R.recs.length, O=ready?this._opts():{ dom:[], lev:[], sec:[], tag:[] };
+    const dk=s.detailKey, wd=this._wantDesc(), on='rgba(255,255,255,.10)', off='transparent';
+    const v={
+      loading:s.loading,
+      mapMode:s.mode==='map', listMode:s.mode==='list', tableMode:s.mode==='table',
+      tileMode:s.mode==='tiles', colMode:s.mode==='cols', graphMode:s.mode==='graph', pairMode:s.mode==='pairs',
+      dataMode:s.mode!=='map',
+      onTabMap:this.onTabMap, onTabList:this.onTabList, onTabTable:this.onTabTable,
+      onTabTiles:this.onTabTiles, onTabCols:this.onTabCols, onTabGraph:this.onTabGraph, onTabPairs:this.onTabPairs,
       statSections:(this.sections?this.sections.length:601).toLocaleString('ru'),
       statEntries:(this._entryCount||45285).toLocaleString('ru'),
       mapRef:this.mapRef,
       path:(s.path||[]).map((p,i,arr)=>({ id:p.id, label:p.label, icon:p.icon, notLast:i<arr.length-1, onClick:()=>this._diveById(p.id) })),
       legend:(this.domIndex?this.DOMAINS.filter(d=>this.domIndex[d.id]&&this.domIndex[d.id].subs.size):[]).map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), onClick:()=>this._diveTo(d.id) })),
       search:s.search, onSearch:this.onSearch, onSearchClear:this.onSearchClear,
-      results:(s.results||[]).slice(0,12).map(r=>({ title:r.title, sub:r.sub, color:r.color, onClick:()=>this._openResult(r.si,r.entryId) })),
-      resultInfo:(s.results||[]).length?('Найдено: '+s.results.length+(s.results.length>=200?'+':'')):'',
-      showResults: !!(s.search && (s.results||[]).length && s.mode==='map'),
-      sel:s.selected, hasSel:!!s.selected, noSel:!s.selected,
-      asideCls: s.selected ? '' : 'tx-aside-hidden',
-      onCloseSel:this.onCloseSel,
+      showResults:!!(s.q && s.mode==='map'),
+      results:(ready&&s.q&&s.mode==='map'?R.recs.slice(0,12):[]).map(r=>({ title:r.t, sub:this.secMeta[r.si].title, color:this.secMeta[r.si].color, onClick:()=>this._openResult(r.si,r.e.id) })),
+      resultInfo: total?('Найдено: '+this._fmt(total)+(R.fuzzy?' · с поправкой на опечатки':'')):'Ничего не найдено',
+      onZoomIn:this.onZoomIn, onZoomOut:this.onZoomOut, onFit:this.onFit, onHome:this.onHome,
       hintText: this._coarse()
         ? 'касание — раскрыть · двойное — погрузиться · щипок — зум'
         : 'клик — раскрыть · 2× клик — погрузиться · колесо — зум · тянуть — двигать',
-      onZoomIn:this.onZoomIn, onZoomOut:this.onZoomOut, onFit:this.onFit, onHome:this.onHome,
-      listRows:s.listRows||[], listInfo: s.listTotal!=null?('Показано '+(s.listRows||[]).length+' из '+s.listTotal.toLocaleString('ru')):'',
-      hasMore:!!s.listHasMore, onMore:this.onMore, listEmpty: s.mode==='list' && s.listTotal===0,
-      listDomains:[{ id:'all', title:'Все', color:'#aeb4c8', active:(s.listDomain||'all')==='all', onClick:()=>this.onListDomain('all') }].concat(this.DOMAINS.map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), active:s.listDomain===d.id, onClick:()=>this.onListDomain(d.id) }))),
+      rowPad:D.pad, rowFs:D.fs, rowDfs:D.dfs, secPad:D.sec,
+      scopeTitleBg:s.scope==='title'?on:off, scopeAllBg:s.scope==='all'?on:off,
+      fDomain:s.fDomain, fLevel:s.fLevel, fSection:s.fSection, fTag:s.fTag,
+      domainOpts:O.dom, levelOpts:O.lev, sectionOpts:O.sec, tagOpts:O.tag,
+      hasTags:!!(this.tagList && this.tagList.length),
+      onSelDomain:this.onSelDomain, onSelLevel:this.onSelLevel, onSelSection:this.onSelSection, onSelTag:this.onSelTag,
+      onScopeTitle:this.onScopeTitle, onScopeAll:this.onScopeAll,
+      onTglDetail:this.onTglDetail, onTglSex:this.onTglSex, onReset:this.onReset,
+      detailBg:s.fDetail?on:off, detailCol:s.fDetail?'#eef0f8':'#9aa0b6',
+      sexBg:s.fSex?on:off, sexCol:s.fSex?'#eef0f8':'#9aa0b6',
+      anyFilter:!!(s.q||s.fDomain!=='all'||s.fLevel!=='all'||s.fSection!=='all'||s.fTag!=='all'||s.fDetail||s.fSex),
+      foundInfo:(s.q?'Найдено ':'Всего ')+this._fmt(total)+' тем · '+this._fmt(R.groups.length)+' разделов'+(R.fuzzy?' · поправка на опечатки':''),
+      onExport:this.onExport, onRandom:this.onRandom,
+      onSecMore:this.onSecMore, onTblMore:this.onTblMore, onPairMore:this.onPairMore,
+      onCollapseAll:this.onCollapseAll, onExpandAll:this.onExpandAll,
+      onSortTitle:this.onSortTitle, onSortSec:this.onSortSec, onSortLev:this.onSortLev,
+      onTileBack:this.onTileBack,
+      listEmpty:ready && total===0
     };
+
+    v.railDomains=[{ id:'all', title:'Все домены', color:'#aeb4c8', n:this._fmt(total),
+      bg:s.fDomain==='all'?on:off, open:false, onClick:()=>this.onDomain('all'), levels:[] }]
+      .concat(this.DOMAINS.map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13),
+        n:this._fmt(AG.dom.get(d.id)||0), bg:s.fDomain===d.id?on:off, open:s.fDomain===d.id,
+        onClick:()=>this.onDomain(s.fDomain===d.id?'all':d.id),
+        levels:(this.levelList||[]).filter(l=>l.did===d.id).map(l=>({ title:l.label, n:this._fmt(AG.lev.get(l.key)||0),
+          bg:s.fLevel===l.label?on:off, onClick:()=>this.onLevel(s.fLevel===l.label?'all':l.label) })) })));
+
+    const page=s.secPage||25, shown=R.groups.slice(0,page);
+    v.secMore=R.groups.length>shown.length;
+    v.listInfo=this._fmt(total)+' тем · '+this._fmt(R.groups.length)+' разделов'+(R.groups.length>shown.length?(' · показано '+shown.length):'');
+    v.secRows=shown.map(g=>{
+      const m=this.secMeta[g.si];
+      const open=(s.openSec[g.si]!==undefined)?s.openSec[g.si]:(st.length>0);
+      const lim=s.secLim[g.si]||50, rows=open?g.recs.slice(0,lim):[];
+      return { si:g.si, icon:m.icon, title:m.title, color:m.color,
+        meta: st.length?(this._fmt(g.recs.length)+' из '+this._fmt(m.n)):(this._fmt(m.n)+' тем'),
+        hasSub:!!m.subtitle, subtitle:m.subtitle, chev:open?'▾':'▸', open:open,
+        onToggle:()=>{ const o=Object.assign({},s.openSec); o[g.si]=!open; this.setState({ openSec:o }); },
+        hasMore:open && g.recs.length>rows.length, moreN:this._fmt(g.recs.length-rows.length),
+        onMore:()=>{ const l=Object.assign({},s.secLim); l[g.si]=lim+150; this.setState({ secLim:l }); },
+        rows:rows.map((r,i)=>({ num:String(i+1), parts:this._parts(r.t,st),
+          hasDesc:wd&&this._ne(r.e.description), dparts:this._parts(this._short(r.e.description||'',260),st),
+          badges:(r.hasD?'❉':'')+(r.hasM?'♂':'')+(r.hasF?'♀':''),
+          bg:dk===(r.si+':'+r.e.id)?'rgba(120,140,255,.11)':'transparent',
+          onClick:()=>this.onPick(r) })) };
+    });
+
+    const tb=ready?this._tbl():[], tlim=s.tblLimit||150, ar=s.tblDir>0?' ↑':' ↓';
+    v.sortTitle=s.tblSort==='title'?ar:''; v.sortSec=s.tblSort==='sec'?ar:''; v.sortLev=s.tblSort==='lev'?ar:'';
+    v.tblInfo='Строк: '+this._fmt(tb.length)+(tb.length>tlim?(' · показано '+this._fmt(tlim)):'')+' · клик по строке открывает панель';
+    v.tblMore=tb.length>tlim;
+    v.tblRows=tb.slice(0,tlim).map((r,i)=>{ const m=this.secMeta[r.si];
+      return { n:String(i+1), parts:this._parts(r.t,st), desc:this._short(r.e.description||'',170),
+        sec:m.title, lev:m.sub, color:m.color,
+        facets:(r.hasD?'❉':'')+(r.hasM?'♂':'')+(r.hasF?'♀':''),
+        bg:dk===(r.si+':'+r.e.id)?'rgba(120,140,255,.11)':'transparent',
+        onClick:()=>this.onPick(r) }; });
+
+    v.tilesRoot=s.tileDomain==null; v.tilesInner=s.tileDomain!=null;
+    const mx=Math.max(1,...this.DOMAINS.map(d=>AG.dom.get(d.id)||0));
+    v.tiles=this.DOMAINS.map(d=>{ const n=AG.dom.get(d.id)||0, ls=(this.levelList||[]).filter(l=>l.did===d.id);
+      return { id:d.id, icon:d.icon, title:d.title, color:this._c(d.hue,0.78,0.13),
+        n:this._fmt(n), secs:ls.reduce((a,l)=>a+l.secs,0)+' разделов',
+        w:Math.round(n/mx*100)+'%',
+        levels:ls.slice(0,4).map(l=>({ t:this._short(l.label,30), n:this._fmt(AG.lev.get(l.key)||0) })),
+        onClick:()=>this.setState({ tileDomain:d.id }) }; });
+    if(s.tileDomain!=null){
+      const dm=this._domMeta(s.tileDomain);
+      v.tileName=dm.title; v.tileIcon=dm.icon;
+      const list=(this.secMeta||[]).filter(m=>m.did===s.tileDomain && (!st.length || (AG.sec.get(m.si)||0)>0));
+      v.tileMeta=list.length+' разделов · '+this._fmt(AG.dom.get(s.tileDomain)||0)+' тем';
+      v.tileSecs=list.map(m=>({ icon:m.icon, title:m.title, hasSub:!!m.subtitle, subtitle:this._short(m.subtitle,90),
+        lev:this._short(m.sub,26), n:this._fmt(st.length?(AG.sec.get(m.si)||0):m.n)+' тем',
+        onClick:()=>this.setState(this._rp({ mode:'list', fDomain:m.did, fLevel:'all', fSection:String(m.si) })) }));
+    } else { v.tileName=''; v.tileIcon=''; v.tileMeta=''; v.tileSecs=[]; }
+
+    v.colD=this.DOMAINS.map(d=>({ id:d.id, icon:d.icon, title:d.title, n:this._fmt(AG.dom.get(d.id)||0),
+      bg:s.colDomain===d.id?on:off, onClick:()=>this.setState({ colDomain:d.id, colLevel:null, colSection:null }) }));
+    v.colL=(s.colDomain?(this.levelList||[]).filter(l=>l.did===s.colDomain):[]).map(l=>({ title:l.label,
+      n:this._fmt(AG.lev.get(l.key)||0), bg:s.colLevel===l.label?on:off,
+      onClick:()=>this.setState({ colLevel:l.label, colSection:null }) }));
+    v.colS=((s.colDomain&&s.colLevel)?(this.secMeta||[]).filter(m=>m.did===s.colDomain&&m.sub===s.colLevel):[]).map(m=>({
+      icon:m.icon, title:m.title, n:this._fmt(st.length?(AG.sec.get(m.si)||0):m.n), bg:s.colSection===m.si?on:off,
+      onClick:()=>this.setState({ colSection:m.si }) }));
+    const cg=s.colSection!=null?R.groups.find(g=>g.si===s.colSection):null, ce=cg?cg.recs:[];
+    v.colE=ce.slice(0,400).map(r=>({ parts:this._parts(r.t,st),
+      badges:(r.hasD?'❉':'')+(r.hasM?'♂':'')+(r.hasF?'♀':''),
+      bg:dk===(r.si+':'+r.e.id)?'rgba(120,140,255,.11)':'transparent', onClick:()=>this.onPick(r) }));
+    v.colEInfo=ce.length?('· '+this._fmt(ce.length)):'';
+    v.colLEmpty=!s.colDomain; v.colSEmpty=!s.colLevel; v.colEEmpty=s.colSection==null;
+
+    const G=(ready&&s.mode==='graph')?this._graphView():null;
+    v.gHas=!!G; v.gEmpty=!G;
+    v.gNodes=G?G.nodes:[]; v.gEdges=G?G.edges:[];
+    v.gInfo=G?G.info:'Клик по узлу переносит центр · соседи считаются по общим словам и тегам';
+    v.gSuggest=(ready?R.recs.slice(0,16):[]).map(r=>({ label:this._short(r.t,42), color:this.secMeta[r.si].color,
+      onClick:()=>this.onFocus(this.fidx.get(r.si+':'+r.e.id)) }));
+
+    const pr=ready?this._pairs():[], plim=s.pairLimit||20;
+    v.pairInfo='Тем с гранями пола: '+this._fmt(pr.length)+(pr.length>plim?(' · показано '+plim):'');
+    v.pairMore=pr.length>plim; v.pairEmpty=ready&&pr.length===0;
+    v.pairRows=pr.slice(0,plim).map(r=>{ const m=this.secMeta[r.si];
+      return { parts:this._parts(r.t,st), color:m.color,
+        meta:this._domMeta(m.did).title+'  ›  '+m.title,
+        hasDesc:this._ne(r.e.description), desc:r.e.description||'',
+        male:this._ne(r.e.male)?r.e.male:'—', female:this._ne(r.e.female)?r.e.female:'—',
+        onClick:()=>this.onPick(r) }; });
+
+    const sel=s.mode==='map'?s.selected:s.detail;
+    v.sel=sel; v.hasSel=!!sel; v.noSel=s.mode==='map'&&!s.selected;
+    v.showAside=s.mode==='map'||!!s.detail;
+    v.mainCls=(s.mode!=='map'&&s.detail)?'tx-narrow':'';
+    v.asideCls=sel?'':'tx-aside-hidden';
+    v.onCloseSel=this.onCloseSel;
+    return v;
   }
 }
 </script>
-</body>
-</html>
+
+
+</body></html>
