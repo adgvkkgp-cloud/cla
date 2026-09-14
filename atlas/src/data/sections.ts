@@ -73,6 +73,7 @@ import { additions7 } from "./additions7";
 import { additions8 } from "./additions8";
 import { additions9 } from "./additions9";
 import { additions10 } from "./additions10";
+import { applyTags } from "./tags";
 
 const baseSections: Section[] = [
   {
@@ -1028,5 +1029,9 @@ for (const table of [additions1, additions2, additions3, additions4, additions5,
     );
   }
 }
+
+// Ярлыки проставляются последними — после того, как добор дописал
+// все позиции, чтобы правила прошли и по ним тоже.
+applyTags(allSections);
 
 export const sections: Section[] = allSections;
