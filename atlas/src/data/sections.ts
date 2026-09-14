@@ -80,6 +80,7 @@ import { additions14 } from "./additions14";
 import { additions15 } from "./additions15";
 import { additions16 } from "./additions16";
 import { applyTags } from "./tags";
+import { applyDetails, details1 } from "./details";
 
 const baseSections: Section[] = [
   {
@@ -1035,6 +1036,10 @@ for (const table of [additions1, additions2, additions3, additions4, additions5,
     );
   }
 }
+
+// Механизм дописывается к уже существующим позициям по совпадению
+// заголовка. Промах роняет сборку.
+applyDetails(allSections, [details1]);
 
 // Ярлыки проставляются последними — после того, как добор дописал
 // все позиции, чтобы правила прошли и по ним тоже.
