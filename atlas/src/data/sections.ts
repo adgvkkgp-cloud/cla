@@ -73,6 +73,7 @@ import { additions7 } from "./additions7";
 import { additions8 } from "./additions8";
 import { additions9 } from "./additions9";
 import { additions10 } from "./additions10";
+import { additions11 } from "./additions11";
 import { applyTags } from "./tags";
 
 const baseSections: Section[] = [
@@ -1019,7 +1020,7 @@ const allSections: Section[] = [
 
 // Добор позиций в уже существующие разделы: записи дописываются
 // в конец своего раздела, нумерация продолжается без разрывов.
-for (const table of [additions1, additions2, additions3, additions4, additions5, additions6, additions7, additions8, additions9, additions10]) {
+for (const table of [additions1, additions2, additions3, additions4, additions5, additions6, additions7, additions8, additions9, additions10, additions11]) {
   for (const [sectionId, rows] of Object.entries(table)) {
     const section = allSections.find((s) => s.id === sectionId);
     if (!section) continue;
