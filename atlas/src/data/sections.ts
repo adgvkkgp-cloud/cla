@@ -85,7 +85,7 @@ import { additions14 } from "./additions14";
 import { additions15 } from "./additions15";
 import { additions16 } from "./additions16";
 import { applyTags } from "./tags";
-import { applyRewrites, rewrites1, rewrites2 } from "./rewrites";
+import { applyRewrites, rewrites1, rewrites2, rewrites3 } from "./rewrites";
 import { applyFacets, facets1, facets2, facets3, facets4, facets5, facets6, facets7, facets8, facets9, facets10, facets11, facets12, facets13, facets14, facets15, facets16, facets17, facets18, facets19, facets20 } from "./facets";
 import { applyDetails, details1, details2, details3, details4, details5, details6, details7, details8, details9, details10, details11, details12, details13, details14, details15, details16, details17, details18, details19, details20, details21, details22, details23, details24, details25, details26, details27 } from "./details";
 
@@ -1055,7 +1055,7 @@ applyDetails(allSections, [details1, details2, details3, details4, details5, det
 
 // Короткие описания переписываются до того, как по ним пройдут
 // механизм, грани пола и ярлыки.
-applyRewrites(allSections, [rewrites1, rewrites2]);
+applyRewrites(allSections, [rewrites1, rewrites2, rewrites3]);
 
 // Грани пола дописываются по совпадению заголовка, как и механизм.
 applyFacets(allSections, [facets1, facets2, facets3, facets4, facets5, facets6, facets7, facets8, facets9, facets10, facets11, facets12, facets13, facets14, facets15, facets16, facets17, facets18, facets19, facets20]);
