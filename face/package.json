@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "check": "node tools/check.cjs",
+    "build": "node tools/check.cjs && vite build && node tools/emit.cjs",
     "preview": "vite preview"
   },
   "dependencies": {
