@@ -1,26 +1,19 @@
-export interface Entry {
-  id: number;
-  name: string;
-  desc: string;
-  tags?: string[];
-}
+// ════════════════════════════════════════════════════════════
+// КОРПУС ТАКСОНОМИИ ЛИЦА
+//
+// Обычный JavaScript без сборки и без зависимостей: файл читается
+// и браузером как <script>, и node — для проверки целостности.
+//
+//   part    { id, title, emoji, sections[] }
+//   section { id, title, subtitle, color, entries[] }
+//   entry   { id, name, desc, tags[] }
+//
+// `id` позиции — порядковый номер внутри раздела, 1..n без дыр.
+// `color` — одно из шестнадцати имён палитры, которые умеет
+// рисовать вьюер.
+// ════════════════════════════════════════════════════════════
 
-export interface Section {
-  id: string;
-  title: string;
-  subtitle: string;
-  color: string;
-  entries: Entry[];
-}
-
-export interface Part {
-  id: string;
-  title: string;
-  emoji: string;
-  sections: Section[];
-}
-
-export const parts: Part[] = [
+const PARTS = [
   // ══════════════════════════════════════════════
   // ЧАСТЬ I — АНАТОМИЯ ЛИЦА
   // ══════════════════════════════════════════════
@@ -4611,12 +4604,5 @@ export const parts: Part[] = [
 
 ];
 
-
-// Счётчик выводится из самих данных. Раньше здесь стояло
-// `TOTAL_COUNT = 3004` вручную: приложение этой константой
-// не пользовалось вовсе (считало само), так что разойтись
-// с корпусом она могла молча и незаметно.
-export const TOTAL_COUNT = parts.reduce(
-  (acc, p) => acc + p.sections.reduce((a, s) => a + s.entries.length, 0),
-  0,
-);
+if (typeof window !== "undefined") window.__FACE__ = PARTS;
+if (typeof module !== "undefined") module.exports = { parts: PARTS };

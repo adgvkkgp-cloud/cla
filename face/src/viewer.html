@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Полная таксономия лица — Анатомия, Эстетика, Мимика</title>
+<style>
+/* Палитра снята с прежней сборки замером вычисленных стилей, а не
+   подобрана на глаз: цвета те же до значения. Подставляется сборкой
+   из src/palette.json. */
+/*__PALETTE__*/
+
+* { box-sizing: border-box; }
+
+:root {
+  --page: #0a0a12;
+  --z100: oklch(0.967 0.001 286.375);
+  --z400: oklch(0.705 0.015 286.067);
+  --z500: oklch(0.552 0.016 285.938);
+  --z600: oklch(0.442 0.017 285.786);
+  --z700: oklch(0.37 0.013 285.805);
+  --z800: oklch(0.274 0.006 286.033);
+  --z900: oklch(0.21 0.006 285.885);
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+html { background: var(--page); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page);
+  color: var(--z100);
+  font-family: var(--mono);
+  font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap { max-width: 80rem; margin: 0 auto; padding: 0 16px; }
+
+/* ── ШАПКА ─────────────────────────────────────────────────
+   Лента частей прокручивается вбок одной строкой. При переносе
+   по строкам 42 вкладки давали шапку в 1464 px при экране 844 px:
+   она прилипала и навсегда закрывала собой нижние вкладки. */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--page) 95%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid color-mix(in srgb, var(--z800) 80%, transparent);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .25);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.hdr { display: flex; flex-direction: column; gap: 12px; padding: 12px 0; }
+
+.hdr-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark { font-size: 24px; line-height: 1; }
+.brand h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+.brand p { margin: 0; font-size: 12px; color: var(--z500); line-height: 1.2; }
+
+.counts { display: flex; gap: 12px; }
+.count { text-align: center; }
+.count b { display: block; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.count span { font-size: 10px; color: var(--z500); text-transform: uppercase; letter-spacing: .08em; }
+.count.n1 b { color: oklch(0.702 0.183 293.541); }
+.count.n2 b { color: oklch(0.673 0.182 276.935); }
+.count.n3 b { color: oklch(0.715 0.143 215.221); }
+
+.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+#q {
+  flex: 1 1 0; min-width: 12rem;
+  background: var(--z900);
+  border: 1px solid var(--z700);
+  border-radius: 8px;
+  padding: 6px 12px;
+  /* 16px на узком экране — иначе Safari сам увеличивает страницу при фокусе */
+  font: inherit; font-size: 16px;
+  color: var(--z100);
+}
+#q::placeholder { color: var(--z600); }
+#q:focus { outline: none; border-color: oklch(0.606 0.25 292.717); box-shadow: 0 0 0 1px oklch(0.606 0.25 292.717 / .3); }
+
+.btn {
+  padding: 6px 12px; border-radius: 8px; font: inherit; font-size: 12px;
+  border: 1px solid var(--z700); background: var(--z900); color: var(--z400);
+  cursor: pointer; transition: color .15s, background .15s, border-color .15s;
+}
+.btn:hover { color: var(--z100); }
+.btn[aria-pressed="true"] {
+  background: color-mix(in srgb, oklch(0.381 0.176 304.987) 40%, transparent);
+  border-color: color-mix(in srgb, oklch(0.541 0.281 293.009) 50%, transparent);
+  color: oklch(0.811 0.111 293.571);
+}
+
+.tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 4px; margin-bottom: -4px; }
+.tab {
+  flex: 0 0 auto; white-space: nowrap;
+  padding: 4px 12px; border-radius: 6px; font: inherit; font-size: 12px; font-weight: 500;
+  border: 1px solid var(--z800); background: color-mix(in srgb, var(--z900) 50%, transparent);
+  color: var(--z500); cursor: pointer; transition: color .15s, background .15s;
+}
+.tab:hover { color: var(--z400); }
+.tab.on { background: var(--z700); border-color: var(--z500); color: var(--z100); }
+.tab.on.tab-part { background: color-mix(in srgb, oklch(0.432 0.232 292.759) 60%, transparent); border-color: oklch(0.541 0.281 293.009); color: oklch(0.894 0.057 293.283); }
+
+/* ── СОДЕРЖИМОЕ ───────────────────────────────────────────── */
+main { padding: 24px 0 0; }
+.part { margin-bottom: 40px; }
+.part-hdr { margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid color-mix(in srgb, var(--z700) 60%, transparent); display: flex; align-items: center; gap: 12px; }
+.part-hdr .em { font-size: 30px; line-height: 1; }
+.part-hdr h2 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+.part-hdr .sub { font-size: 12px; color: var(--z500); margin-top: 2px; }
+
+.sec { border-radius: 12px; border: 1px solid var(--bd); background: var(--bg); overflow: hidden; margin-bottom: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,.3); }
+.sec-hdr {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 16px; background: var(--hdr); border: 0; cursor: pointer;
+  font: inherit; text-align: left; color: inherit; transition: filter .15s;
+}
+.sec-hdr:hover { filter: brightness(1.1); }
+.sec-hdr .left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.badge { flex: 0 0 auto; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; background: var(--badge-bg); border: 1px solid var(--badge-bd); color: var(--fg); font-variant-numeric: tabular-nums; }
+.sec-hdr .t { font-weight: 700; font-size: 16px; line-height: 1.2; color: var(--fg); }
+.sec-hdr .s { font-size: 12px; color: var(--z500); margin-top: 2px; }
+.chev { font-size: 18px; color: var(--fg); transition: transform .2s; }
+.sec-hdr[aria-expanded="true"] .chev { transform: rotate(180deg); }
+
+.rows > .row + .row { border-top: 1px solid color-mix(in srgb, var(--z800) 50%, transparent); }
+.row { display: flex; transition: background .15s; }
+.row:hover { background: rgba(255,255,255,.02); }
+.row .num { flex: 0 0 48px; display: flex; justify-content: center; padding: 12px 0 8px; font-size: 12px; font-weight: 700; color: var(--fg); opacity: .6; font-variant-numeric: tabular-nums; }
+.row .body { flex: 1 1 0; min-width: 0; padding: 10px 8px; border-left: 1px solid color-mix(in srgb, var(--z800) 50%, transparent); display: flex; gap: 12px; }
+.row .nm { flex: 0 0 14rem; font-weight: 600; font-size: 14px; line-height: 1.35; color: var(--fg); }
+.row .rest { flex: 1 1 0; min-width: 0; }
+.row .ds { font-size: 12px; color: var(--z400); line-height: 1.6; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.tag { font: inherit; font-size: 10px; padding: 1px 6px; border-radius: 4px; background: var(--badge-bg); border: 1px solid var(--badge-bd); color: var(--fg); cursor: pointer; transition: filter .15s; }
+.tag:hover { filter: brightness(1.25); }
+
+.empty { text-align: center; padding: 80px 0; color: var(--z600); }
+.empty .em { font-size: 36px; margin-bottom: 12px; }
+.empty button { background: none; border: 0; color: oklch(0.702 0.183 293.541); font: inherit; font-size: 12px; cursor: pointer; margin-top: 12px; text-decoration: underline; }
+
+footer { border-top: 1px solid color-mix(in srgb, var(--z800) 60%, transparent); margin-top: 40px; padding: 24px 0 calc(24px + env(safe-area-inset-bottom, 0px)); text-align: center; font-size: 12px; color: var(--z600); }
+footer .dim { color: var(--z700); margin-top: 4px; }
+
+@media (max-width: 639px) {
+  .brand h1 { font-size: 16px; }
+  .part-hdr h2 { font-size: 20px; }
+  .sec-hdr .t { font-size: 14px; }
+  .row .body { flex-direction: column; gap: 2px; }
+  .row .nm { flex: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hdr">
+    <div class="hdr-top">
+      <div class="brand">
+        <div class="brand-mark">🪞</div>
+        <div>
+          <h1>ПОЛНАЯ ТАКСОНОМИЯ ЛИЦА</h1>
+          <p>Анатомия · Эстетика · Мимика · Типажи · Арт-теги</p>
+        </div>
+      </div>
+      <div class="counts">
+        <div class="count n1"><b id="cEntries">—</b><span id="wEntries">позиций</span></div>
+        <div class="count n2"><b id="cSections">—</b><span id="wSections">разделов</span></div>
+        <div class="count n3"><b id="cParts">—</b><span id="wParts">частей</span></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="q" type="text" placeholder="🔍 Поиск по названию, описанию, тегу…" autocomplete="off" spellcheck="false">
+      <button class="btn" id="bTags" aria-pressed="true"># теги</button>
+      <button class="btn" id="bOpen">↓ все</button>
+      <button class="btn" id="bClose">↑ свернуть</button>
+    </div>
+
+    <div class="tabs" id="tabs"></div>
+  </div>
+</header>
+
+<main class="wrap" id="main"></main>
+
+<footer class="wrap">
+  <div id="foot">—</div>
+  <div class="dim">Анатомия · Морфология · Мимика · Эстетика · Арт-теги (Danbooru/Gelbooru style)</div>
+</footer>
+
+<script>/*__DATA__*/</script>
+<script>
+"use strict";
+(function () {
+  var PARTS = window.__FACE__;
+
+  // ── склонение ────────────────────────────────────────────
+  // Без этого в подвале стояло «41 части», а у части
+  // с единственным разделом — «1 разделов».
+  function plural(n, one, few, many) {
+    var m100 = n % 100;
+    if (m100 >= 11 && m100 <= 14) return many;
+    var m10 = n % 10;
+    if (m10 === 1) return one;
+    if (m10 >= 2 && m10 <= 4) return few;
+    return many;
+  }
+  var wParts = function (n) { return plural(n, "часть", "части", "частей"); };
+  var wSecs  = function (n) { return plural(n, "раздел", "раздела", "разделов"); };
+  var wEnts  = function (n) { return plural(n, "позиция", "позиции", "позиций"); };
+
+  // Подпись вкладки — заголовок части без префикса «ЧАСТЬ N — ».
+  // Обрезать нельзя: слово рвалось посередине («АНАТОМИЯ И МОРФОЛОГИ»).
+  function partLabel(title) {
+    var i = title.indexOf("—");
+    return i === -1 ? title : title.slice(i + 1).trim();
+  }
+
+  var totalEntries = 0, totalSections = 0;
+  PARTS.forEach(function (p) {
+    totalSections += p.sections.length;
+    p.sections.forEach(function (s) { totalEntries += s.entries.length; });
+  });
+
+  var state = {
+    q: "",
+    part: null,
+    tags: true,
+    open: Object.create(null),          // раскрытые вне поиска
+    shutInSearch: Object.create(null),  // свёрнутые вручную во время поиска
+  };
+
+  var searching = function () { return state.q.trim().length > 0; };
+  var isOpen = function (id) {
+    return searching() ? !state.shutInSearch[id] : !!state.open[id];
+  };
+
+  // ── распорка под несмонтированным телом раздела ──────────
+  // Замерено: на широком экране строка укладывается в одну линию
+  // (~68 px), на узком название и описание встают друг под друга
+  // (~88 px). С одним числом полоса прокрутки дёргалась.
+  var wide = window.matchMedia("(min-width: 640px)");
+  var rowH = function () { return wide.matches ? 68 : 88; };
+
+  var io = null;
+  if (typeof IntersectionObserver !== "undefined") {
+    io = new IntersectionObserver(function (items) {
+      items.forEach(function (it) {
+        if (!it.isIntersecting) return;
+        io.unobserve(it.target);
+        mount(it.target);
+      });
+    }, { rootMargin: "100% 0px" });
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  // Тело раздела строится только когда раздел попал в поле зрения
+  // с запасом в экран. Без этого «↓ все» разворачивало все позиции
+  // разом: страница вырастала до 285 000 px, раскрытие занимало
+  // больше секунды.
+  function mount(box) {
+    if (box.dataset.mounted) return;
+    box.dataset.mounted = "1";
+    var entries = box.__entries;
+    var html = '<div class="rows">';
+    for (var i = 0; i < entries.length; i++) {
+      var e = entries[i];
+      html += '<div class="row"><div class="num">' + e.id + '</div>' +
+        '<div class="body"><div class="nm">' + esc(e.name) + '</div>' +
+        '<div class="rest"><div class="ds">' + esc(e.desc) + '</div>';
+      if (state.tags && e.tags && e.tags.length) {
+        html += '<div class="tags">';
+        for (var j = 0; j < e.tags.length; j++) {
+          html += '<button class="tag" data-tag="' + esc(e.tags[j]) + '" title="Искать «' +
+            esc(e.tags[j]) + '»">#' + esc(e.tags[j]) + '</button>';
+        }
+        html += '</div>';
+      }
+      html += '</div></div></div>';
+    }
+    box.innerHTML = html + '</div>';
+    box.style.height = "";
+  }
+
+  // ── отбор ────────────────────────────────────────────────
+  function filtered() {
+    var q = state.q.toLowerCase().trim();
+    var src = state.part ? PARTS.filter(function (p) { return p.id === state.part; }) : PARTS;
+    if (!q) return src;
+    var out = [];
+    src.forEach(function (p) {
+      var secs = [];
+      p.sections.forEach(function (s) {
+        // Раздел, попавший по своему названию, показывается целиком:
+        // иначе он оставался в выдаче с пустым телом и счётчиком «0».
+        if (s.title.toLowerCase().indexOf(q) !== -1 || s.subtitle.toLowerCase().indexOf(q) !== -1) {
+          secs.push(s);
+          return;
+        }
+        var es = s.entries.filter(function (e) {
+          if (e.name.toLowerCase().indexOf(q) !== -1) return true;
+          if (e.desc.toLowerCase().indexOf(q) !== -1) return true;
+          return !!(e.tags && e.tags.some(function (t) { return t.toLowerCase().indexOf(q) !== -1; }));
+        });
+        if (es.length) secs.push({ id: s.id, title: s.title, subtitle: s.subtitle, color: s.color, entries: es });
+      });
+      if (secs.length) out.push({ id: p.id, title: p.title, emoji: p.emoji, sections: secs });
+    });
+    return out;
+  }
+
+  // ── отрисовка ────────────────────────────────────────────
+  var main = document.getElementById("main");
+
+  function render() {
+    var vis = filtered();
+    main.textContent = "";
+
+    if (!vis.length) {
+      var d = document.createElement("div");
+      d.className = "empty";
+      d.innerHTML = '<div class="em">🔎</div><div>' +
+        (searching() ? "Ничего не найдено по запросу «" + esc(state.q) + "»" : "В этой части нечего показать") +
+        "</div>" + (searching() ? '<button id="reset">Сбросить поиск</button>' : "");
+      main.appendChild(d);
+      var r = document.getElementById("reset");
+      if (r) r.onclick = function () { document.getElementById("q").value = ""; state.q = ""; state.shutInSearch = Object.create(null); render(); };
+      return;
+    }
+
+    var frag = document.createDocumentFragment();
+
+    vis.forEach(function (p) {
+      var n = 0;
+      p.sections.forEach(function (s) { n += s.entries.length; });
+
+      var pd = document.createElement("div");
+      pd.className = "part";
+      pd.innerHTML =
+        '<div class="part-hdr"><span class="em">' + p.emoji + '</span><div>' +
+        "<h2>" + esc(p.title) + "</h2>" +
+        '<div class="sub">' + p.sections.length + " " + wSecs(p.sections.length) +
+        " · " + n + " " + wEnts(n) + "</div></div></div>";
+
+      p.sections.forEach(function (s) {
+        var open = isOpen(s.id);
+        var sd = document.createElement("div");
+        sd.className = "sec c-" + s.color;
+        sd.innerHTML =
+          '<button class="sec-hdr" aria-expanded="' + open + '" data-sec="' + esc(s.id) + '">' +
+          '<span class="left"><span class="badge">' + s.entries.length + "</span>" +
+          '<span><span class="t">' + esc(s.title) + "</span>" +
+          '<span class="s" style="display:block">' + esc(s.subtitle) + "</span></span></span>" +
+          '<span class="chev">▾</span></button>';
+
+        if (open) {
+          var box = document.createElement("div");
+          box.__entries = s.entries;
+          box.style.height = s.entries.length * rowH() + "px";
+          sd.appendChild(box);
+          if (io) io.observe(box); else mount(box);
+        }
+        pd.appendChild(sd);
+      });
+
+      frag.appendChild(pd);
+    });
+
+    main.appendChild(frag);
+  }
+
+  function renderCounts() {
+    document.getElementById("cEntries").textContent = totalEntries;
+    document.getElementById("wEntries").textContent = wEnts(totalEntries);
+    document.getElementById("cSections").textContent = totalSections;
+    document.getElementById("wSections").textContent = wSecs(totalSections);
+    document.getElementById("cParts").textContent = PARTS.length;
+    document.getElementById("wParts").textContent = wParts(PARTS.length);
+    document.getElementById("foot").textContent =
+      "Полная таксономия лица · " + totalEntries + " " + wEnts(totalEntries) +
+      " · " + totalSections + " " + wSecs(totalSections) +
+      " · " + PARTS.length + " " + wParts(PARTS.length);
+  }
+
+  function renderTabs() {
+    var t = document.getElementById("tabs");
+    var html = '<button class="tab' + (state.part === null ? " on" : "") + '" data-part="">Все части</button>';
+    PARTS.forEach(function (p) {
+      html += '<button class="tab tab-part' + (state.part === p.id ? " on" : "") + '" data-part="' + esc(p.id) + '">' +
+        p.emoji + " " + esc(partLabel(p.title)) + "</button>";
+    });
+    t.innerHTML = html;
+  }
+
+  // ── события ──────────────────────────────────────────────
+  var q = document.getElementById("q");
+  var timer = null;
+  q.addEventListener("input", function () {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      state.q = q.value;
+      if (!searching()) state.shutInSearch = Object.create(null);
+      render();
+    }, 120);
+  });
+
+  document.getElementById("bTags").addEventListener("click", function () {
+    state.tags = !state.tags;
+    this.setAttribute("aria-pressed", String(state.tags));
+    render();
+  });
+
+  document.getElementById("bOpen").addEventListener("click", function () {
+    PARTS.forEach(function (p) { p.sections.forEach(function (s) { state.open[s.id] = true; }); });
+    state.shutInSearch = Object.create(null);
+    render();
+  });
+
+  document.getElementById("bClose").addEventListener("click", function () {
+    state.open = Object.create(null);
+    if (searching()) {
+      PARTS.forEach(function (p) { p.sections.forEach(function (s) { state.shutInSearch[s.id] = true; }); });
+    }
+    render();
+  });
+
+  document.getElementById("tabs").addEventListener("click", function (ev) {
+    var b = ev.target.closest(".tab");
+    if (!b) return;
+    var id = b.getAttribute("data-part");
+    state.part = !id || state.part === id ? null : id;
+    renderTabs();
+    render();
+    window.scrollTo(0, 0);
+  });
+
+  main.addEventListener("click", function (ev) {
+    var tag = ev.target.closest(".tag");
+    if (tag) {
+      q.value = tag.getAttribute("data-tag");
+      state.q = q.value;
+      state.shutInSearch = Object.create(null);
+      render();
+      window.scrollTo(0, 0);
+      return;
+    }
+    var hdr = ev.target.closest(".sec-hdr");
+    if (!hdr) return;
+    var id = hdr.getAttribute("data-sec");
+    // Во время поиска разделы раскрыты по умолчанию, поэтому ручное
+    // сворачивание помнится отдельно — иначе клик не делал ничего.
+    if (searching()) {
+      if (state.shutInSearch[id]) delete state.shutInSearch[id];
+      else state.shutInSearch[id] = true;
+    } else {
+      if (state.open[id]) delete state.open[id];
+      else state.open[id] = true;
+    }
+    render();
+  });
+
+  renderCounts();
+  renderTabs();
+  render();
+})();
+</script>
+</body>
+</html>

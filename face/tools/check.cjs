@@ -1,54 +1,31 @@
-#!/usr/bin/env node
-/**
- * Проверка целостности данных. Роняет сборку, если корпус разошёлся
- * сам с собой.
- *
- * Главная проверка — повторяющиеся названия. Именно так корпус
- * и испортился: части дописывались поверх существующих, и одна
- * и та же черта попадала в него по второму и третьему разу, каждый
- * раз с чуть другим описанием. Вручную это не отлавливается — к тому
- * моменту, как повторов стало 152, заметить их в файле на 4700 строк
- * было уже нельзя.
- *
- * Черта, которую нужно назвать дважды в разных рамках, называется
- * по-разному: «Высокие скулы» (анатомия), «Высокие скулы как канон
- * красоты», «Высокие скулы (южноазиатский тип)».
- */
-
 const path = require("path");
-const { execFileSync } = require("child_process");
 const fs = require("fs");
-const os = require("os");
 
 const ROOT = path.join(__dirname, "..");
 
-// Цвета, которые умеет рисовать App.tsx. Раздел с чужим цветом
-// молча отрисуется фиолетовым.
+// Цвета, которые умеет рисовать вьюер. Раздел с чужим цветом
+// остался бы вовсе без оформления.
 const COLORS = [
   "violet", "blue", "indigo", "cyan", "teal", "emerald", "sky", "yellow",
   "rose", "orange", "amber", "lime", "purple", "red", "pink", "fuchsia",
 ];
 
+// Данные читаются как обычный текст и исполняются в пустой области
+// видимости: ни esbuild, ни require не нужны, поэтому проверка
+// работает на голом node без node_modules.
 function loadData() {
-  const esbuild = path.join(ROOT, "node_modules", ".bin", "esbuild");
-  if (!fs.existsSync(esbuild)) {
-    console.error("Нет node_modules/.bin/esbuild — сначала `npm install`.");
+  const src = fs.readFileSync(path.join(ROOT, "src", "data.js"), "utf8");
+  const mod = { exports: {} };
+  new Function("module", "window", src)(mod, undefined);
+  if (!Array.isArray(mod.exports.parts)) {
+    console.error("src/data.js не отдал массив частей.");
     process.exit(2);
   }
-  const out = path.join(os.tmpdir(), `face-check-${process.pid}.cjs`);
-  execFileSync(esbuild, [
-    path.join(ROOT, "src", "data.ts"),
-    "--bundle", "--format=cjs", `--outfile=${out}`, "--log-level=error",
-  ]);
-  try {
-    return require(out);
-  } finally {
-    fs.unlinkSync(out);
-  }
+  return mod.exports;
 }
 
 function main() {
-  const { parts, TOTAL_COUNT } = loadData();
+  const { parts } = loadData();
   const problems = [];
   const seenSection = new Map();
   const seenName = new Map();
@@ -98,8 +75,9 @@ function main() {
     }
   }
 
-  if (TOTAL_COUNT !== entries) {
-    problems.push(`TOTAL_COUNT = ${TOTAL_COUNT}, а позиций ${entries}`);
+  const palette = JSON.parse(fs.readFileSync(path.join(ROOT, "src", "palette.json"), "utf8"));
+  for (const c of COLORS) {
+    if (!palette[c]) problems.push(`в src/palette.json нет цвета «${c}»`);
   }
 
   console.log(`частей ${parts.length}, разделов ${sections}, позиций ${entries}`);
