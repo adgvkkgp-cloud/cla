@@ -1,0 +1,7 @@
+# Командные файлы Windows — только CRLF: с голым LF cmd.exe
+# ошибается в переходах по меткам (goto) на границах буфера.
+*.bat      text eol=crlf
+# Сценарии для macOS и Linux — только LF: с CRLF строка #!/bin/bash
+# превращается в «/bin/bash\r», и файл не запускается.
+*.command  text eol=lf
+*.py       text eol=lf
