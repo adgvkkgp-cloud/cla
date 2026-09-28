@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пролив аргументов — 110 философий о Тайване</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;0,800;1,600;1,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#D8D4C6;
+  --ground-2:#CEC9B8;
+  --paper:#E4E0D3;
+  --ink:#1A1C18;
+  --ink-soft:#55574D;
+  --ink-faint:#8A8878;
+  --rule:#B0AB98;
+  --mainland:#8E4A2E;
+  --island:#255E5B;
+  --neutral:#8A7233;
+  --void:#0E0D0B;
+  --void-2:#191713;
+  --sodium:#E0742F;
+  --bone:#E9E3D5;
+  --blood:#9B2F35;
+  --seal:#A03028;
+  --s:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.028) 0 1px,transparent 1px 4px);
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ---------- typography ---------- */
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink-faint);
+}
+h1{
+  font-family:'Spectral',Georgia,serif;font-weight:800;line-height:.94;
+  font-size:clamp(42px,7.4vw,86px);letter-spacing:-.02em;margin:18px 0 0;
+}
+h1 em{font-style:italic;font-weight:800;color:var(--mainland)}
+h2{
+  font-family:'Spectral',Georgia,serif;font-weight:800;
+  font-size:clamp(26px,3.6vw,40px);line-height:1.02;letter-spacing:-.015em;
+}
+h3{font-family:'Spectral',Georgia,serif;font-weight:700;font-size:20px;line-height:1.15}
+.lede{
+  font-family:'Spectral',Georgia,serif;font-size:clamp(17px,2vw,21px);
+  line-height:1.5;max-width:64ch;color:var(--ink-soft);margin-top:20px;
+}
+.mono{font-family:'IBM Plex Mono',monospace}
+.cjk{font-family:'Noto Serif TC','Songti TC','PingFang TC',serif;font-weight:600}
+
+/* ---------- header ---------- */
+header{padding:56px 0 40px;border-bottom:1px solid var(--rule)}
+.hrule{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.path{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);letter-spacing:.04em}
+.sibling{
+  margin-top:26px;border-left:2px solid var(--seal);padding:10px 0 10px 16px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.65;color:var(--ink-soft);max-width:76ch;
+}
+.sibling b{color:var(--seal);font-weight:600}
+
+/* ---------- stat strip ---------- */
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:34px;
+}
+.stat{background:var(--ground);padding:18px 16px}
+.stat b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:30px;
+  font-weight:600;line-height:1;letter-spacing:-.03em;
+}
+.stat span{
+  display:block;margin-top:8px;font-size:12px;line-height:1.35;color:var(--ink-soft);
+}
+.stat.m b{color:var(--mainland)} .stat.i b{color:var(--island)} .stat.n b{color:var(--neutral)}
+
+/* ---------- section ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--rule)}
+.sechead{display:flex;gap:20px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:32px}
+.sechead p{max-width:52ch;color:var(--ink-soft);font-size:15px}
+
+/* ---------- controls ---------- */
+.ctrls{display:flex;gap:0;border:1px solid var(--ink);flex-wrap:wrap}
+.ctrls button{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.11em;
+  text-transform:uppercase;background:transparent;color:var(--ink);
+  border:0;border-right:1px solid var(--ink);padding:11px 15px;cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.ctrls button:last-child{border-right:0}
+.ctrls button[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+.ctrls button:focus-visible{outline:2px solid var(--mainland);outline-offset:2px}
+.ctrlrow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.ctrls.thin button{padding:9px 13px;font-size:11px}
+.ctrls.thin{border-color:var(--ink-faint)}
+.ctrls.thin button{border-right-color:var(--ink-faint)}
+.ctrls.thin button[aria-pressed="true"]{background:var(--ink-faint);color:var(--ground)}
+
+/* ---------- the strait plot ---------- */
+.plotwrap{margin-top:28px;position:relative}
+.axislabel{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-faint);
+}
+.plot{
+  position:relative;height:min(58vh,470px);min-height:340px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 39px,rgba(26,28,24,.055) 39px 40px),
+    repeating-linear-gradient(0deg,transparent 0 39px,rgba(26,28,24,.055) 39px 40px),
+    linear-gradient(90deg,rgba(142,74,46,.075),rgba(216,212,198,0) 42%,rgba(216,212,198,0) 58%,rgba(37,94,91,.075));
+  border:1px solid var(--rule);margin:10px 0;overflow:hidden;
+}
+.median{
+  position:absolute;left:50%;top:0;bottom:0;width:0;
+  border-left:1px dashed rgba(26,28,24,.5);
+}
+.median span{
+  position:absolute;top:8px;left:8px;white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-faint);
+}
+.mean{
+  position:absolute;top:0;bottom:0;width:0;border-left:2px solid rgba(142,74,46,.65);
+  transition:left .85s cubic-bezier(.65,.02,.25,1);
+}
+.mean span{
+  position:absolute;bottom:8px;left:6px;white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mainland);
+}
+.shore{
+  position:absolute;top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.shore.l{left:10px;color:var(--mainland)} .shore.r{right:10px;color:var(--island)}
+
+.die{
+  position:absolute;width:13px;height:13px;padding:0;border:0;cursor:pointer;
+  transform:translate(-50%,50%);
+  transition:left .85s cubic-bezier(.65,.02,.25,1),bottom .85s cubic-bezier(.65,.02,.25,1),
+             width .16s,height .16s,box-shadow .16s,opacity .25s;
+  background:var(--neutral);
+}
+.die.m{background:var(--mainland)} .die.i{background:var(--island)}
+.die.dim{opacity:.13}
+.die:hover,.die:focus-visible{width:19px;height:19px;outline:0;box-shadow:0 0 0 3px var(--ground),0 0 0 4px var(--ink);z-index:6}
+.die.on{width:19px;height:19px;box-shadow:0 0 0 3px var(--ground),0 0 0 4px var(--ink);z-index:7}
+.tip{
+  position:absolute;pointer-events:none;z-index:20;background:var(--ink);color:var(--ground);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 9px;white-space:nowrap;
+  transform:translate(-50%,-160%);opacity:0;transition:opacity .12s;
+}
+.tip.show{opacity:1}
+
+.legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:7px;vertical-align:-1px}
+.legend span{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace}
+.note{
+  margin-top:18px;font-size:13.5px;color:var(--ink-soft);max-width:74ch;
+  border-left:2px solid var(--rule);padding-left:14px;line-height:1.6;
+}
+.note b{color:var(--ink);font-weight:600}
+
+/* ---------- detail ---------- */
+.detail{margin-top:34px;border-top:2px solid var(--ink);padding-top:24px}
+.dhead{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.dnum{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);letter-spacing:.12em}
+.dcn{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:600;color:var(--seal);letter-spacing:.06em}
+.dreg{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-faint);border:1px solid var(--rule);padding:3px 8px;
+}
+.dthesis{font-family:'Spectral',Georgia,serif;font-style:italic;font-size:17px;color:var(--ink-soft);margin-top:8px;max-width:60ch}
+.reads{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:24px}
+.read{background:var(--paper);padding:18px 20px}
+.read h4{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;margin-bottom:10px;
+}
+.read.m{border-top:3px solid var(--mainland)} .read.m h4{color:var(--mainland)}
+.read.i{border-top:3px solid var(--island)} .read.i h4{color:var(--island)}
+.read p{font-size:15px;line-height:1.55}
+.verdict{margin-top:1px;background:var(--ink);color:var(--ground);padding:18px 20px}
+.verdict h4{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;margin-bottom:9px;color:var(--ink-faint);
+}
+.verdict p{font-family:'Spectral',Georgia,serif;font-size:17px;line-height:1.45;max-width:70ch}
+.drift{margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft)}
+.bar{display:inline-block;height:7px;background:var(--ink);vertical-align:0;margin:0 8px}
+
+/* ---------- two-canon comparison ---------- */
+.cmp{margin-top:10px}
+.cmprow{margin-bottom:26px}
+.cmplab{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;
+}
+.cmplab b{font-size:13px;letter-spacing:.06em;text-transform:none;color:var(--ink);font-weight:600}
+.strip{
+  position:relative;height:58px;border:1px solid var(--rule);
+  background:linear-gradient(90deg,rgba(142,74,46,.1),rgba(216,212,198,0) 44%,rgba(216,212,198,0) 56%,rgba(37,94,91,.1));
+}
+.strip .mid{position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(26,28,24,.42)}
+.strip i{
+  position:absolute;top:10px;bottom:10px;width:2px;background:var(--ink);opacity:.6;
+  transform:translateX(-50%);
+}
+.strip i.m{background:var(--mainland);opacity:.85}
+.strip i.i{background:var(--island);opacity:.85}
+.strip .mk{
+  position:absolute;top:-1px;bottom:-1px;width:3px;background:var(--seal);transform:translateX(-50%);
+}
+.strip .mklab{
+  position:absolute;top:100%;margin-top:4px;transform:translateX(-50%);white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--seal);letter-spacing:.06em;
+}
+.tbl{width:100%;border-collapse:collapse;margin-top:38px;font-size:14px}
+.tbl th,.tbl td{border:1px solid var(--rule);padding:10px 13px;text-align:left}
+.tbl thead th{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-faint);font-weight:600;background:var(--paper);
+}
+.tbl td.num{font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;width:15%}
+.tbl tr.hi td{background:var(--paper)}
+.tblwrap{overflow-x:auto}
+
+/* ---------- dark chamber ---------- */
+.dark{background:var(--void);color:var(--bone);border-bottom:0;position:relative}
+.dark::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 65% at 50% -12%,rgba(224,116,47,.17),transparent 62%);
+}
+.dark .wrap{position:relative;z-index:1}
+.dark .eyebrow{color:var(--sodium)}
+.dark h2{color:var(--bone)}
+.dark .sechead p{color:#9C958A}
+.warn{
+  border:1px solid rgba(224,116,47,.45);padding:14px 18px;margin-bottom:34px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.6;color:#B9B1A4;max-width:74ch;
+}
+.warn b{color:var(--sodium);font-weight:600}
+.acc{border-top:1px solid rgba(233,227,213,.16)}
+.acc:last-of-type{border-bottom:1px solid rgba(233,227,213,.16)}
+.accbtn{
+  width:100%;background:transparent;border:0;color:var(--bone);cursor:pointer;
+  display:flex;gap:18px;align-items:baseline;text-align:left;padding:20px 4px;
+  font-family:'Spectral',Georgia,serif;font-size:clamp(19px,2.5vw,26px);font-weight:700;
+  transition:color .18s;
+}
+.accbtn:hover,.accbtn:focus-visible{color:var(--sodium);outline:0}
+.accbtn .k{
+  font-family:'Noto Serif TC',serif;font-size:16px;line-height:1.25;letter-spacing:.06em;
+  color:var(--sodium);flex:0 0 96px;padding-top:3px;
+}
+.accbtn .sub{
+  display:block;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;
+  font-weight:400;color:#948C80;letter-spacing:.01em;margin-top:5px;
+}
+.accbtn .pm{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--sodium);flex:0 0 auto}
+.accbody{display:none;padding:0 4px 26px 114px;max-width:80ch}
+.acc.open .accbody{display:block}
+.accbody p{margin-bottom:14px;font-size:15.5px;line-height:1.62;color:#C6BFB2}
+.worse{
+  border-left:2px solid var(--blood);padding:11px 16px;background:rgba(155,47,53,.1);
+  font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.6;color:#DCC9C1;
+}
+.worse b{color:#E4726F;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:10.5px;display:block;margin-bottom:6px}
+
+/* ---------- abyss ---------- */
+.abyss{background:#08090A;color:#A2A8AA;border-bottom:0}
+.abyss .eyebrow{color:#6E8C93}
+.abyss h2{color:#D2D8D9}
+.abyss .sechead p{color:#7C8385}
+.abyss .warn{border-color:rgba(110,140,147,.4);color:#8B9294}
+.abyss .warn b{color:#8FB3BA}
+.grp{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:#5E6B6E;padding:30px 0 10px;
+  border-bottom:1px solid rgba(162,168,170,.14);
+}
+.spec{border-bottom:1px solid rgba(162,168,170,.14)}
+.specbtn{
+  width:100%;background:transparent;border:0;color:#CBD1D2;cursor:pointer;
+  display:flex;gap:16px;align-items:baseline;text-align:left;padding:17px 4px;
+  font-family:'Spectral',Georgia,serif;font-size:clamp(17px,2.2vw,22px);font-weight:700;
+  transition:color .18s;
+}
+.specbtn:hover,.specbtn:focus-visible{color:#8FB3BA;outline:0}
+.specbtn .n{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5E6B6E;
+  flex:0 0 34px;padding-top:5px;
+}
+.specbtn .who{
+  display:block;font-family:'IBM Plex Sans',sans-serif;font-size:12px;
+  font-weight:400;color:#6F7679;margin-top:4px;
+}
+.specbtn .pm{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:17px;color:#5E6B6E;flex:0 0 auto}
+.specbody{display:none;padding:0 4px 24px 50px;max-width:78ch}
+.spec.open .specbody{display:block}
+.specbody p{margin-bottom:13px;font-size:15px;line-height:1.62;color:#9CA3A5}
+.breaks{border:1px solid rgba(143,179,186,.35);padding:12px 16px;margin-top:4px}
+.breaks b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8FB3BA;margin-bottom:7px;font-weight:600;
+}
+.breaks p{font-size:14.5px;line-height:1.6;color:#AEB5B7;margin:0}
+
+/* ---------- iceberg / bottom ---------- */
+.ice{background:var(--void);color:var(--bone);border-bottom:0;padding-bottom:0}
+.ice .eyebrow{color:var(--blood)}
+.ice h2{color:var(--bone)}
+.ice .sechead p{color:#9C958A}
+.ice .warn{border-color:rgba(155,47,53,.5)}
+.ice .warn b{color:#E4726F}
+.doc{border-top:1px solid rgba(233,227,213,.13);padding:34px 0}
+.docmeta{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--blood);
+}
+.doc h3{margin:10px 0 8px;font-size:clamp(21px,2.9vw,29px);color:var(--bone)}
+.docsub{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8B8478;margin-bottom:16px;line-height:1.6}
+.doc p{color:#B8B1A4;font-size:15.5px;line-height:1.62;max-width:76ch;margin-bottom:14px}
+.ann{
+  border-left:2px solid var(--blood);background:rgba(155,47,53,.09);
+  padding:12px 17px;margin:0 0 14px;max-width:76ch;
+}
+.ann b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#E4726F;margin-bottom:7px;font-weight:600;
+}
+.ann{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.62;color:#DCC9C1}
+p.fair{
+  border-left:2px solid rgba(233,227,213,.28);padding-left:16px;color:#9C958A;
+  font-size:14.5px;line-height:1.62;
+}
+
+/* ---------- machine ---------- */
+.machine{border-top:2px solid var(--blood);margin-top:14px;padding:34px 0 10px}
+.machine h3{font-size:clamp(22px,3vw,30px);color:var(--bone);margin:10px 0 10px}
+.mdesc{color:#9C958A;font-size:15px;line-height:1.6;max-width:70ch;margin-bottom:22px}
+.mctrl{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:20px}
+.mfield{display:flex;flex-direction:column;gap:6px}
+.mfield label{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8B8478;
+}
+.mfield select{
+  background:#141311;color:var(--bone);border:1px solid rgba(233,227,213,.28);
+  font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:9px 11px;min-width:180px;max-width:340px;
+}
+.mfield select:focus-visible{outline:2px solid var(--blood);outline-offset:1px}
+.machine button{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  background:var(--blood);color:#F3E9E2;border:1px solid var(--blood);padding:11px 20px;cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.machine button:hover{background:#B8393F}
+.machine button.ghost{background:transparent;color:#C9B7B0;border-color:rgba(233,227,213,.3)}
+.machine button.ghost:hover{background:rgba(233,227,213,.08)}
+.machine button:focus-visible{outline:2px solid var(--sodium);outline-offset:2px}
+.mout{border:1px solid rgba(233,227,213,.16);padding:20px 22px;min-height:120px;max-width:80ch;background:#0B0A09}
+.mempty{color:#6F6960;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.6}
+.mtag{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blood);margin-bottom:12px;
+}
+.mtag .mcn{font-family:'Noto Serif TC',serif;font-size:14px;letter-spacing:.08em;color:#8B8478;text-transform:none}
+.mprem{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#8B8478;margin-bottom:12px;line-height:1.6}
+.mbody{font-family:'Spectral',Georgia,serif;font-size:18px;line-height:1.5;color:var(--bone);margin-bottom:14px}
+.msign{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6F6960;line-height:1.6;border-top:1px solid rgba(233,227,213,.13);padding-top:11px}
+.mcount{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8B8478;margin-top:12px}
+
+/* ---------- floor ---------- */
+.floor{
+  background:#080706;margin-top:0;padding:56px 0 64px;
+  border-top:2px solid var(--blood);
+}
+.floor h3{font-family:'Spectral',Georgia,serif;font-size:clamp(24px,3.4vw,34px);color:var(--bone);margin-bottom:20px;line-height:1.12}
+.floor p{color:#B8B1A4;font-size:16px;line-height:1.62;max-width:76ch;margin-bottom:16px}
+.floor p b{color:var(--bone);font-weight:600}
+.levers{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:rgba(233,227,213,.13);border:1px solid rgba(233,227,213,.13);margin:26px 0}
+.lever{background:#0D0C0A;padding:16px 17px}
+.lever b{display:block;font-family:'Spectral',Georgia,serif;font-size:17px;color:var(--bone);margin-bottom:7px}
+.lever b .cjk{color:var(--blood);font-size:15px;margin-right:6px}
+.lever span{font-size:13.5px;line-height:1.5;color:#9A9287}
+.kicker{
+  font-family:'Spectral',Georgia,serif;font-style:italic;font-size:clamp(19px,2.6vw,25px);
+  line-height:1.4;color:var(--bone);border-left:2px solid var(--blood);padding-left:20px;max-width:62ch;
+}
+
+/* ---------- footer ---------- */
+footer{padding:44px 0 60px;background:var(--void-2);color:#8B8478}
+footer .wrap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.85}
+footer b{color:var(--bone);font-weight:500}
+
+@media(max-width:720px){
+  .reads{grid-template-columns:1fr}
+  .accbody{padding-left:4px}
+  header{padding:36px 0 28px}
+  section{padding:44px 0}
+  .mfield select{min-width:150px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- два канона ---------- */
+[hidden]{display:none!important}
+.die.e{border-radius:50%}
+.legend i.sq{background:var(--ink-soft)}
+.legend i.ci{background:var(--ink-soft);border-radius:50%}
+.cbadge{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:3px 8px;color:var(--ink-faint);white-space:nowrap;
+}
+.dsrc{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);margin-top:6px}
+.accbtn .k.latin{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.08em}
+.dark .grp{color:#8A7F72;border-bottom-color:rgba(233,227,213,.16)}
+.dark .grp:first-child{padding-top:4px}
+.origin{
+  display:inline-block;margin-left:10px;padding:2px 7px;border:1px solid rgba(233,227,213,.3);
+  color:#C9B7B0;font-size:10px;letter-spacing:.14em;
+}
+.docsum{
+  border-top:2px solid var(--blood);margin-top:10px;padding:22px 0 8px;max-width:78ch;
+  font-family:'Spectral',Georgia,serif;font-size:18px;line-height:1.5;color:var(--bone);
+}
+.docsum b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:#E4726F;margin-bottom:8px;font-weight:600;
+}
+.method ol{list-style:none;counter-reset:m;margin:6px 0 30px;max-width:78ch}
+.method li{counter-increment:m;position:relative;padding-left:40px;margin-bottom:16px;color:#B8B1A4;font-size:16px;line-height:1.6}
+.method li::before{
+  content:counter(m,decimal-leading-zero);position:absolute;left:0;top:2px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blood);
+}
+.method li b{color:var(--bone);font-weight:600}
+.lever .cb{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#6F6960;display:block;margin-bottom:6px;
+}
+.specbtn .cb{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#5E6B6E;border:1px solid rgba(162,168,170,.25);padding:2px 6px;margin-left:8px;vertical-align:2px;
+}
+@media(max-width:720px){
+  .ctrls button{padding:9px 11px;font-size:10.5px}
+  .method li{padding-left:32px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hrule">
+      <div class="eyebrow">110 доктрин · один пролив · два канона</div>
+      <div class="path">atlas/data › ✦Человек › 🏛Культура и смысл › Философия</div>
+    </div>
+    <h1>Каждая доктрина<br><em>оправдывает</em> обоих</h1>
+    <p class="lede">Пятьдесят пять европейских направлений и пятьдесят пять школ восточного канона, нанесённые на пролив. По горизонтали — чью позицию доктрина усиливает, по вертикали — насколько она объясняет происходящее. При смене точки чтения почти каждая доктрина переезжает через срединную линию. Средний сдвиг в обоих канонах почти одинаков, а центр тяжести у них противоположен.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<section id="map">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Карта</div>
+        <h2>Пролив аргументов</h2>
+      </div>
+      <p>Координаты — авторская оценка, а не измерение. Информативны две величины: куда смещён центр тяжести списка и насколько далеко доктрина уходит при смене точки чтения.</p>
+    </div>
+
+    <div class="ctrlrow">
+      <div class="ctrls" role="group" aria-label="Точка чтения">
+        <button data-mode="n" aria-pressed="true">Нейтральное чтение</button>
+        <button data-mode="pk" aria-pressed="false">Читать с материка</button>
+        <button data-mode="tb" aria-pressed="false">Читать с острова</button>
+      </div>
+      <div class="ctrls thin" role="group" aria-label="Каталог">
+        <button data-f="all" aria-pressed="true">Все 110</button>
+        <button data-f="w" aria-pressed="false">Европейский</button>
+        <button data-f="e" aria-pressed="false">Восточный</button>
+        <button data-f="cn" aria-pressed="false">Китай</button>
+        <button data-f="ip" aria-pressed="false">Индия и Персия</button>
+        <button data-f="hr" aria-pressed="false">Наследники канона</button>
+      </div>
+    </div>
+
+    <div class="plotwrap">
+      <div class="axislabel" style="margin-bottom:6px">↑ Объяснительная сила</div>
+      <div class="plot" id="plot">
+        <div class="median"><span>срединная линия</span></div>
+        <div class="mean" id="meanline"><span id="meanlabel"></span></div>
+        <div class="shore l">материк</div>
+        <div class="shore r">остров</div>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="axislabel">Усиливает позицию Пекина ←&nbsp;&nbsp;&nbsp;→ усиливает позицию Тайбэя</div>
+      <div class="legend">
+        <span><i style="background:var(--mainland)"></i>склоняется к материковой позиции</span>
+        <span><i style="background:var(--neutral)"></i>двойного назначения</span>
+        <span><i style="background:var(--island)"></i>склоняется к островной позиции</span>
+        <span><i class="sq"></i>европейский канон</span>
+        <span><i class="ci"></i>восточный канон</span>
+        <span><i style="background:var(--seal);width:3px"></i>среднее по выборке</span>
+      </div>
+      <p class="note" id="mapnote"></p>
+    </div>
+
+    <div class="detail" id="detail"></div>
+  </div>
+</section>
+
+<section id="cmp">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Сличение</div>
+        <h2>Два каталога,<br>один метод</h2>
+      </div>
+      <p>Каждая чёрточка — одна доктрина в нейтральном чтении. Красная метка — среднее по каталогу.</p>
+    </div>
+    <div class="cmp">
+      <div class="cmprow">
+        <div class="cmplab"><b>Европейский канон</b><span>55 направлений · от платонизма до стоического космополитизма</span></div>
+        <div class="strip" id="stripW"><div class="mid"></div></div>
+      </div>
+      <div class="cmprow" style="margin-top:38px">
+        <div class="cmplab"><b>Восточный канон</b><span>55 школ · от конфуцианства до сатьяграхи</span></div>
+        <div class="strip" id="stripE"><div class="mid"></div></div>
+      </div>
+    </div>
+    <div class="tblwrap">
+      <table class="tbl" id="cmptbl"></table>
+    </div>
+    <p class="note" style="margin-top:26px" id="cmpnote"></p>
+  </div>
+</section>
+
+<section class="dark" id="dark">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Тёмный отсек</div>
+        <h2>Двадцать четыре оптики,<br>которые делают хуже</h2>
+      </div>
+      <p>Рамки, которые не смягчают конфликт, а обостряют его: двенадцать европейских и двенадцать восточных.</p>
+    </div>
+    <div class="warn">
+      <b>Что это.</b> Аналитические рамки, а не позиции и не рекомендации. Для каждой показано, что меняется в тайваньском вопросе, если принять её посылки: какие решения она подсказывает, какие инструменты выводит из поля зрения, на каком уровне действует. У всех есть сторонники; большинство входит в университетские курсы по обе стороны пролива.
+    </div>
+    <div id="darklist"></div>
+  </div>
+</section>
+
+<section class="ice" id="ice">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Дно</div>
+        <h2>Пять документов</h2>
+      </div>
+      <p>Открытые документы 1999–2024 годов — КНР, США, Япония. Разбор касается одного вопроса: как в каждом из них учтено гражданское население острова.</p>
+    </div>
+    <div class="warn">
+      <b>Почему документы, а не организации.</b> Подпольную группу называют и запрещают, и её механизм виден сразу. Здесь разобраны тексты, прошедшие рецензирование, голосование или утверждение правительством и открытые для чтения. Порядок хронологический.
+    </div>
+    <div id="doclist"></div>
+    <div class="docsum" id="docsum"></div>
+
+    <div class="machine">
+      <div class="eyebrow" style="color:var(--blood)">Механика</div>
+      <h3>Машина оправданий</h3>
+      <p class="mdesc">Выберите сторону и доктрину — устройство соберёт обоснование из таблицы. Для каждой из 110 доктрин заготовлены оба варианта, всего 220 формулировок.</p>
+      <div class="mctrl">
+        <div class="mfield">
+          <label for="mside">Сторона</label>
+          <select id="mside"><option value="pk">Пекин</option><option value="tb">Тайбэй</option></select>
+        </div>
+        <div class="mfield">
+          <label for="mdoc">Доктрина</label>
+          <select id="mdoc"></select>
+        </div>
+        <button id="mgo" type="button">Собрать</button>
+        <button id="mrnd" type="button" class="ghost">Наугад</button>
+      </div>
+      <div class="mout" id="mout" aria-live="polite"><p class="mempty">Выберите сторону и доктрину и нажмите «Собрать».</p></div>
+      <div class="mcount" id="mcount"></div>
+    </div>
+  </div>
+
+  <div class="floor method">
+    <div class="wrap">
+      <h3>Что показывает карта</h3>
+      <ol id="methodlist"></ol>
+      <h3 style="font-size:clamp(20px,2.6vw,26px)">Рычаги</h3>
+      <p>В десяти доктринах есть посылка, которая при последовательном применении исключает население острова из расчёта или из круга тех, чьё согласие требуется. Все десять преподаются и имеют сторонников.</p>
+      <div class="levers" id="levers"></div>
+    </div>
+  </div>
+</section>
+
+<section class="abyss" id="abyss">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Нижний ярус</div>
+        <h2>Двадцать четыре вскрытия</h2>
+      </div>
+      <p>Позиции, отменяющие обязательность морали, — от академических до доктрин, обслуживавших террор. У каждой указано, где она ломается.</p>
+    </div>
+    <div class="warn">
+      <b>Порядок.</b> По типу аргумента, а не по радикальности: ранжирование по «глубине» придаёт крайним позициям статус. <b>На карту эти позиции не наносятся:</b> ни одна из сторон спора на них не опирается.
+    </div>
+    <div id="abysslist"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" id="foot">
+    <b>Структура:</b> европейский список — раздел g-isms («Философские направления (-измы)», 55 записей) Атласа, порядок и названия сохранены; восточный составлен тем же методом с тем же числом мест. Объединены две страницы «Пролив аргументов». Сводные числа пересчитываются из данных при загрузке страницы.<br>
+    <b>Состав восточного канона:</b> <span id="ecomp"></span><br>
+    <b>Начертание:</b> иероглифика набрана полными знаками (<span class="cjk">正體字</span>).<br>
+    <b>Фактура:</b> Центр изучения выборов Университета Чжэнчжи, министерства обороны и иностранных дел Тайваня, USTR и Министерство торговли США, AEI, Global Taiwan Institute, отчётность TSMC; «Антисепаратистский закон» КНР от 14 марта 2005 года; белые книги по тайваньскому вопросу 1993, 2000 и 2022 годов; Цяо Лян и Ван Сяньсуй, «Война, превосходящая пределы», 1999; Маккинни и Харрис, «Broken Nest», Parameters, 2021; CSIS, «The First Battle of the Next War», 2023; план эвакуации островов Сакисима, правительство Японии, 2024. Состояние данных — июль 2026 года.<br>
+    <b>Оговорка:</b> политический статус Тайваня оспаривается. Позиции обеих сторон изложены в их сильнейшей форме; выбор между ними здесь не делается.
+  </div>
+</footer>
+
+<script>/*__DATA__*/</script>
+<script>
+"use strict";
+(function(){
+var S = window.__STRAIT__, D = S.doctrines;
+var REGNAME = {eu:"Европа",cn:"Китай","in":"Индия",ir:"Персия",jp:"Япония",kr:"Корея",vn:"Вьетнам",bo:"Тибет"};
+var REGGRP  = {eu:"w",cn:"cn","in":"ip",ir:"ip",jp:"hr",kr:"hr",vn:"hr",bo:"hr"};
+var CANON = {w:"европейский канон", e:"восточный канон"};
+var CANON_SHORT = {w:"евр.", e:"вост."};
+var ORIGIN = {cn:"КНР", us:"США", jp:"Япония"};
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function xpct(x){ return 4+(x+100)/200*92; }
+function signed(v){ return (v>0?"+":v<0?"−":"")+Math.abs(v); }
+function mean(a){ return a.length ? Math.round(a.reduce(function(x,y){return x+y;},0)/a.length) : 0; }
+function lean(x){ return x<=-20?"m":(x>=20?"i":""); }
+function drift(d){ return Math.abs(d.tb-d.pk); }
+function byCanon(c){ return D.filter(function(d){ return d.canon===c; }); }
+function tally(arr){
+  var t={m:0,i:0,n:0};
+  arr.forEach(function(d){ var c=lean(d.n); if(c==="m") t.m++; else if(c==="i") t.i++; else t.n++; });
+  t.mean=mean(arr.map(function(d){return d.n;}));
+  t.drift=mean(arr.map(drift));
+  t.rev=arr.filter(function(d){return drift(d)>=100;}).length;
+  return t;
+}
+var W=byCanon("w"), E=byCanon("e"), TW=tally(W), TE=tally(E);
+function grpMean(g){ return mean(D.filter(function(d){return REGGRP[d.reg]===g;}).map(function(d){return d.n;})); }
+function grpCount(g){ return D.filter(function(d){return REGGRP[d.reg]===g;}).length; }
+
+/* ---------- шапка ---------- */
+document.getElementById("stats").innerHTML=
+  '<div class="stat"><b>110</b><span>доктрин: 55 европейских и 55 восточных</span></div>'+
+  '<div class="stat"><b>'+signed(TW.mean)+' / '+signed(TE.mean)+'</b><span>средний наклон при нейтральном чтении: европейский канон / восточный</span></div>'+
+  '<div class="stat"><b>'+TW.drift+' / '+TE.drift+'</b><span>средний сдвиг при смене точки чтения, из 200 возможных</span></div>'+
+  '<div class="stat"><b>'+TW.rev+' / '+TE.rev+'</b><span>обращаются полностью — сдвиг 100 и больше</span></div>'+
+  '<div class="stat n"><b>'+TW.n+' / '+TE.n+'</b><span>двойного назначения — не склоняются никуда</span></div>';
+
+/* ---------- карта ---------- */
+var mode="n", filt="all", sel=null;
+var plot=document.getElementById("plot"), tip=document.getElementById("tip");
+var meanline=document.getElementById("meanline"), meanlabel=document.getElementById("meanlabel");
+function inFilter(d){
+  if(filt==="all") return true;
+  if(filt==="w"||filt==="e") return d.canon===filt;
+  return REGGRP[d.reg]===filt;
+}
+function jit(i){ return ((i*37)%11-5)*0.55; }
+
+D.forEach(function(d,i){
+  var b=document.createElement("button");
+  b.type="button"; b.setAttribute("aria-label",d.name+", "+CANON[d.canon]);
+  b.addEventListener("mouseenter",function(){ showTip(b,d); });
+  b.addEventListener("mouseleave",hideTip);
+  b.addEventListener("focus",function(){ showTip(b,d); });
+  b.addEventListener("blur",hideTip);
+  b.addEventListener("click",function(){ select(d.id); });
+  plot.appendChild(b);
+  d.el=b; d.idx=i;
+});
+
+function place(){
+  var xs=[];
+  D.forEach(function(d){
+    var x=d[mode], vis=inFilter(d);
+    d.el.style.left=(xpct(x)+jit(d.idx))+"%";
+    d.el.style.bottom=(6+d.y/100*86)+"%";
+    d.el.className="die "+d.canon+" "+lean(x)+(sel===d.id?" on":"")+(vis?"":" dim");
+    d.el.setAttribute("tabindex",vis?"0":"-1");
+    if(vis) xs.push(x);
+  });
+  var avg=mean(xs);
+  meanline.style.left=xpct(avg)+"%";
+  meanlabel.textContent="среднее "+signed(avg);
+}
+function showTip(b,d){
+  tip.textContent=d.num+". "+d.name+" · "+CANON_SHORT[d.canon];
+  tip.style.left=b.style.left; tip.style.bottom=b.style.bottom;
+  tip.classList.add("show");
+}
+function hideTip(){ tip.classList.remove("show"); }
+
+document.getElementById("mapnote").innerHTML=
+  'Средний наклон по происхождению при нейтральном чтении: европейский канон <b>'+signed(TW.mean)+'</b>; '+
+  'Китай <b>'+signed(grpMean("cn"))+'</b> ('+grpCount("cn")+' записей); '+
+  'Индия и Персия <b>'+signed(grpMean("ip"))+'</b> ('+grpCount("ip")+'); '+
+  'наследники канона — Япония, Корея, Вьетнам, Тибет — <b>'+signed(grpMean("hr"))+'</b> ('+grpCount("hr")+'). '+
+  'Доктрины, выработанные в государствах, унаследовавших канон, но не входивших в Китай, в среднем усиливают островную позицию.';
+
+function select(id){
+  sel=id; place();
+  var d=D.filter(function(x){return x.id===id;})[0];
+  var dr=drift(d);
+  document.getElementById("detail").innerHTML=
+    '<div class="dhead"><span class="dnum">'+d.num+' / 55</span><h3>'+esc(d.name)+'</h3>'+
+      (d.cn?'<span class="dcn">'+esc(d.cn)+'</span>':'')+
+      '<span class="dreg">'+REGNAME[d.reg]+'</span><span class="cbadge">'+CANON[d.canon]+'</span></div>'+
+    '<p class="dsrc">'+esc(d.src)+'</p>'+
+    '<p class="dthesis">'+esc(d.thesis)+'</p>'+
+    '<div class="reads">'+
+      '<div class="read m"><h4>Как этим пользуется Пекин</h4><p>'+esc(d.rPK)+'</p></div>'+
+      '<div class="read i"><h4>Как этим пользуется Тайбэй</h4><p>'+esc(d.rTB)+'</p></div>'+
+    '</div>'+
+    '<div class="verdict"><h4>Что оно объясняет на самом деле</h4><p>'+esc(d.real)+'</p></div>'+
+    '<div class="drift">Сдвиг при смене точки чтения: '+dr+' из 200'+
+      '<span class="bar" style="width:'+(dr/200*160)+'px"></span>'+
+      (dr>=100?"доктрина полностью обратима":dr>=55?"доктрина обратима частично":"доктрина сопротивляется перевороту")+
+    '</div>';
+}
+
+function bindGroup(attr, set){
+  Array.prototype.forEach.call(document.querySelectorAll(".ctrls button["+attr+"]"),function(b){
+    b.addEventListener("click",function(){
+      set(b.getAttribute(attr));
+      Array.prototype.forEach.call(document.querySelectorAll(".ctrls button["+attr+"]"),function(o){
+        o.setAttribute("aria-pressed", o===b ? "true":"false");
+      });
+      place();
+    });
+  });
+}
+bindGroup("data-mode", function(v){ mode=v; });
+bindGroup("data-f", function(v){ filt=v; });
+
+/* ---------- сличение ---------- */
+function strip(el,arr){
+  var h="", vals=arr.map(function(d){return d.n;});
+  vals.forEach(function(v){ h+='<i class="'+lean(v)+'" style="left:'+xpct(v)+'%"></i>'; });
+  var mn=mean(vals);
+  h+='<div class="mk" style="left:'+xpct(mn)+'%"></div>';
+  h+='<div class="mklab" style="left:'+xpct(mn)+'%">среднее '+signed(mn)+'</div>';
+  el.insertAdjacentHTML("beforeend",h);
+}
+strip(document.getElementById("stripW"),W);
+strip(document.getElementById("stripE"),E);
+(function(){
+  var rows=[
+    ["Склоняются к материковой позиции",TW.m,TE.m,""],
+    ["Не склоняются никуда",TW.n,TE.n,""],
+    ["Склоняются к островной позиции",TW.i,TE.i,""],
+    ["Средний наклон списка",signed(TW.mean),signed(TE.mean),"hi"],
+    ["Средний сдвиг при смене точки чтения",TW.drift,TE.drift,"hi"],
+    ["Обращаются полностью (сдвиг ≥ 100)",TW.rev,TE.rev,""]
+  ];
+  var h='<thead><tr><th>Показатель по 55 доктринам</th><th>Европейский канон</th><th>Восточный канон</th></tr></thead><tbody>';
+  rows.forEach(function(r){ h+='<tr class="'+r[3]+'"><td>'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td></tr>'; });
+  document.getElementById("cmptbl").innerHTML=h+'</tbody>';
+})();
+document.getElementById("cmpnote").innerHTML=
+  'Наклоны каталогов противоположны: европейский в среднем усиливает островную позицию ('+signed(TW.mean)+'), восточный — материковую ('+signed(TE.mean)+'). '+
+  'Средний сдвиг при смене точки чтения при этом почти совпадает — <b>'+TW.drift+'</b> и <b>'+TE.drift+'</b>. '+
+  'Обратимость не зависит от традиции: она возникает при любом чтении доктрины в пользу одной из сторон, а наклон карты определяется выбором каталога.';
+
+/* ---------- раскрывающиеся списки ---------- */
+function toggler(root, btnSel, wrapPrefix){
+  Array.prototype.forEach.call(root.querySelectorAll(btnSel),function(b){
+    b.addEventListener("click",function(){
+      var w=document.getElementById(wrapPrefix+b.dataset.i);
+      var op=w.classList.toggle("open");
+      b.setAttribute("aria-expanded",op?"true":"false");
+      b.querySelector(".pm").textContent=op?"−":"+";
+    });
+  });
+}
+
+/* ---------- тёмный отсек ---------- */
+(function(){
+  var h="", idx=0;
+  [["w","Европейские рамки"],["e","Восточные рамки"]].forEach(function(g){
+    h+='<div class="grp">'+g[1]+'</div>';
+    S.optics.filter(function(o){return o.canon===g[0];}).forEach(function(o){
+      var latin=/^[\x00-\x7f]+$/.test(o.key);
+      h+='<div class="acc" id="acc'+idx+'">'+
+         '<button class="accbtn" type="button" aria-expanded="false" data-i="'+idx+'">'+
+           '<span class="k'+(latin?" latin":"")+'">'+esc(o.key)+'</span>'+
+           '<span>'+esc(o.name)+'<span class="sub">'+esc(o.sub)+'</span></span>'+
+           '<span class="pm">+</span>'+
+         '</button><div class="accbody">'+
+           o.paras.map(function(p){return "<p>"+esc(p)+"</p>";}).join("")+
+           '<div class="worse"><b>Чем это делает хуже</b>'+esc(o.worse)+'</div>'+
+         '</div></div>';
+      idx++;
+    });
+  });
+  var root=document.getElementById("darklist"); root.innerHTML=h;
+  toggler(root,".accbtn","acc");
+})();
+
+/* ---------- документы ---------- */
+(function(){
+  var h="";
+  S.docs.forEach(function(d){
+    h+='<div class="doc"><div class="docmeta">'+esc(d.meta)+'<span class="origin">'+ORIGIN[d.origin]+'</span></div>'+
+       '<h3>'+esc(d.title)+'</h3><p class="docsub">'+esc(d.sub)+'</p>';
+    d.blocks.forEach(function(b){
+      if(b[0]==="p")    h+='<p>'+esc(b[1])+'</p>';
+      if(b[0]==="fair") h+='<p class="fair">'+esc(b[1])+'</p>';
+      if(b[0]==="ann")  h+='<div class="ann"><b>'+esc(b[1])+'</b>'+esc(b[2])+'</div>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("doclist").innerHTML=h;
+  document.getElementById("docsum").innerHTML='<b>Итог по пяти документам</b>'+esc(S.docsSum);
+})();
+
+/* ---------- машина оправданий ---------- */
+(function(){
+  var side=document.getElementById("mside"), pick=document.getElementById("mdoc"),
+      out=document.getElementById("mout"), cnt=document.getElementById("mcount");
+  var seen={}, made=0;
+  [["w","Европейский канон"],["e","Восточный канон"]].forEach(function(g){
+    var og=document.createElement("optgroup"); og.label=g[1];
+    byCanon(g[0]).forEach(function(d){
+      var o=document.createElement("option"); o.value=d.id; o.textContent=d.num+". "+d.name; og.appendChild(o);
+    });
+    pick.appendChild(og);
+  });
+  function count(){ cnt.textContent="Собрано обоснований: "+made+" из 220."; }
+  function build(){
+    var d=D.filter(function(x){return x.id===pick.value;})[0]; if(!d) return;
+    var s=side.value, who=(s==="pk")?"Пекин":"Тайбэй", body=(s==="pk")?d.rPK:d.rTB, pos=(s==="pk")?d.pk:d.tb;
+    if(!seen[s+":"+d.id]){ seen[s+":"+d.id]=1; made++; }
+    out.innerHTML=
+      '<div class="mtag">'+who+' · '+esc(d.name)+(d.cn?' <span class="mcn">'+esc(d.cn)+'</span>':'')+'</div>'+
+      '<p class="mprem">Посылка доктрины: '+esc(d.thesis)+'.</p>'+
+      '<p class="mbody">'+esc(body)+'</p>'+
+      '<p class="msign">Собрано из таблицы. Смещение относительно нейтрального чтения: '+signed(pos-d.n)+
+        ' пунктов. Обоснование для противоположной стороны — в том же меню.</p>';
+    count();
+  }
+  document.getElementById("mgo").addEventListener("click",build);
+  document.getElementById("mrnd").addEventListener("click",function(){
+    side.value=(Math.random()<0.5)?"pk":"tb";
+    pick.value=D[Math.floor(Math.random()*D.length)].id;
+    build();
+  });
+  count();
+})();
+
+/* ---------- что показывает карта ---------- */
+document.getElementById("methodlist").innerHTML=
+  '<li><b>Обратимость не зависит от традиции.</b> Средний сдвиг при смене точки чтения — '+TW.drift+' пунктов из 200 у европейского канона и '+TE.drift+' у восточного; полностью обращаются '+TW.rev+' и '+TE.rev+' доктрин. Два каталога, собранные независимо, дают одну и ту же обратимость.</li>'+
+  '<li><b>Наклон задаёт каталог.</b> При нейтральном чтении европейский канон даёт '+TW.i+' доктрин к островной позиции против '+TW.m+' к материковой, восточный — '+TE.m+' к материковой против '+TE.i+' к островной. Результат определяется выбором списка, а выбор списка методом не обосновывается.</li>'+
+  '<li><b>Общие учителя.</b> Конфуций, Мэн-цзы, Ван Янмин, Сунь Ятсен — наследие обеих сторон, с храмами, учебниками и государственными церемониями по обе стороны пролива. Координата «чью позицию усиливает» для них — оценка прочтения, а не свойство учения.</li>'+
+  '<li><b>Начертание.</b> Иероглифика набрана полными знаками (<span class="cjk">正體字</span>), как на Тайване; на материке пишут сокращёнными. Нейтрального варианта нет.</li>';
+document.getElementById("levers").innerHTML=S.levers.map(function(l){
+  return '<div class="lever"><span class="cb">'+CANON[l[0]]+'</span><b>'+(l[1]?'<span class="cjk">'+esc(l[1])+'</span>':'')+esc(l[2])+'</b><span>'+esc(l[3])+'</span></div>';
+}).join("");
+
+/* ---------- нижний ярус ---------- */
+(function(){
+  var h="", k=0;
+  S.abyss.forEach(function(g){
+    h+='<div class="grp">'+esc(g.title)+'</div>';
+    g.specs.forEach(function(sp){
+      k++;
+      h+='<div class="spec" id="sp'+k+'">'+
+         '<button class="specbtn" type="button" aria-expanded="false" data-i="'+k+'">'+
+           '<span class="n">'+(k<10?"0":"")+k+'</span>'+
+           '<span>'+esc(sp.name)+'<span class="cb">'+CANON_SHORT[sp.canon]+'</span><span class="who">'+esc(sp.who)+'</span></span>'+
+           '<span class="pm">+</span>'+
+         '</button><div class="specbody">'+
+           sp.paras.map(function(p){return "<p>"+esc(p)+"</p>";}).join("")+
+           '<div class="breaks"><b>Где ломается</b><p>'+esc(sp.breaks)+'</p></div>'+
+         '</div></div>';
+    });
+  });
+  var root=document.getElementById("abysslist"); root.innerHTML=h;
+  toggler(root,".specbtn","sp");
+})();
+
+/* ---------- подвал ---------- */
+(function(){
+  var c={}; E.forEach(function(d){ c[d.reg]=(c[d.reg]||0)+1; });
+  var order=["cn","in","ir","jp","kr","vn","bo"];
+  document.getElementById("ecomp").textContent=order.filter(function(r){return c[r];}).map(function(r){return REGNAME[r]+" — "+c[r];}).join(", ")+".";
+})();
+
+place();
+select("w16");
+})();
+</script>
+</body>
+
+</html>

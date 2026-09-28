@@ -1,0 +1,3578 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пролив аргументов — 110 философий о Тайване</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;0,800;1,600;1,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#D8D4C6;
+  --ground-2:#CEC9B8;
+  --paper:#E4E0D3;
+  --ink:#1A1C18;
+  --ink-soft:#55574D;
+  --ink-faint:#8A8878;
+  --rule:#B0AB98;
+  --mainland:#8E4A2E;
+  --island:#255E5B;
+  --neutral:#8A7233;
+  --void:#0E0D0B;
+  --void-2:#191713;
+  --sodium:#E0742F;
+  --bone:#E9E3D5;
+  --blood:#9B2F35;
+  --seal:#A03028;
+  --s:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.028) 0 1px,transparent 1px 4px);
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ---------- typography ---------- */
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink-faint);
+}
+h1{
+  font-family:'Spectral',Georgia,serif;font-weight:800;line-height:.94;
+  font-size:clamp(42px,7.4vw,86px);letter-spacing:-.02em;margin:18px 0 0;
+}
+h1 em{font-style:italic;font-weight:800;color:var(--mainland)}
+h2{
+  font-family:'Spectral',Georgia,serif;font-weight:800;
+  font-size:clamp(26px,3.6vw,40px);line-height:1.02;letter-spacing:-.015em;
+}
+h3{font-family:'Spectral',Georgia,serif;font-weight:700;font-size:20px;line-height:1.15}
+.lede{
+  font-family:'Spectral',Georgia,serif;font-size:clamp(17px,2vw,21px);
+  line-height:1.5;max-width:64ch;color:var(--ink-soft);margin-top:20px;
+}
+.mono{font-family:'IBM Plex Mono',monospace}
+.cjk{font-family:'Noto Serif TC','Songti TC','PingFang TC',serif;font-weight:600}
+
+/* ---------- header ---------- */
+header{padding:56px 0 40px;border-bottom:1px solid var(--rule)}
+.hrule{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.path{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-faint);letter-spacing:.04em}
+.sibling{
+  margin-top:26px;border-left:2px solid var(--seal);padding:10px 0 10px 16px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.65;color:var(--ink-soft);max-width:76ch;
+}
+.sibling b{color:var(--seal);font-weight:600}
+
+/* ---------- stat strip ---------- */
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:34px;
+}
+.stat{background:var(--ground);padding:18px 16px}
+.stat b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:30px;
+  font-weight:600;line-height:1;letter-spacing:-.03em;
+}
+.stat span{
+  display:block;margin-top:8px;font-size:12px;line-height:1.35;color:var(--ink-soft);
+}
+.stat.m b{color:var(--mainland)} .stat.i b{color:var(--island)} .stat.n b{color:var(--neutral)}
+
+/* ---------- section ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--rule)}
+.sechead{display:flex;gap:20px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:32px}
+.sechead p{max-width:52ch;color:var(--ink-soft);font-size:15px}
+
+/* ---------- controls ---------- */
+.ctrls{display:flex;gap:0;border:1px solid var(--ink);flex-wrap:wrap}
+.ctrls button{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.11em;
+  text-transform:uppercase;background:transparent;color:var(--ink);
+  border:0;border-right:1px solid var(--ink);padding:11px 15px;cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.ctrls button:last-child{border-right:0}
+.ctrls button[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+.ctrls button:focus-visible{outline:2px solid var(--mainland);outline-offset:2px}
+.ctrlrow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.ctrls.thin button{padding:9px 13px;font-size:11px}
+.ctrls.thin{border-color:var(--ink-faint)}
+.ctrls.thin button{border-right-color:var(--ink-faint)}
+.ctrls.thin button[aria-pressed="true"]{background:var(--ink-faint);color:var(--ground)}
+
+/* ---------- the strait plot ---------- */
+.plotwrap{margin-top:28px;position:relative}
+.axislabel{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-faint);
+}
+.plot{
+  position:relative;height:min(58vh,470px);min-height:340px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 39px,rgba(26,28,24,.055) 39px 40px),
+    repeating-linear-gradient(0deg,transparent 0 39px,rgba(26,28,24,.055) 39px 40px),
+    linear-gradient(90deg,rgba(142,74,46,.075),rgba(216,212,198,0) 42%,rgba(216,212,198,0) 58%,rgba(37,94,91,.075));
+  border:1px solid var(--rule);margin:10px 0;overflow:hidden;
+}
+.median{
+  position:absolute;left:50%;top:0;bottom:0;width:0;
+  border-left:1px dashed rgba(26,28,24,.5);
+}
+.median span{
+  position:absolute;top:8px;left:8px;white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-faint);
+}
+.mean{
+  position:absolute;top:0;bottom:0;width:0;border-left:2px solid rgba(142,74,46,.65);
+  transition:left .85s cubic-bezier(.65,.02,.25,1);
+}
+.mean span{
+  position:absolute;bottom:8px;left:6px;white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mainland);
+}
+.shore{
+  position:absolute;top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.shore.l{left:10px;color:var(--mainland)} .shore.r{right:10px;color:var(--island)}
+
+.die{
+  position:absolute;width:13px;height:13px;padding:0;border:0;cursor:pointer;
+  transform:translate(-50%,50%);
+  transition:left .85s cubic-bezier(.65,.02,.25,1),bottom .85s cubic-bezier(.65,.02,.25,1),
+             width .16s,height .16s,box-shadow .16s,opacity .25s;
+  background:var(--neutral);
+}
+.die.m{background:var(--mainland)} .die.i{background:var(--island)}
+.die.dim{opacity:.13}
+.die:hover,.die:focus-visible{width:19px;height:19px;outline:0;box-shadow:0 0 0 3px var(--ground),0 0 0 4px var(--ink);z-index:6}
+.die.on{width:19px;height:19px;box-shadow:0 0 0 3px var(--ground),0 0 0 4px var(--ink);z-index:7}
+.tip{
+  position:absolute;pointer-events:none;z-index:20;background:var(--ink);color:var(--ground);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;padding:5px 9px;white-space:nowrap;
+  transform:translate(-50%,-160%);opacity:0;transition:opacity .12s;
+}
+.tip.show{opacity:1}
+
+.legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:7px;vertical-align:-1px}
+.legend span{font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace}
+.note{
+  margin-top:18px;font-size:13.5px;color:var(--ink-soft);max-width:74ch;
+  border-left:2px solid var(--rule);padding-left:14px;line-height:1.6;
+}
+.note b{color:var(--ink);font-weight:600}
+
+/* ---------- detail ---------- */
+.detail{margin-top:34px;border-top:2px solid var(--ink);padding-top:24px}
+.dhead{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.dnum{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);letter-spacing:.12em}
+.dcn{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:600;color:var(--seal);letter-spacing:.06em}
+.dreg{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-faint);border:1px solid var(--rule);padding:3px 8px;
+}
+.dthesis{font-family:'Spectral',Georgia,serif;font-style:italic;font-size:17px;color:var(--ink-soft);margin-top:8px;max-width:60ch}
+.reads{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:24px}
+.read{background:var(--paper);padding:18px 20px}
+.read h4{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;margin-bottom:10px;
+}
+.read.m{border-top:3px solid var(--mainland)} .read.m h4{color:var(--mainland)}
+.read.i{border-top:3px solid var(--island)} .read.i h4{color:var(--island)}
+.read p{font-size:15px;line-height:1.55}
+.verdict{margin-top:1px;background:var(--ink);color:var(--ground);padding:18px 20px}
+.verdict h4{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;margin-bottom:9px;color:var(--ink-faint);
+}
+.verdict p{font-family:'Spectral',Georgia,serif;font-size:17px;line-height:1.45;max-width:70ch}
+.drift{margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-soft)}
+.bar{display:inline-block;height:7px;background:var(--ink);vertical-align:0;margin:0 8px}
+
+/* ---------- two-canon comparison ---------- */
+.cmp{margin-top:10px}
+.cmprow{margin-bottom:26px}
+.cmplab{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;
+}
+.cmplab b{font-size:13px;letter-spacing:.06em;text-transform:none;color:var(--ink);font-weight:600}
+.strip{
+  position:relative;height:58px;border:1px solid var(--rule);
+  background:linear-gradient(90deg,rgba(142,74,46,.1),rgba(216,212,198,0) 44%,rgba(216,212,198,0) 56%,rgba(37,94,91,.1));
+}
+.strip .mid{position:absolute;left:50%;top:0;bottom:0;border-left:1px dashed rgba(26,28,24,.42)}
+.strip i{
+  position:absolute;top:10px;bottom:10px;width:2px;background:var(--ink);opacity:.6;
+  transform:translateX(-50%);
+}
+.strip i.m{background:var(--mainland);opacity:.85}
+.strip i.i{background:var(--island);opacity:.85}
+.strip .mk{
+  position:absolute;top:-1px;bottom:-1px;width:3px;background:var(--seal);transform:translateX(-50%);
+}
+.strip .mklab{
+  position:absolute;top:100%;margin-top:4px;transform:translateX(-50%);white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--seal);letter-spacing:.06em;
+}
+.tbl{width:100%;border-collapse:collapse;margin-top:38px;font-size:14px}
+.tbl th,.tbl td{border:1px solid var(--rule);padding:10px 13px;text-align:left}
+.tbl thead th{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-faint);font-weight:600;background:var(--paper);
+}
+.tbl td.num{font-family:'IBM Plex Mono',monospace;font-weight:600;text-align:right;width:15%}
+.tbl tr.hi td{background:var(--paper)}
+.tblwrap{overflow-x:auto}
+
+/* ---------- dark chamber ---------- */
+.dark{background:var(--void);color:var(--bone);border-bottom:0;position:relative}
+.dark::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 65% at 50% -12%,rgba(224,116,47,.17),transparent 62%);
+}
+.dark .wrap{position:relative;z-index:1}
+.dark .eyebrow{color:var(--sodium)}
+.dark h2{color:var(--bone)}
+.dark .sechead p{color:#9C958A}
+.warn{
+  border:1px solid rgba(224,116,47,.45);padding:14px 18px;margin-bottom:34px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.6;color:#B9B1A4;max-width:74ch;
+}
+.warn b{color:var(--sodium);font-weight:600}
+.acc{border-top:1px solid rgba(233,227,213,.16)}
+.acc:last-of-type{border-bottom:1px solid rgba(233,227,213,.16)}
+.accbtn{
+  width:100%;background:transparent;border:0;color:var(--bone);cursor:pointer;
+  display:flex;gap:18px;align-items:baseline;text-align:left;padding:20px 4px;
+  font-family:'Spectral',Georgia,serif;font-size:clamp(19px,2.5vw,26px);font-weight:700;
+  transition:color .18s;
+}
+.accbtn:hover,.accbtn:focus-visible{color:var(--sodium);outline:0}
+.accbtn .k{
+  font-family:'Noto Serif TC',serif;font-size:16px;line-height:1.25;letter-spacing:.06em;
+  color:var(--sodium);flex:0 0 96px;padding-top:3px;
+}
+.accbtn .sub{
+  display:block;font-family:'IBM Plex Sans',sans-serif;font-size:12.5px;
+  font-weight:400;color:#948C80;letter-spacing:.01em;margin-top:5px;
+}
+.accbtn .pm{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--sodium);flex:0 0 auto}
+.accbody{display:none;padding:0 4px 26px 114px;max-width:80ch}
+.acc.open .accbody{display:block}
+.accbody p{margin-bottom:14px;font-size:15.5px;line-height:1.62;color:#C6BFB2}
+.worse{
+  border-left:2px solid var(--blood);padding:11px 16px;background:rgba(155,47,53,.1);
+  font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.6;color:#DCC9C1;
+}
+.worse b{color:#E4726F;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:10.5px;display:block;margin-bottom:6px}
+
+/* ---------- abyss ---------- */
+.abyss{background:#08090A;color:#A2A8AA;border-bottom:0}
+.abyss .eyebrow{color:#6E8C93}
+.abyss h2{color:#D2D8D9}
+.abyss .sechead p{color:#7C8385}
+.abyss .warn{border-color:rgba(110,140,147,.4);color:#8B9294}
+.abyss .warn b{color:#8FB3BA}
+.grp{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:#5E6B6E;padding:30px 0 10px;
+  border-bottom:1px solid rgba(162,168,170,.14);
+}
+.spec{border-bottom:1px solid rgba(162,168,170,.14)}
+.specbtn{
+  width:100%;background:transparent;border:0;color:#CBD1D2;cursor:pointer;
+  display:flex;gap:16px;align-items:baseline;text-align:left;padding:17px 4px;
+  font-family:'Spectral',Georgia,serif;font-size:clamp(17px,2.2vw,22px);font-weight:700;
+  transition:color .18s;
+}
+.specbtn:hover,.specbtn:focus-visible{color:#8FB3BA;outline:0}
+.specbtn .n{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5E6B6E;
+  flex:0 0 34px;padding-top:5px;
+}
+.specbtn .who{
+  display:block;font-family:'IBM Plex Sans',sans-serif;font-size:12px;
+  font-weight:400;color:#6F7679;margin-top:4px;
+}
+.specbtn .pm{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:17px;color:#5E6B6E;flex:0 0 auto}
+.specbody{display:none;padding:0 4px 24px 50px;max-width:78ch}
+.spec.open .specbody{display:block}
+.specbody p{margin-bottom:13px;font-size:15px;line-height:1.62;color:#9CA3A5}
+.breaks{border:1px solid rgba(143,179,186,.35);padding:12px 16px;margin-top:4px}
+.breaks b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8FB3BA;margin-bottom:7px;font-weight:600;
+}
+.breaks p{font-size:14.5px;line-height:1.6;color:#AEB5B7;margin:0}
+
+/* ---------- iceberg / bottom ---------- */
+.ice{background:var(--void);color:var(--bone);border-bottom:0;padding-bottom:0}
+.ice .eyebrow{color:var(--blood)}
+.ice h2{color:var(--bone)}
+.ice .sechead p{color:#9C958A}
+.ice .warn{border-color:rgba(155,47,53,.5)}
+.ice .warn b{color:#E4726F}
+.doc{border-top:1px solid rgba(233,227,213,.13);padding:34px 0}
+.docmeta{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--blood);
+}
+.doc h3{margin:10px 0 8px;font-size:clamp(21px,2.9vw,29px);color:var(--bone)}
+.docsub{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8B8478;margin-bottom:16px;line-height:1.6}
+.doc p{color:#B8B1A4;font-size:15.5px;line-height:1.62;max-width:76ch;margin-bottom:14px}
+.ann{
+  border-left:2px solid var(--blood);background:rgba(155,47,53,.09);
+  padding:12px 17px;margin:0 0 14px;max-width:76ch;
+}
+.ann b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#E4726F;margin-bottom:7px;font-weight:600;
+}
+.ann{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.62;color:#DCC9C1}
+p.fair{
+  border-left:2px solid rgba(233,227,213,.28);padding-left:16px;color:#9C958A;
+  font-size:14.5px;line-height:1.62;
+}
+
+/* ---------- machine ---------- */
+.machine{border-top:2px solid var(--blood);margin-top:14px;padding:34px 0 10px}
+.machine h3{font-size:clamp(22px,3vw,30px);color:var(--bone);margin:10px 0 10px}
+.mdesc{color:#9C958A;font-size:15px;line-height:1.6;max-width:70ch;margin-bottom:22px}
+.mctrl{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:20px}
+.mfield{display:flex;flex-direction:column;gap:6px}
+.mfield label{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8B8478;
+}
+.mfield select{
+  background:#141311;color:var(--bone);border:1px solid rgba(233,227,213,.28);
+  font-family:'IBM Plex Sans',sans-serif;font-size:14px;padding:9px 11px;min-width:180px;max-width:340px;
+}
+.mfield select:focus-visible{outline:2px solid var(--blood);outline-offset:1px}
+.machine button{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  background:var(--blood);color:#F3E9E2;border:1px solid var(--blood);padding:11px 20px;cursor:pointer;
+  transition:background .18s,color .18s;
+}
+.machine button:hover{background:#B8393F}
+.machine button.ghost{background:transparent;color:#C9B7B0;border-color:rgba(233,227,213,.3)}
+.machine button.ghost:hover{background:rgba(233,227,213,.08)}
+.machine button:focus-visible{outline:2px solid var(--sodium);outline-offset:2px}
+.mout{border:1px solid rgba(233,227,213,.16);padding:20px 22px;min-height:120px;max-width:80ch;background:#0B0A09}
+.mempty{color:#6F6960;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.6}
+.mtag{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blood);margin-bottom:12px;
+}
+.mtag .mcn{font-family:'Noto Serif TC',serif;font-size:14px;letter-spacing:.08em;color:#8B8478;text-transform:none}
+.mprem{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#8B8478;margin-bottom:12px;line-height:1.6}
+.mbody{font-family:'Spectral',Georgia,serif;font-size:18px;line-height:1.5;color:var(--bone);margin-bottom:14px}
+.msign{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6F6960;line-height:1.6;border-top:1px solid rgba(233,227,213,.13);padding-top:11px}
+.mcount{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8B8478;margin-top:12px}
+
+/* ---------- floor ---------- */
+.floor{
+  background:#080706;margin-top:0;padding:56px 0 64px;
+  border-top:2px solid var(--blood);
+}
+.floor h3{font-family:'Spectral',Georgia,serif;font-size:clamp(24px,3.4vw,34px);color:var(--bone);margin-bottom:20px;line-height:1.12}
+.floor p{color:#B8B1A4;font-size:16px;line-height:1.62;max-width:76ch;margin-bottom:16px}
+.floor p b{color:var(--bone);font-weight:600}
+.levers{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:rgba(233,227,213,.13);border:1px solid rgba(233,227,213,.13);margin:26px 0}
+.lever{background:#0D0C0A;padding:16px 17px}
+.lever b{display:block;font-family:'Spectral',Georgia,serif;font-size:17px;color:var(--bone);margin-bottom:7px}
+.lever b .cjk{color:var(--blood);font-size:15px;margin-right:6px}
+.lever span{font-size:13.5px;line-height:1.5;color:#9A9287}
+.kicker{
+  font-family:'Spectral',Georgia,serif;font-style:italic;font-size:clamp(19px,2.6vw,25px);
+  line-height:1.4;color:var(--bone);border-left:2px solid var(--blood);padding-left:20px;max-width:62ch;
+}
+
+/* ---------- footer ---------- */
+footer{padding:44px 0 60px;background:var(--void-2);color:#8B8478}
+footer .wrap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.85}
+footer b{color:var(--bone);font-weight:500}
+
+@media(max-width:720px){
+  .reads{grid-template-columns:1fr}
+  .accbody{padding-left:4px}
+  header{padding:36px 0 28px}
+  section{padding:44px 0}
+  .mfield select{min-width:150px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- два канона ---------- */
+[hidden]{display:none!important}
+.die.e{border-radius:50%}
+.legend i.sq{background:var(--ink-soft)}
+.legend i.ci{background:var(--ink-soft);border-radius:50%}
+.cbadge{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid var(--rule);padding:3px 8px;color:var(--ink-faint);white-space:nowrap;
+}
+.dsrc{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-faint);margin-top:6px}
+.accbtn .k.latin{font-family:'IBM Plex Mono',monospace;font-size:12.5px;letter-spacing:.08em}
+.dark .grp{color:#8A7F72;border-bottom-color:rgba(233,227,213,.16)}
+.dark .grp:first-child{padding-top:4px}
+.origin{
+  display:inline-block;margin-left:10px;padding:2px 7px;border:1px solid rgba(233,227,213,.3);
+  color:#C9B7B0;font-size:10px;letter-spacing:.14em;
+}
+.docsum{
+  border-top:2px solid var(--blood);margin-top:10px;padding:22px 0 8px;max-width:78ch;
+  font-family:'Spectral',Georgia,serif;font-size:18px;line-height:1.5;color:var(--bone);
+}
+.docsum b{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:#E4726F;margin-bottom:8px;font-weight:600;
+}
+.method ol{list-style:none;counter-reset:m;margin:6px 0 30px;max-width:78ch}
+.method li{counter-increment:m;position:relative;padding-left:40px;margin-bottom:16px;color:#B8B1A4;font-size:16px;line-height:1.6}
+.method li::before{
+  content:counter(m,decimal-leading-zero);position:absolute;left:0;top:2px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blood);
+}
+.method li b{color:var(--bone);font-weight:600}
+.lever .cb{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#6F6960;display:block;margin-bottom:6px;
+}
+.specbtn .cb{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:#5E6B6E;border:1px solid rgba(162,168,170,.25);padding:2px 6px;margin-left:8px;vertical-align:2px;
+}
+@media(max-width:720px){
+  .ctrls button{padding:9px 11px;font-size:10.5px}
+  .method li{padding-left:32px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hrule">
+      <div class="eyebrow">110 доктрин · один пролив · два канона</div>
+      <div class="path">atlas/data › ✦Человек › 🏛Культура и смысл › Философия</div>
+    </div>
+    <h1>Каждая доктрина<br><em>оправдывает</em> обоих</h1>
+    <p class="lede">Пятьдесят пять европейских направлений и пятьдесят пять школ восточного канона, нанесённые на пролив. По горизонтали — чью позицию доктрина усиливает, по вертикали — насколько она объясняет происходящее. При смене точки чтения почти каждая доктрина переезжает через срединную линию. Средний сдвиг в обоих канонах почти одинаков, а центр тяжести у них противоположен.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<section id="map">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Карта</div>
+        <h2>Пролив аргументов</h2>
+      </div>
+      <p>Координаты — авторская оценка, а не измерение. Информативны две величины: куда смещён центр тяжести списка и насколько далеко доктрина уходит при смене точки чтения.</p>
+    </div>
+
+    <div class="ctrlrow">
+      <div class="ctrls" role="group" aria-label="Точка чтения">
+        <button data-mode="n" aria-pressed="true">Нейтральное чтение</button>
+        <button data-mode="pk" aria-pressed="false">Читать с материка</button>
+        <button data-mode="tb" aria-pressed="false">Читать с острова</button>
+      </div>
+      <div class="ctrls thin" role="group" aria-label="Каталог">
+        <button data-f="all" aria-pressed="true">Все 110</button>
+        <button data-f="w" aria-pressed="false">Европейский</button>
+        <button data-f="e" aria-pressed="false">Восточный</button>
+        <button data-f="cn" aria-pressed="false">Китай</button>
+        <button data-f="ip" aria-pressed="false">Индия и Персия</button>
+        <button data-f="hr" aria-pressed="false">Наследники канона</button>
+      </div>
+    </div>
+
+    <div class="plotwrap">
+      <div class="axislabel" style="margin-bottom:6px">↑ Объяснительная сила</div>
+      <div class="plot" id="plot">
+        <div class="median"><span>срединная линия</span></div>
+        <div class="mean" id="meanline"><span id="meanlabel"></span></div>
+        <div class="shore l">материк</div>
+        <div class="shore r">остров</div>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="axislabel">Усиливает позицию Пекина ←&nbsp;&nbsp;&nbsp;→ усиливает позицию Тайбэя</div>
+      <div class="legend">
+        <span><i style="background:var(--mainland)"></i>склоняется к материковой позиции</span>
+        <span><i style="background:var(--neutral)"></i>двойного назначения</span>
+        <span><i style="background:var(--island)"></i>склоняется к островной позиции</span>
+        <span><i class="sq"></i>европейский канон</span>
+        <span><i class="ci"></i>восточный канон</span>
+        <span><i style="background:var(--seal);width:3px"></i>среднее по выборке</span>
+      </div>
+      <p class="note" id="mapnote"></p>
+    </div>
+
+    <div class="detail" id="detail"></div>
+  </div>
+</section>
+
+<section id="cmp">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Сличение</div>
+        <h2>Два каталога,<br>один метод</h2>
+      </div>
+      <p>Каждая чёрточка — одна доктрина в нейтральном чтении. Красная метка — среднее по каталогу.</p>
+    </div>
+    <div class="cmp">
+      <div class="cmprow">
+        <div class="cmplab"><b>Европейский канон</b><span>55 направлений · от платонизма до стоического космополитизма</span></div>
+        <div class="strip" id="stripW"><div class="mid"></div></div>
+      </div>
+      <div class="cmprow" style="margin-top:38px">
+        <div class="cmplab"><b>Восточный канон</b><span>55 школ · от конфуцианства до сатьяграхи</span></div>
+        <div class="strip" id="stripE"><div class="mid"></div></div>
+      </div>
+    </div>
+    <div class="tblwrap">
+      <table class="tbl" id="cmptbl"></table>
+    </div>
+    <p class="note" style="margin-top:26px" id="cmpnote"></p>
+  </div>
+</section>
+
+<section class="dark" id="dark">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Тёмный отсек</div>
+        <h2>Двадцать четыре оптики,<br>которые делают хуже</h2>
+      </div>
+      <p>Рамки, которые не смягчают конфликт, а обостряют его: двенадцать европейских и двенадцать восточных.</p>
+    </div>
+    <div class="warn">
+      <b>Что это.</b> Аналитические рамки, а не позиции и не рекомендации. Для каждой показано, что меняется в тайваньском вопросе, если принять её посылки: какие решения она подсказывает, какие инструменты выводит из поля зрения, на каком уровне действует. У всех есть сторонники; большинство входит в университетские курсы по обе стороны пролива.
+    </div>
+    <div id="darklist"></div>
+  </div>
+</section>
+
+<section class="ice" id="ice">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Дно</div>
+        <h2>Пять документов</h2>
+      </div>
+      <p>Открытые документы 1999–2024 годов — КНР, США, Япония. Разбор касается одного вопроса: как в каждом из них учтено гражданское население острова.</p>
+    </div>
+    <div class="warn">
+      <b>Почему документы, а не организации.</b> Подпольную группу называют и запрещают, и её механизм виден сразу. Здесь разобраны тексты, прошедшие рецензирование, голосование или утверждение правительством и открытые для чтения. Порядок хронологический.
+    </div>
+    <div id="doclist"></div>
+    <div class="docsum" id="docsum"></div>
+
+    <div class="machine">
+      <div class="eyebrow" style="color:var(--blood)">Механика</div>
+      <h3>Машина оправданий</h3>
+      <p class="mdesc">Выберите сторону и доктрину — устройство соберёт обоснование из таблицы. Для каждой из 110 доктрин заготовлены оба варианта, всего 220 формулировок.</p>
+      <div class="mctrl">
+        <div class="mfield">
+          <label for="mside">Сторона</label>
+          <select id="mside"><option value="pk">Пекин</option><option value="tb">Тайбэй</option></select>
+        </div>
+        <div class="mfield">
+          <label for="mdoc">Доктрина</label>
+          <select id="mdoc"></select>
+        </div>
+        <button id="mgo" type="button">Собрать</button>
+        <button id="mrnd" type="button" class="ghost">Наугад</button>
+      </div>
+      <div class="mout" id="mout" aria-live="polite"><p class="mempty">Выберите сторону и доктрину и нажмите «Собрать».</p></div>
+      <div class="mcount" id="mcount"></div>
+    </div>
+  </div>
+
+  <div class="floor method">
+    <div class="wrap">
+      <h3>Что показывает карта</h3>
+      <ol id="methodlist"></ol>
+      <h3 style="font-size:clamp(20px,2.6vw,26px)">Рычаги</h3>
+      <p>В десяти доктринах есть посылка, которая при последовательном применении исключает население острова из расчёта или из круга тех, чьё согласие требуется. Все десять преподаются и имеют сторонников.</p>
+      <div class="levers" id="levers"></div>
+    </div>
+  </div>
+</section>
+
+<section class="abyss" id="abyss">
+  <div class="wrap">
+    <div class="sechead">
+      <div>
+        <div class="eyebrow">Нижний ярус</div>
+        <h2>Двадцать четыре вскрытия</h2>
+      </div>
+      <p>Позиции, отменяющие обязательность морали, — от академических до доктрин, обслуживавших террор. У каждой указано, где она ломается.</p>
+    </div>
+    <div class="warn">
+      <b>Порядок.</b> По типу аргумента, а не по радикальности: ранжирование по «глубине» придаёт крайним позициям статус. <b>На карту эти позиции не наносятся:</b> ни одна из сторон спора на них не опирается.
+    </div>
+    <div id="abysslist"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" id="foot">
+    <b>Структура:</b> европейский список — раздел g-isms («Философские направления (-измы)», 55 записей) Атласа, порядок и названия сохранены; восточный составлен тем же методом с тем же числом мест. Объединены две страницы «Пролив аргументов». Сводные числа пересчитываются из данных при загрузке страницы.<br>
+    <b>Состав восточного канона:</b> <span id="ecomp"></span><br>
+    <b>Начертание:</b> иероглифика набрана полными знаками (<span class="cjk">正體字</span>).<br>
+    <b>Фактура:</b> Центр изучения выборов Университета Чжэнчжи, министерства обороны и иностранных дел Тайваня, USTR и Министерство торговли США, AEI, Global Taiwan Institute, отчётность TSMC; «Антисепаратистский закон» КНР от 14 марта 2005 года; белые книги по тайваньскому вопросу 1993, 2000 и 2022 годов; Цяо Лян и Ван Сяньсуй, «Война, превосходящая пределы», 1999; Маккинни и Харрис, «Broken Nest», Parameters, 2021; CSIS, «The First Battle of the Next War», 2023; план эвакуации островов Сакисима, правительство Японии, 2024. Состояние данных — июль 2026 года.<br>
+    <b>Оговорка:</b> политический статус Тайваня оспаривается. Позиции обеих сторон изложены в их сильнейшей форме; выбор между ними здесь не делается.
+  </div>
+</footer>
+
+<script>// ════════════════════════════════════════════════════════════
+// ПРОЛИВ АРГУМЕНТОВ — данные
+//
+// Обычный JavaScript без сборки и зависимостей: читается браузером
+// как <script> и node — при проверке (tools/build.cjs).
+//
+//   doctrines  110 доктрин: 55 европейских (canon "w", раздел g-isms
+//              Атласа) и 55 восточных (canon "e").
+//              n / pk / tb — положение на оси «Пекин −100 … +100 Тайбэй»
+//              при нейтральном чтении, с материка и с острова;
+//              y — объяснительная сила, 0…100. Координаты — авторская
+//              оценка, а не измерение.
+//   optics     24 рамки, обостряющие конфликт, 12 + 12.
+//   docs       5 открытых документов 1999–2024 годов.
+//   levers     10 рычагов — по одной посылке из десяти доктрин.
+//   abyss      24 позиции, отменяющие обязательность морали,
+//              сгруппированные по типу аргумента.
+// ════════════════════════════════════════════════════════════
+
+var STRAIT = {
+ "doctrines": [
+  {
+   "id": "w1",
+   "canon": "w",
+   "num": 1,
+   "name": "Платонизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Платон, IV в. до н. э.",
+   "thesis": "Мир идей выше вещей",
+   "y": 72,
+   "n": 0,
+   "pk": -70,
+   "tb": 55,
+   "rPK": "Идея единого Китая первична; фактическое разделение — временная тень, не отменяющая эйдос.",
+   "rTB": "Конституция 1947 года и «статус-кво» — тоже идеи, живущие без воплощения; значит, идеями спор не решается.",
+   "real": "Объясняет, почему обе стороны защищают понятия, которые не могут определить."
+  },
+  {
+   "id": "w2",
+   "canon": "w",
+   "num": 2,
+   "name": "Аристотелизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Аристотель, IV в. до н. э.",
+   "thesis": "Форма, материя, цель",
+   "y": 78,
+   "n": 25,
+   "pk": -45,
+   "tb": 70,
+   "rPK": "У острова есть незавершённая целевая причина — возвращение в целое, частью которого он был.",
+   "rTB": "Полис самодостаточен для благой жизни: по аристотелевскому критерию остров завершён, а не незавершён.",
+   "real": "Спор идёт не о фактах, а о том, чей telos считать подлинным."
+  },
+  {
+   "id": "w3",
+   "canon": "w",
+   "num": 3,
+   "name": "Стоицизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Зенон Китийский, ок. 300 г. до н. э.; Эпиктет, Марк Аврелий",
+   "thesis": "Различай подвластное и неподвластное",
+   "y": 68,
+   "n": 30,
+   "pk": -20,
+   "tb": 60,
+   "rPK": "Следует принять неподвластное: соотношение сил не меняется усилием воли.",
+   "rTB": "Неподвластно давление, подвластны институты и готовность — из этого и строится оборона.",
+   "real": "Обе стороны берут один принцип и расходятся только в том, где проходит граница подвластного."
+  },
+  {
+   "id": "w4",
+   "canon": "w",
+   "num": 4,
+   "name": "Эпикуреизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Эпикур, ок. 307 г. до н. э.",
+   "thesis": "Разумное удовольствие и атараксия",
+   "y": 52,
+   "n": 20,
+   "pk": -35,
+   "tb": 55,
+   "rPK": "Незачем рисковать благополучием ради символов; спокойная жизнь дороже флага.",
+   "rTB": "«Живи незаметно» — вот почему независимость не провозглашают: покой не нуждается в декларации.",
+   "real": "Объясняет тайваньскую нормальность как политику, а не как беспечность."
+  },
+  {
+   "id": "w5",
+   "canon": "w",
+   "num": 5,
+   "name": "Скептицизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Пиррон, IV–III вв. до н. э.; Секст Эмпирик, II в.",
+   "thesis": "Воздержание от суждения",
+   "y": 74,
+   "n": 0,
+   "pk": -30,
+   "tb": 30,
+   "rPK": "Никто не доказал, что остров когда-либо был отдельным государством, — воздержись и не признавай.",
+   "rTB": "Никто не доказал и обратного — воздержись, и статус-кво сохраняется.",
+   "real": "Эпохе, возведённое в стратегию: американская двусмысленность держится на нерешённости."
+  },
+  {
+   "id": "w6",
+   "canon": "w",
+   "num": 6,
+   "name": "Кинизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Антисфен, Диоген Синопский, IV в. до н. э.",
+   "thesis": "Отказ от условностей",
+   "y": 46,
+   "n": 35,
+   "pk": -25,
+   "tb": 65,
+   "rPK": "Протокол — доказательство: мир на словах согласен, что отдельного государства нет.",
+   "rTB": "Тот же протокол — доказательство лицемерия: все ведут дела с государством, отказываясь его назвать.",
+   "real": "Разрыв между тем, что делают, и тем, что говорят, — рабочий механизм, а не аномалия."
+  },
+  {
+   "id": "w7",
+   "canon": "w",
+   "num": 7,
+   "name": "Рационализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Декарт, Спиноза, Лейбниц, XVII в.",
+   "thesis": "Источник знания — разум",
+   "y": 55,
+   "n": 10,
+   "pk": -30,
+   "tb": 45,
+   "rPK": "Единство выводится из принципа суверенитета, а не из опросов населения.",
+   "rTB": "Из принципов же выводится право на самоопределение; принципы симметричны.",
+   "real": "Оба вывода корректны внутри своих аксиом — спор в аксиомах, а не в логике."
+  },
+  {
+   "id": "w8",
+   "canon": "w",
+   "num": 8,
+   "name": "Эмпиризм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Локк, Беркли, Юм, XVII–XVIII вв.",
+   "thesis": "Источник знания — опыт",
+   "y": 82,
+   "n": 55,
+   "pk": -15,
+   "tb": 75,
+   "rPK": "Опыт показывает, что интеграция реализуема, а разделённые территории возвращаются.",
+   "rTB": "Опыт сорока лет самоуправления и трёх смен власти — единственный доступный факт.",
+   "real": "Объясняет и демократизацию, и неповторимость TSMC: и то и другое — накопленный навык, а не проект."
+  },
+  {
+   "id": "w9",
+   "canon": "w",
+   "num": 9,
+   "name": "Идеализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Беркли; Кант, Фихте, Шеллинг, Гегель, XVIII–XIX вв.",
+   "thesis": "Первично сознание",
+   "y": 70,
+   "n": 40,
+   "pk": -50,
+   "tb": 70,
+   "rPK": "Национальное сознание формируемо — воспитанием, символикой, законом; идентичность не данность.",
+   "rTB": "Именно поэтому она и изменилась: с 18 % до 62 % за тридцать лет, и обратно не откатывается.",
+   "real": "Сознание здесь опередило институты и переписало их под себя."
+  },
+  {
+   "id": "w10",
+   "canon": "w",
+   "num": 10,
+   "name": "Материализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Демокрит, V в. до н. э.; Гольбах, Ламетри, XVIII в.",
+   "thesis": "Первична материя",
+   "y": 88,
+   "n": -10,
+   "pk": -55,
+   "tb": 35,
+   "rPK": "Двадцатикратный ВВП, география, демография — решает материя, а не риторика.",
+   "rTB": "Материя же: 130 км воды, две погодные щели в году и 77 % передовых пластин — всё это на острове.",
+   "real": "Самый честный уровень описания и единственный, где обе стороны считают одни и те же цифры."
+  },
+  {
+   "id": "w11",
+   "canon": "w",
+   "num": 11,
+   "name": "Дуализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Декарт, «Размышления о первой философии», 1641",
+   "thesis": "Дух и материя — два начала",
+   "y": 66,
+   "n": 15,
+   "pk": -35,
+   "tb": 50,
+   "rPK": "Раздвоение имени и тела — аномалия, требующая устранения.",
+   "rTB": "Раздвоение — не болезнь, а конструкция: тело работает, пока имя не трогают.",
+   "real": "Описывает механику паспорта, флага и институтов-фантомов лучше любой правовой теории."
+  },
+  {
+   "id": "w12",
+   "canon": "w",
+   "num": 12,
+   "name": "Монизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Парменид, V в. до н. э.; Спиноза, «Этика», 1677",
+   "thesis": "Всё сводится к одному началу",
+   "y": 58,
+   "n": -60,
+   "pk": -95,
+   "tb": -20,
+   "rPK": "Китай один, двух быть не может, различие есть отклонение.",
+   "rTB": "Монизм применим и к другому началу: одна политическая нация, сложившаяся де-факто.",
+   "real": "Единственная позиция, которая почти не поддаётся перевороту, — и потому делает спор нерешаемым."
+  },
+  {
+   "id": "w13",
+   "canon": "w",
+   "num": 13,
+   "name": "Детерминизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Спиноза; Лаплас, «Опыт философии теории вероятностей», 1814",
+   "thesis": "Всё причинно обусловлено",
+   "y": 64,
+   "n": -35,
+   "pk": -85,
+   "tb": 10,
+   "rPK": "Исход предрешён соотношением сил; сопротивление меняет цену, но не результат.",
+   "rTB": "Тогда предрешена и демографическая, и долговая траектория самого материка.",
+   "real": "Работает как оружие: убедить в неизбежности дешевле, чем воевать."
+  },
+  {
+   "id": "w14",
+   "canon": "w",
+   "num": 14,
+   "name": "Индетерминизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Эпикур (отклонение атомов); квантовая механика, 1920-е",
+   "thesis": "Есть подлинная случайность",
+   "y": 62,
+   "n": 40,
+   "pk": -10,
+   "tb": 65,
+   "rPK": "Ничто не гарантирует и вмешательства извне — на случайность полагаться нельзя.",
+   "rTB": "Военное положение отменил один человек, который мог не отменять; траектория ветвится.",
+   "real": "Дважды за полвека решения отдельных людей меняли всё — детерминизм этого не предсказал."
+  },
+  {
+   "id": "w15",
+   "canon": "w",
+   "num": 15,
+   "name": "Позитивизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Огюст Конт, «Курс позитивной философии», 1830–1842",
+   "thesis": "Знание — только проверяемое",
+   "y": 72,
+   "n": 45,
+   "pk": -20,
+   "tb": 70,
+   "rPK": "Проверяемо, что подавляющее большинство государств не признаёт остров государством.",
+   "rTB": "Проверяемо, что налоги, суды, армия и выборы — свои; это и есть данные.",
+   "real": "Объясняет технократический стиль: семь смертей от ковида за весь 2020 год без общего локдауна."
+  },
+  {
+   "id": "w16",
+   "canon": "w",
+   "num": 16,
+   "name": "Прагматизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Пирс, Джеймс, Дьюи, 1870–1920-е",
+   "thesis": "Истина — то, что работает",
+   "y": 92,
+   "n": 60,
+   "pk": -20,
+   "tb": 85,
+   "rPK": "Работает экономическая связка и постепенность; декларации не работают.",
+   "rTB": "Работает государственность без имени: 12 союзников и 177 безвизовых направлений.",
+   "real": "Главный «-изм» острова: имя отдано в обмен на всё остальное."
+  },
+  {
+   "id": "w17",
+   "canon": "w",
+   "num": 17,
+   "name": "Экзистенциализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Кьеркегор, XIX в.; Хайдеггер, Сартр, 1920–1940-е",
+   "thesis": "Существование предшествует сущности",
+   "y": 86,
+   "n": 65,
+   "pk": -5,
+   "tb": 85,
+   "rPK": "Существование без признанной сущности не может длиться вечно; неопределённость временна.",
+   "rTB": "Оно длится семьдесят лет — и это и есть способ существования.",
+   "real": "Точное юридическое описание: сущность так и не выдана, а существование продолжается."
+  },
+  {
+   "id": "w18",
+   "canon": "w",
+   "num": 18,
+   "name": "Феноменология",
+   "cn": "",
+   "reg": "eu",
+   "src": "Эдмунд Гуссерль, «Логические исследования», 1900–1901",
+   "thesis": "Описание структур опыта",
+   "y": 70,
+   "n": 50,
+   "pk": -10,
+   "tb": 70,
+   "rPK": "Переживание общей культуры, языка и родства — тоже данность опыта.",
+   "rTB": "Данность опыта — жизнь, в которой угроза на периферии, а не в центре.",
+   "real": "Объясняет, почему внешние прогнозы тайваньского поведения регулярно промахиваются."
+  },
+  {
+   "id": "w19",
+   "canon": "w",
+   "num": 19,
+   "name": "Герменевтика",
+   "cn": "",
+   "reg": "eu",
+   "src": "Шлейермахер, Дильтей; Гадамер, «Истина и метод», 1960",
+   "thesis": "Искусство истолкования",
+   "y": 90,
+   "n": 0,
+   "pk": -55,
+   "tb": 55,
+   "rPK": "Резолюция 2758 закрыла вопрос, а коммюнике 1972 года подтвердило понимание.",
+   "rTB": "В резолюции 2758 нет слова «Тайвань», а acknowledge — не recognize.",
+   "real": "Предмет спора состоит из текстов, и всё зависит от того, кто их читает."
+  },
+  {
+   "id": "w20",
+   "canon": "w",
+   "num": 20,
+   "name": "Структурализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Фердинанд де Соссюр, 1916; Клод Леви-Строс, 1950-е",
+   "thesis": "Скрытые структуры в культуре",
+   "y": 76,
+   "n": -15,
+   "pk": -55,
+   "tb": 25,
+   "rPK": "Первая островная цепь — структура, в которой остров есть чужой форпост, а не субъект.",
+   "rTB": "Та же структура делает его незаменимым, а значит защищаемым.",
+   "real": "Идентичность построена на различении и потому неотделима от того, от чего отличается."
+  },
+  {
+   "id": "w21",
+   "canon": "w",
+   "num": 21,
+   "name": "Постструктурализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Деррида, Фуко, Делёз, 1960–1970-е",
+   "thesis": "Критика устойчивых структур",
+   "y": 68,
+   "n": 30,
+   "pk": -25,
+   "tb": 55,
+   "rPK": "«Тайваньская нация» — недавно сконструированный дискурс, а не природная данность.",
+   "rTB": "Ровно то же верно про «китайскую нацию» в её нынешнем изводе.",
+   "real": "«Один Китай» работает потому, что означаемое бесконечно откладывается."
+  },
+  {
+   "id": "w22",
+   "canon": "w",
+   "num": 22,
+   "name": "Постмодернизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Жан-Франсуа Лиотар, «Состояние постмодерна», 1979",
+   "thesis": "Скепсис к большим нарративам",
+   "y": 64,
+   "n": 25,
+   "pk": -30,
+   "tb": 50,
+   "rPK": "Разговоры о суверенитете — западный большой нарратив, навязанный региону.",
+   "rTB": "«Национальное возрождение» — большой нарратив ничуть не меньше.",
+   "real": "Три несовместимых нарратива сосуществуют; общество живёт в лоскутном режиме."
+  },
+  {
+   "id": "w23",
+   "canon": "w",
+   "num": 23,
+   "name": "Нигилизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Слово — у Тургенева, 1862; как философия — Ницше, 1880-е",
+   "thesis": "Отрицание объективных ценностей",
+   "y": 50,
+   "n": -25,
+   "pk": -60,
+   "tb": 5,
+   "rPK": "Принципы не значат ничего: союзники уходили, как только становилось выгодно.",
+   "rTB": "Тогда не значат ничего и притязания, основанные на истории.",
+   "real": "Описывает бытовую усталость и «маленькое верное счастье» точнее любой политологии."
+  },
+  {
+   "id": "w24",
+   "canon": "w",
+   "num": 24,
+   "name": "Гуманизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Петрарка, Пико делла Мирандола, XIV–XV вв.",
+   "thesis": "Достоинство и ценность человека",
+   "y": 74,
+   "n": 70,
+   "pk": 0,
+   "tb": 90,
+   "rPK": "Достоинство включает право народа не быть разделённым и не быть втянутым в чужую войну.",
+   "rTB": "23 миллиона человек не спрашивали ни в 1945-м, ни в 1949-м, ни в 1971-м.",
+   "real": "Не украшение позиции, а её содержание: медстрахование, 2019 год, извинения за 1947-й."
+  },
+  {
+   "id": "w25",
+   "canon": "w",
+   "num": 25,
+   "name": "Утилитаризм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Бентам, 1789; Милль, «Утилитаризм», 1863",
+   "thesis": "Максимум счастья для большинства",
+   "y": 72,
+   "n": -20,
+   "pk": -70,
+   "tb": 30,
+   "rPK": "Полтора миллиарда против двадцати трёх миллионов — арифметика полезности однозначна.",
+   "rTB": "Полезность существования острова для мира оценивают в 10 трлн долларов предотвращённых потерь.",
+   "real": "Опасен тем, что превращает численность населения в аргумент."
+  },
+  {
+   "id": "w26",
+   "canon": "w",
+   "num": 26,
+   "name": "Деонтология",
+   "cn": "",
+   "reg": "eu",
+   "src": "Кант, «Основоположение к метафизике нравов», 1785",
+   "thesis": "Этика долга и правил",
+   "y": 70,
+   "n": 60,
+   "pk": -10,
+   "tb": 85,
+   "rPK": "Долг государства — территориальная целостность, и он не отменяется расчётом выгоды.",
+   "rTB": "Долг — не использовать людей как средство; закон 1979 года обязывает поставлять оружие.",
+   "real": "Ось всех дебатов: долг против последствий, причём на долге стоят обе стороны."
+  },
+  {
+   "id": "w27",
+   "canon": "w",
+   "num": 27,
+   "name": "Консеквенциализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Термин Элизабет Энском, 1958",
+   "thesis": "Моральность по последствиям",
+   "y": 74,
+   "n": 0,
+   "pk": -45,
+   "tb": 40,
+   "rPK": "Любой шаг к формальному отделению влечёт последствия, за которые отвечает шагнувший.",
+   "rTB": "Задержка вооружений тоже имеет последствия — просто отложенные за горизонт расчёта.",
+   "real": "Всегда упирается в горизонт: чем он короче, тем убедительнее и тем хуже работает."
+  },
+  {
+   "id": "w28",
+   "canon": "w",
+   "num": 28,
+   "name": "Релятивизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Протагор, V в. до н. э.: «человек есть мера всех вещей»",
+   "thesis": "Истина относительна к контексту",
+   "y": 66,
+   "n": 20,
+   "pk": -35,
+   "tb": 45,
+   "rPK": "В контексте ООН и большинства столиц остров — часть Китая, и это тоже контекст.",
+   "rTB": "Шесть имён в шести организациях истинны одновременно; ни одно не отменяет фактов.",
+   "real": "Не софистика, а несущий элемент: относительность имён сажает стороны за один стол."
+  },
+  {
+   "id": "w29",
+   "canon": "w",
+   "num": 29,
+   "name": "Абсолютизм (этич.)",
+   "cn": "",
+   "reg": "eu",
+   "src": "Кант (категорический императив); традиция естественного права",
+   "thesis": "Существуют безусловные нормы",
+   "y": 60,
+   "n": 0,
+   "pk": -80,
+   "tb": 80,
+   "rPK": "Суверенитет и территориальная целостность безусловны и не подлежат торгу.",
+   "rTB": "Право народа решать свою судьбу безусловно и не подлежит торгу.",
+   "real": "Идеально симметричен — потому спор и не решается: два абсолюта не обмениваются."
+  },
+  {
+   "id": "w30",
+   "canon": "w",
+   "num": 30,
+   "name": "Солипсизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Предельная позиция без школы: от Горгия, V в. до н. э., до Витгенштейна",
+   "thesis": "Достоверно лишь своё сознание",
+   "y": 48,
+   "n": -10,
+   "pk": -45,
+   "tb": 20,
+   "rPK": "Тайваньское самосознание наведено извне, а не выросло само.",
+   "rTB": "В картине мира, которую Пекин строит для себя, тайваньского субъекта попросту нет.",
+   "real": "Описывает информационное расслоение и системную ошибку в прогнозах чужого поведения."
+  },
+  {
+   "id": "w31",
+   "canon": "w",
+   "num": 31,
+   "name": "Агностицизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Термин Томаса Гексли, 1869",
+   "thesis": "Непознаваемость предельных вопросов",
+   "y": 78,
+   "n": 10,
+   "pk": -25,
+   "tb": 35,
+   "rPK": "Никто не знает, придут ли США, — и на этом незнании строится расчёт.",
+   "rTB": "Никто не знает и цены вторжения — на этом же незнании держится сдерживание.",
+   "real": "Двусмысленность как институт: работает ровно до тех пор, пока никто не знает наверняка."
+  },
+  {
+   "id": "w32",
+   "canon": "w",
+   "num": 32,
+   "name": "Атеизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "От античности; Гольбах, «Система природы», 1770",
+   "thesis": "Высшей инстанции нет",
+   "y": 68,
+   "n": -5,
+   "pk": -35,
+   "tb": 30,
+   "rPK": "Международного арбитра не существует, значит решает тот, кто способен решить.",
+   "rTB": "Арбитра нет и у притязаний — они держатся не на праве, а на силе.",
+   "real": "Осуждения в ООН, конгрессе и Европарламенте — давление, а не приговор. Разница существенна."
+  },
+  {
+   "id": "w33",
+   "canon": "w",
+   "num": 33,
+   "name": "Теизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Авраамические традиции; термин Ральфа Кедворта, 1678",
+   "thesis": "Вера в личного бога-творца",
+   "y": 42,
+   "n": 0,
+   "pk": -40,
+   "tb": 30,
+   "rPK": "Общие храмы Мацзу по обе стороны — доказательство единого культурного тела.",
+   "rTB": "Те же храмы — самостоятельная островная политическая инфраструктура.",
+   "real": "Религия здесь действующий канал влияния и мобилизации, а не фольклор."
+  },
+  {
+   "id": "w34",
+   "canon": "w",
+   "num": 34,
+   "name": "Деизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Толанд, Тиндал, XVII–XVIII вв.; Вольтер",
+   "thesis": "Творец не вмешивается в мир",
+   "y": 56,
+   "n": 10,
+   "pk": -30,
+   "tb": 35,
+   "rPK": "Вашингтон создал механизм и уклоняется от его применения — на это и расчёт.",
+   "rTB": "Механизм создан так, чтобы работать без вмешательства творца; в этом его смысл.",
+   "real": "Конституция 1947 года пережила собственного творца и живёт по своим законам."
+  },
+  {
+   "id": "w35",
+   "canon": "w",
+   "num": 35,
+   "name": "Пантеизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Спиноза; термин Джона Толанда, 1705",
+   "thesis": "Бог тождествен природе",
+   "y": 44,
+   "n": 35,
+   "pk": -15,
+   "tb": 60,
+   "rPK": "Земля общая; географическая связность предшествует политике.",
+   "rTB": "Австронезийские корни, шестнадцать признанных народов, тайфуны и разлом — остров начинается не с материка.",
+   "real": "Земля здесь действительно аргумент — редкий случай в современной политике."
+  },
+  {
+   "id": "w36",
+   "canon": "w",
+   "num": 36,
+   "name": "Панпсихизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Лейбниц; Уайтхед, 1920-е; Чалмерс, Гофф, XXI в.",
+   "thesis": "Сознание присуще всему сущему",
+   "y": 40,
+   "n": 15,
+   "pk": -10,
+   "tb": 40,
+   "rPK": "Узел мирового разума не может принадлежать одной стороне конфликта.",
+   "rTB": "Он и не принадлежит: 2-нанометровые линии распроданы, а экосистему нельзя перевезти.",
+   "real": "Метафора, оказавшаяся буквальной: здесь кремний доводят до состояния, в котором он думает."
+  },
+  {
+   "id": "w37",
+   "canon": "w",
+   "num": 37,
+   "name": "Эмпириокритицизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Рихард Авенариус, Эрнст Мах, 1880–1890-е",
+   "thesis": "Очищение опыта от метафизики",
+   "y": 80,
+   "n": 55,
+   "pk": -15,
+   "tb": 75,
+   "rPK": "Уберите метафизику — останется экономическая взаимозависимость и география.",
+   "rTB": "Уберите метафизику — останутся налоги, суды, армия и 177 безвизовых стран.",
+   "real": "Так и работает мировая практика: с островом имеют дело функционально, не называя сущности."
+  },
+  {
+   "id": "w38",
+   "canon": "w",
+   "num": 38,
+   "name": "Логический позитивизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Венский кружок: Шлик, Карнап, 1920–1930-е",
+   "thesis": "Смысл равен верифицируемости",
+   "y": 84,
+   "n": 30,
+   "pk": -25,
+   "tb": 70,
+   "rPK": "«Независимое государство» не проходит проверку признанием: 12 союзников против 180.",
+   "rTB": "«Часть Китая» не проходит проверку ничем: ни налогом, ни судом, ни назначением.",
+   "real": "Обе формулы оказываются перформативами, а не утверждениями. Отсюда полвека подбора глаголов."
+  },
+  {
+   "id": "w39",
+   "canon": "w",
+   "num": 39,
+   "name": "Натурализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Дьюи; Уиллард Куайн, «Натурализованная эпистемология», 1969",
+   "thesis": "Реальность исчерпывается природой",
+   "y": 66,
+   "n": 5,
+   "pk": -35,
+   "tb": 35,
+   "rPK": "Давление растёт вместе с мощью — это природный процесс, а не злая воля.",
+   "rTB": "Тогда природно и сопротивление: система защищает собственную границу.",
+   "real": "Хорошо предсказывает давление и совсем не объясняет, почему именно этот объект стал центральным."
+  },
+  {
+   "id": "w40",
+   "canon": "w",
+   "num": 40,
+   "name": "Редукционизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Декарт; Эрнест Нагель, «Структура науки», 1961",
+   "thesis": "Сложное сводимо к простому",
+   "y": 58,
+   "n": -5,
+   "pk": -40,
+   "tb": 30,
+   "rPK": "Всё сводится к силе и экономике, остальное надстройка.",
+   "rTB": "Всё сводится к чипам — и перенос производства в Аризону не снял вопрос ни на процент.",
+   "real": "Каждая редукция работает и каждая обманывает; отброшенное имеет свойство возвращаться."
+  },
+  {
+   "id": "w41",
+   "canon": "w",
+   "num": 41,
+   "name": "Холизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Ян Смэтс, «Холизм и эволюция», 1926; Куайн",
+   "thesis": "Целое больше суммы частей",
+   "y": 82,
+   "n": 45,
+   "pk": -30,
+   "tb": 75,
+   "rPK": "Целое — китайская цивилизация, и часть вне целого неполна.",
+   "rTB": "Целое — экосистема острова: перевезти можно фабрику, но не поставщиков, кадры и рутины.",
+   "real": "Объясняет и незаменимость TSMC, и то, почему устойчивость нельзя разложить по статьям бюджета."
+  },
+  {
+   "id": "w42",
+   "canon": "w",
+   "num": 42,
+   "name": "Эссенциализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Аристотель; Сол Крипке, «Именование и необходимость», 1980",
+   "thesis": "У вещей неизменная сущность",
+   "y": 50,
+   "n": -30,
+   "pk": -85,
+   "tb": 25,
+   "rPK": "Остров китайский по сущности; самоощущение жителей вторично и наведено.",
+   "rTB": "Тайваньцы — отдельный народ по сущности, с австронезийским корнем и японским слоем.",
+   "real": "Обе версии ошибаются одинаково: измеряемая «сущность» сдвинулась на сорок пунктов за тридцать лет."
+  },
+  {
+   "id": "w43",
+   "canon": "w",
+   "num": 43,
+   "name": "Номинализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Росцелин, XI в.; Уильям Оккам, XIV в.",
+   "thesis": "Общие понятия — лишь имена",
+   "y": 88,
+   "n": 50,
+   "pk": -20,
+   "tb": 75,
+   "rPK": "«Тайвань» — географическое имя, а не политическая сущность.",
+   "rTB": "«Китай» — тоже имя; существуют конкретные администрации, и их две.",
+   "real": "Самая производительная философия вопроса: полтриллиона долларов прошли через несуществующие сущности."
+  },
+  {
+   "id": "w44",
+   "canon": "w",
+   "num": 44,
+   "name": "Реализм (универсалии)",
+   "cn": "",
+   "reg": "eu",
+   "src": "Платон; умеренный реализм Фомы Аквинского, XIII в.",
+   "thesis": "Общие понятия существуют реально",
+   "y": 76,
+   "n": 40,
+   "pk": -35,
+   "tb": 80,
+   "rPK": "Суверенитет реален и неделим, а признание конституирует государство.",
+   "rTB": "Государственность реальна и декларативна: четыре признака Монтевидео выполнены с запасом.",
+   "real": "Спор об универсалиях воспроизведён в праве как конститутивная теория против декларативной."
+  },
+  {
+   "id": "w45",
+   "canon": "w",
+   "num": 45,
+   "name": "Эмерджентизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Дж. С. Милль; британские эмерджентисты, 1920-е",
+   "thesis": "Возникновение нового качества",
+   "y": 78,
+   "n": 55,
+   "pk": -15,
+   "tb": 80,
+   "rPK": "Новое качество возникает и при объединении: целое даст то, чего нет у частей.",
+   "rTB": "Тайваньская идентичность возникла на стыке и не сводится ни к одному из источников.",
+   "real": "Ни идентичность, ни цифровая демократия никем не проектировались — они возникли."
+  },
+  {
+   "id": "w46",
+   "canon": "w",
+   "num": 46,
+   "name": "Витализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Анри Бергсон, «Творческая эволюция», 1907; Ханс Дриш",
+   "thesis": "Жизнь определяется особой силой",
+   "y": 40,
+   "n": 35,
+   "pk": -20,
+   "tb": 60,
+   "rPK": "Жизненная сила нации требует завершённости; ампутация не заживает.",
+   "rTB": "Жизнестойкость: не превзойти, а оказаться слишком живучим, чтобы усилие окупилось.",
+   "real": "Опровергнут как наука и прекрасно работает как мобилизационный язык — у обеих сторон."
+  },
+  {
+   "id": "w47",
+   "canon": "w",
+   "num": 47,
+   "name": "Механицизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Декарт, Гоббс; Ламетри, «Человек-машина», 1747",
+   "thesis": "Мир как механизм",
+   "y": 62,
+   "n": -10,
+   "pk": -45,
+   "tb": 25,
+   "rPK": "Тоннаж, окна погоды, коэффициенты потерь — задача решается расчётом.",
+   "rTB": "Тем же расчётом решается и её недопустимая цена.",
+   "real": "Отвечает на «как» и не имеет доступа к «станут ли» — а решает именно второе."
+  },
+  {
+   "id": "w48",
+   "canon": "w",
+   "num": 48,
+   "name": "Фатализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Стоики; античное учение о мойре",
+   "thesis": "Всё предопределено судьбой",
+   "y": 54,
+   "n": -40,
+   "pk": -90,
+   "tb": 5,
+   "rPK": "Воссоединение неизбежно, вопрос лишь в цене и сроке.",
+   "rTB": "Неизбежность — не факт, а сообщение; приговор капитану за перерезанный кабель это сообщение опровергает.",
+   "real": "Главная мишень давления: убедить, что сопротивление бессмысленно, дешевле, чем сломить его."
+  },
+  {
+   "id": "w49",
+   "canon": "w",
+   "num": 49,
+   "name": "Волюнтаризм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Шопенгауэр, «Мир как воля и представление», 1819",
+   "thesis": "Первична воля, а не разум",
+   "y": 72,
+   "n": 20,
+   "pk": -30,
+   "tb": 55,
+   "rPK": "Решение примет воля, а не расчёт, — и она уже сформирована.",
+   "rTB": "Воля к сопротивлению — переменная, которую не считает ни одна модель.",
+   "real": "За всем аппаратом планирования с обеих сторон стоит воля, которой аппарат служит."
+  },
+  {
+   "id": "w50",
+   "canon": "w",
+   "num": 50,
+   "name": "Иррационализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Шопенгауэр, Кьеркегор, Ницше, XIX в.",
+   "thesis": "Пределы и недостаточность разума",
+   "y": 74,
+   "n": -20,
+   "pk": -55,
+   "tb": 25,
+   "rPK": "Столетие унижения и завершённость нации не подлежат калькуляции.",
+   "rTB": "Именно поэтому расчёты о невыгодности войны ничего не гарантируют.",
+   "real": "Главный риск уравнения лежит там, где количественные аргументы не имеют силы."
+  },
+  {
+   "id": "w51",
+   "canon": "w",
+   "num": 51,
+   "name": "Трансцендентализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Эмерсон, Торо, 1830–1840-е",
+   "thesis": "Опора на интуицию",
+   "y": 52,
+   "n": 45,
+   "pk": -10,
+   "tb": 70,
+   "rPK": "Интуиция родства сильнее процедур и договоров.",
+   "rTB": "Интуиция «так нельзя» — это подсолнухи 2014 года: двадцать четыре дня против процедуры.",
+   "real": "Из этого жеста выросла почти вся нынешняя политическая конфигурация острова."
+  },
+  {
+   "id": "w52",
+   "canon": "w",
+   "num": 52,
+   "name": "Марксизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Маркс, Энгельс; «Капитал», 1867",
+   "thesis": "Материализм истории, классовая борьба",
+   "y": 70,
+   "n": 0,
+   "pk": -50,
+   "tb": 45,
+   "rPK": "Экономический базис связывает остров с материком; надстройка последует за базисом.",
+   "rTB": "Базис изменился: в 2025 году в материковый Китай ушло 0,86 % тайваньских инвестиций.",
+   "real": "Класс, чьи интересы связывали остров с материком, экономически растворяется."
+  },
+  {
+   "id": "w53",
+   "canon": "w",
+   "num": 53,
+   "name": "Либерализм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Локк, XVII в.; Милль, «О свободе», 1859",
+   "thesis": "Свобода личности и прав",
+   "y": 80,
+   "n": 75,
+   "pk": -5,
+   "tb": 92,
+   "rPK": "Свобода включает свободу от навязанного извне противостояния.",
+   "rTB": "Три смены власти, суд, отменивший поправки, провалившийся отзыв 2025 года — система работает.",
+   "real": "Разделённое правление выглядит параличом, но паралич и есть механизм."
+  },
+  {
+   "id": "w54",
+   "canon": "w",
+   "num": 54,
+   "name": "Анархизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Прудон, 1840; Бакунин, Кропоткин",
+   "thesis": "Отрицание принудительной власти",
+   "y": 58,
+   "n": 25,
+   "pk": -25,
+   "tb": 50,
+   "rPK": "Международная анархия означает, что защищает не право, а расчёт, — а расчёт меняется.",
+   "rTB": "g0v и подсолнухи показали, что самоорганизация быстрее государства.",
+   "real": "Над островом нет ничего: ни суда, ни гаранта. Самый чистый случай анархии на планете."
+  },
+  {
+   "id": "w55",
+   "canon": "w",
+   "num": 55,
+   "name": "Стоический космополитизм",
+   "cn": "",
+   "reg": "eu",
+   "src": "Диоген, IV в. до н. э.; стоики; Кант, «К вечному миру», 1795",
+   "thesis": "Все люди — граждане мира",
+   "y": 60,
+   "n": 45,
+   "pk": 0,
+   "tb": 70,
+   "rPK": "Гражданин мира не нуждается в отдельном флаге.",
+   "rTB": "Исключённый из ООН, ВОЗ и ИКАО остров ведёт себя как гражданин мира, которому отказали в гражданстве.",
+   "real": "Стратегия: если не пускают в клуб, стань полезнее его членов. И встречный вопрос — 800 тысяч мигрантов."
+  },
+  {
+   "id": "e1",
+   "canon": "e",
+   "num": 1,
+   "name": "Конфуцианство",
+   "cn": "儒家",
+   "reg": "cn",
+   "src": "Кун-цзы, VI–V вв. до н. э.; «Лунь юй»",
+   "thesis": "Ритуал, иерархия, взаимные обязанности",
+   "y": 80,
+   "n": -50,
+   "pk": -85,
+   "tb": 15,
+   "rPK": "Отношения предшествуют лицам. Положение острова определяется не тем, чего он хочет, а его местом в порядке: 君君臣臣 — каждый на своём месте, и это место описано за две тысячи лет до появления спора.",
+   "rTB": "Управляют добродетелью, а не силой: 為政以德. Принуждающий уже проиграл спор о легитимности. И ритуал двусторонен — обязанность старшего не в том, чтобы давить, а в том, чтобы заслуживать.",
+   "real": "Обе стороны справляют 28 сентября как государственную церемонию. На материке её отменили в 1966 году и восстановили в 1980-е; на острове она не прерывалась ни разу."
+  },
+  {
+   "id": "e2",
+   "canon": "e",
+   "num": 2,
+   "name": "Учение Мэн-цзы",
+   "cn": "孟子",
+   "reg": "cn",
+   "src": "Мэн Кэ, IV в. до н. э.",
+   "thesis": "Природа человека блага, мандат отзывается",
+   "y": 76,
+   "n": 10,
+   "pk": -40,
+   "tb": 75,
+   "rPK": "Народ важнее государя — но суждение о целом выносит Небо через народ целого, а не через население одной приморской области.",
+   "rTB": "民為貴，社稷次之，君為輕 — народ дороже алтарей, государь легче всего. Убийство утратившего мандат Мэн-цзы называет казнью простолюдина, а не цареубийством.",
+   "real": "Единственная классическая китайская доктрина с прямым правом на свержение. Именно поэтому Чжу Юаньчжан велел вычеркнуть из «Мэн-цзы» 85 фрагментов и в таком виде преподавать."
+  },
+  {
+   "id": "e3",
+   "canon": "e",
+   "num": 3,
+   "name": "Учение Сюнь-цзы",
+   "cn": "荀子",
+   "reg": "cn",
+   "src": "Сюнь Куан, III в. до н. э.",
+   "thesis": "Природа зла, ритуал есть выучка",
+   "y": 72,
+   "n": -35,
+   "pk": -70,
+   "tb": 20,
+   "rPK": "Порядок не растёт сам: без разграничения (分) люди дерутся за ресурс. Государство и есть разграничение, и устанавливается оно сверху, а не соглашением дерущихся.",
+   "rTB": "Ритуал приобретён, а не врождён — значит, приобретаемо и другое. Сорок лет выборов есть 化性起偽 в чистом виде: искусственное, ставшее второй природой.",
+   "real": "Спор о том, врождённа идентичность или выучена, — это спор Мэн-цзы с Сюнь-цзы, воспроизведённый на графиках Центра изучения выборов."
+  },
+  {
+   "id": "e4",
+   "canon": "e",
+   "num": 4,
+   "name": "Исправление имён",
+   "cn": "正名",
+   "reg": "cn",
+   "src": "«Лунь юй», 13.3",
+   "thesis": "Пока имя неверно, речь не вяжется",
+   "y": 94,
+   "n": -35,
+   "pk": -80,
+   "tb": 45,
+   "rPK": "名不正則言不順 — пока остров называют не тем именем, ни одна договорённость не может быть исполнена: не к чему её отнести. Сначала имя, затем всё остальное.",
+   "rTB": "Тот же принцип обращается целиком. «Китайский Тайбэй» не соответствует ни одной действительности — и именно поэтому под этим именем ничего и не вяжется, кроме спортивных заявок.",
+   "real": "Самая точная философия конфликта. Спорят не о территории, которая никуда не денется, а о шести именах в шести организациях."
+  },
+  {
+   "id": "e5",
+   "canon": "e",
+   "num": 5,
+   "name": "Моизм",
+   "cn": "墨家",
+   "reg": "cn",
+   "src": "Мо Ди, V в. до н. э.",
+   "thesis": "Всеобщая любовь, отказ от нападения",
+   "y": 70,
+   "n": 45,
+   "pk": -5,
+   "tb": 85,
+   "rPK": "兼愛 не различает своих и чужих. Разделение на «нас» и «их» по линии пролива и есть 別愛, пристрастная любовь, которую Мо-цзы прямо осуждает как источник смуты.",
+   "rTB": "非攻 — отдельная глава: нападение на соседнее государство названо величайшим преступлением, а моисты шли к обороняющемуся и строили ему стены. 墨守 до сих пор значит «стойко держать оборону».",
+   "real": "Единственная школа канона с собственным инженерным корпусом обороняющихся. Асимметричная оборона — моистская идея, а не американская."
+  },
+  {
+   "id": "e6",
+   "canon": "e",
+   "num": 6,
+   "name": "Легизм",
+   "cn": "法家",
+   "reg": "cn",
+   "src": "Шан Ян, IV в. до н. э.; Хань Фэй, III в. до н. э.",
+   "thesis": "Закон, приём, властная позиция",
+   "y": 86,
+   "n": -70,
+   "pk": -95,
+   "tb": -15,
+   "rPK": "法·術·勢 — не убеждение, а закон, приём и позиция силы. Единство обеспечивается исчислимой властью; согласие есть следствие, а не условие.",
+   "rTB": "Легизм требует, чтобы закон был обнародован, единообразен и обязателен для самого правителя. Там, где применение зависит от усмотрения, это уже не 法, а 術 — и по легистскому же счёту это порок.",
+   "real": "Самая нереверсируемая позиция списка и самая исполняемая. Закон 2005 года написан ровно в этой грамматике: условие, следствие, никакого адресата."
+  },
+  {
+   "id": "e7",
+   "canon": "e",
+   "num": 7,
+   "name": "Военная школа",
+   "cn": "兵家",
+   "reg": "cn",
+   "src": "Сунь-цзы, «Искусство войны», традиционно V в. до н. э.",
+   "thesis": "Победить, не сражаясь",
+   "y": 88,
+   "n": -40,
+   "pk": -75,
+   "tb": 15,
+   "rPK": "上兵伐謀 — высшее есть разбить замысел, затем союзы, и лишь потом войска. Двадцать лет давления — это верхняя строка Сунь-цзы, а не подготовка к нижней.",
+   "rTB": "У него же 知彼知己, и первая глава требует считать не только силу, но и 道 — единство народа с правителем. У нападающего этой графы в расчёте нет.",
+   "real": "Обе стороны читают один трактат и находят в нём противоположные рекомендации, потому что он о расчёте, а не о цели."
+  },
+  {
+   "id": "e8",
+   "canon": "e",
+   "num": 8,
+   "name": "Школа союзов",
+   "cn": "縱橫家",
+   "reg": "cn",
+   "src": "Су Цинь, Чжан И, IV в. до н. э.",
+   "thesis": "Вертикаль слабых или горизонталь с сильным",
+   "y": 78,
+   "n": -25,
+   "pk": -60,
+   "tb": 30,
+   "rPK": "連橫 — линия Чжан И: слабые всё равно договариваются с сильным поодиночке, и каждый выторговывает условия, пока они ещё есть, а не когда их уже назначают.",
+   "rTB": "合縱 — линия Су Циня: шесть царств, связанных по вертикали, держались ровно столько, сколько держался союз. Первая островная цепь — это 合縱, нанесённое на карту.",
+   "real": "Учебник по тому, что происходит прямо сейчас: доктрина описывает и союз слабых, и работу по его разбору поодиночке — в одном тексте и с равным сочувствием."
+  },
+  {
+   "id": "e9",
+   "canon": "e",
+   "num": 9,
+   "name": "Даосизм",
+   "cn": "道家",
+   "reg": "cn",
+   "src": "Лао-цзы, «Дао дэ цзин»; датировка спорна, IV в. до н. э.",
+   "thesis": "Путь, недеяние, мягкое одолевает твёрдое",
+   "y": 66,
+   "n": -10,
+   "pk": -45,
+   "tb": 40,
+   "rPK": "無為 — не дёргаться. Соотношение созревает само, и всякая декларация лишь ускоряет то, чего декларирующий боится.",
+   "rTB": "柔弱勝剛強 — мягкое одолевает твёрдое, вода точит камень. Не сопротивляться лоб в лоб и при этом не исчезать — это и есть островная стратегия, изложенная за двадцать пять веков до неё.",
+   "real": "Объясняет, почему обе стороны предпочитают ничего не объявлять: в этой рамке объявление и есть поражение."
+  },
+  {
+   "id": "e10",
+   "canon": "e",
+   "num": 10,
+   "name": "Чжуан-цзы",
+   "cn": "莊子",
+   "reg": "cn",
+   "src": "Чжуан Чжоу, IV в. до н. э.",
+   "thesis": "Уравнивание вещей",
+   "y": 64,
+   "n": -5,
+   "pk": -40,
+   "tb": 45,
+   "rPK": "齊物論 — различия, из-за которых спорят, не существуют на том уровне, где смотрит Небо. Настаивать на своей отдельности значит застрять в частном и принять его за целое.",
+   "rTB": "Та же глава уравнивает и притязание: если различия условны, условно и «единство». Спор Чжуан Чжоу с бабочкой о том, кто кому снится, силой не решается.",
+   "real": "Единственный текст канона, который смеётся над самой постановкой вопроса, — и потому одинаково применим к любой стороне."
+  },
+  {
+   "id": "e11",
+   "canon": "e",
+   "num": 11,
+   "name": "Школа имён",
+   "cn": "名家",
+   "reg": "cn",
+   "src": "Хуэй Ши, Гунсунь Лун, IV–III вв. до н. э.",
+   "thesis": "Белая лошадь не есть лошадь",
+   "y": 68,
+   "n": 25,
+   "pk": -15,
+   "tb": 65,
+   "rPK": "Софистика — ровно то, чем занимаются на острове. «Китайская Республика» есть имя без референта, годное только для парадокса и школьного упражнения.",
+   "rTB": "白馬非馬 — это и есть приём, на котором держится существование острова: «китайский» не влечёт «КНР», и мир полвека пользуется этим различением, не признаваясь.",
+   "real": "Гунсунь Лун описал юридическую технику, через которую сегодня проходит полтриллиона долларов торговли в год."
+  },
+  {
+   "id": "e12",
+   "canon": "e",
+   "num": 12,
+   "name": "Инь-ян и пять стихий",
+   "cn": "陰陽家",
+   "reg": "cn",
+   "src": "Цзоу Янь, III в. до н. э.",
+   "thesis": "Циклы порождения и преодоления",
+   "y": 48,
+   "n": -40,
+   "pk": -70,
+   "tb": 5,
+   "rPK": "五德終始 — династии сменяются по порядку стихий, и фаза сменяет предыдущую целиком. Частичной смены в этой схеме не предусмотрено вообще.",
+   "rTB": "В той же схеме есть 相剋 — преодоление: малое одолевает большое, если стоит в нужной позиции. Вода тушит огонь не размером, а положением.",
+   "real": "Схема, из которой выросла вся имперская легитимация. Её остаток — уверенность обеих сторон, что у истории есть расписание."
+  },
+  {
+   "id": "e13",
+   "canon": "e",
+   "num": 13,
+   "name": "Школа земледельцев",
+   "cn": "農家",
+   "reg": "cn",
+   "src": "Сюй Син, IV в. до н. э.; известен по «Мэн-цзы»",
+   "thesis": "Правитель пашет вместе с народом",
+   "y": 52,
+   "n": -30,
+   "pk": -55,
+   "tb": 10,
+   "rPK": "Сюй Син требовал, чтобы необходимое производилось там же, где потребляется. Остров, ввозящий больше двух третей продовольствия по калорийности и 97 процентов энергоносителей, по этому критерию несамостоятелен.",
+   "rTB": "Тот же критерий обращается на материк: продовольственная и энергетическая зависимость от морских путей у него ровно та же, только объёмом больше и уязвимее по числу проливов.",
+   "real": "Самая приземлённая философия списка и единственная, которая прямо указывает на блокаду как на настоящий инструмент — вместо десанта, о котором пишут все."
+  },
+  {
+   "id": "e14",
+   "canon": "e",
+   "num": 14,
+   "name": "Эклектики",
+   "cn": "雜家",
+   "reg": "cn",
+   "src": "Люй Бувэй, «Люйши чуньцю», 239 г. до н. э.",
+   "thesis": "Взять годное у всех школ",
+   "y": 58,
+   "n": -20,
+   "pk": -50,
+   "tb": 15,
+   "rPK": "«Люйши чуньцю» составлен ровно накануне объединения и ради него. Сведение школ было подготовкой к сведению царств, и составитель этого не скрывал.",
+   "rTB": "Эклектика есть признание, что ни одна доктрина не покрывает целого. Из этого следует не объединение порядков, а их сосуществование.",
+   "real": "Первый в истории случай, когда философскую антологию заказали как инструмент государственной унификации. Не последний."
+  },
+  {
+   "id": "e15",
+   "canon": "e",
+   "num": 15,
+   "name": "Хуан-Лао",
+   "cn": "黃老",
+   "reg": "cn",
+   "src": "Ранняя Хань, II в. до н. э.; тексты из Мавандуя",
+   "thesis": "Недеяние сверху, закон снизу",
+   "y": 70,
+   "n": -30,
+   "pk": -60,
+   "tb": 20,
+   "rPK": "Ранняя Хань шестьдесят лет ничего не предпринимала — и накопила ресурс, которым потом сделала всё сразу. Терпение здесь метод, а не слабость.",
+   "rTB": "Та же доктрина описывает и островную позицию: не провозглашать, не провоцировать, наращивать и не давать поводу возникнуть.",
+   "real": "Обе стороны официально практикуют одну и ту же стратегию отложенного действия, и обе уверены, что время работает на них."
+  },
+  {
+   "id": "e16",
+   "canon": "e",
+   "num": 16,
+   "name": "Небесный мандат",
+   "cn": "天命",
+   "reg": "cn",
+   "src": "Чжоу, XI в. до н. э.; «Шу цзин»",
+   "thesis": "Право на власть даётся и отзывается",
+   "y": 74,
+   "n": -40,
+   "pk": -80,
+   "tb": 25,
+   "rPK": "Мандат неделим: двух Небес не бывает, и параллельного мандата на часть территории эта схема не описывает — не потому, что запрещает, а потому, что не имеет для него формы.",
+   "rTB": "Мандат отзывается по утрате добродетели и подтверждается согласием управляемых. 1949 год в этой логике есть утрата, а не передача.",
+   "real": "Схема без процедуры проверки: мандат опознают по исходу. Значит, всякий исход оказывается законным — задним числом и без исключений."
+  },
+  {
+   "id": "e17",
+   "canon": "e",
+   "num": 17,
+   "name": "Династический цикл",
+   "cn": "分久必合",
+   "reg": "cn",
+   "src": "Ло Гуаньчжун, «Троецарствие», XIV в.",
+   "thesis": "Разделённое соединится, соединённое разделится",
+   "y": 62,
+   "n": -55,
+   "pk": -90,
+   "tb": -10,
+   "rPK": "«Троецарствие» открывается этой фразой, и первая её половина стоит в каждом втором документе: 分久必合 — разделённое непременно соединится.",
+   "rTB": "Цитируют половину. Вторая половина — 合久必分 — говорит ровно противоположное и стоит в том же предложении, через запятую.",
+   "real": "Самый распространённый аргумент пролива есть усечённая цитата из романа XIV века. Половины симметричны; выбирают одну и не оговаривают, что выбрали."
+  },
+  {
+   "id": "e18",
+   "canon": "e",
+   "num": 18,
+   "name": "Тянься",
+   "cn": "天下",
+   "reg": "cn",
+   "src": "Доимперская и имперская традиция; Чжао Тинъян, 2005",
+   "thesis": "Поднебесная: у порядка нет наружной стороны",
+   "y": 80,
+   "n": -65,
+   "pk": -95,
+   "tb": -5,
+   "rPK": "Мир есть концентрическая система, а не набор равных суверенов. Отделение в ней не право и не преступление, а категориальная ошибка: выйти наружу некуда, наружного нет.",
+   "rTB": "Тянься исторически включала данников, сохранявших свои династии, календари и войска. Система, где Корея и Вьетнам были внутри и при этом отдельны, — довод против унификации, а не за неё.",
+   "real": "Единственная схема, в которой у слова «независимость» отсутствует перевод. Поэтому её и возрождают."
+  },
+  {
+   "id": "e19",
+   "canon": "e",
+   "num": 19,
+   "name": "Резонанс Неба и человека",
+   "cn": "天人感應",
+   "reg": "cn",
+   "src": "Дун Чжуншу, II в. до н. э.",
+   "thesis": "Небо отвечает на дела правителя",
+   "y": 42,
+   "n": -45,
+   "pk": -75,
+   "tb": 0,
+   "rPK": "Дун Чжуншу связал единство доктрины с единством державы: 罷黜百家，獨尊儒術. Одно государство, одно учение — это его формула, а не поздняя выдумка недругов.",
+   "rTB": "В той же системе бедствие есть упрёк правителю. Землетрясение, эпидемия и обвал рынка — не помехи управлению, а сообщения о том, кто утратил соответствие.",
+   "real": "Первый в истории протокол, связавший идеологическую унификацию с территориальной. Ему две тысячи сто лет, и он работает без изменений."
+  },
+  {
+   "id": "e20",
+   "canon": "e",
+   "num": 20,
+   "name": "Даосская религия",
+   "cn": "道教",
+   "reg": "cn",
+   "src": "Чжан Даолин, II в.",
+   "thesis": "Небесные наставники, литургия, реестр богов",
+   "y": 44,
+   "n": -20,
+   "pk": -55,
+   "tb": 20,
+   "rPK": "Общий пантеон, общие реестры, общий обряд: религиозная инфраструктура пролива никогда не разделялась и разделению не поддаётся ни административно, ни литургически.",
+   "rTB": "Именно на острове линия не прерывалась. Шестьдесят третий Небесный наставник умер в Тайбэе, а на материке храмы после 1980-х восстанавливали в том числе по островным образцам и с островными деньгами.",
+   "real": "Один из немногих институтов, где островная преемственность старше материковой. Об этом не спорят — этим пользуются обе стороны и молча."
+  },
+  {
+   "id": "e21",
+   "canon": "e",
+   "num": 21,
+   "name": "Разделение курильницы",
+   "cn": "分香",
+   "reg": "cn",
+   "src": "Народная религия Фуцзяни и Тайваня",
+   "thesis": "Дочерний храм берёт пепел материнского",
+   "y": 56,
+   "n": -25,
+   "pk": -60,
+   "tb": 40,
+   "rPK": "Мэйчжоу есть материнский храм Мацзу, а тайваньские — дочерние по определению обряда: пепел взят оттуда, и паломничество идёт в одну сторону, а не в обе.",
+   "rTB": "Обряд 分香 создаёт самостоятельный храм с собственной силой, а не филиал. Дочерний становится материнским для следующих: Бэйган и Дацзя давно делят курильницу дальше сами.",
+   "real": "Точнейшая метафора спора и единственная, у которой есть отработанное ритуальное решение: отделившееся сохраняет родство, не теряя самостоятельности, и никто не считает это расколом."
+  },
+  {
+   "id": "e22",
+   "canon": "e",
+   "num": 22,
+   "name": "Мадхьямака · Санлунь",
+   "cn": "中觀·三論",
+   "reg": "cn",
+   "src": "Нагарджуна, II в.; Цзицзан, VI в.",
+   "thesis": "Пустота и две истины",
+   "y": 84,
+   "n": -10,
+   "pk": -50,
+   "tb": 50,
+   "rPK": "На уровне обыденной истины остров есть провинция; на предельном ни «государство», ни «провинция» не имеют самобытия. Держаться за имя есть цепляние, и оно же есть источник страдания.",
+   "rTB": "Две истины работают в обе стороны. Если суверенитет пуст, то пусто и притязание на него: отрицание самобытия не выдаёт лицензии на присвоение.",
+   "real": "Даёт язык для положения, которое не описывается ни «да», ни «нет», ни «и да и нет», ни «ни то ни другое». Тетралемма Нагарджуны — точный портрет статус-кво."
+  },
+  {
+   "id": "e23",
+   "canon": "e",
+   "num": 23,
+   "name": "Йогачара · Вэйши",
+   "cn": "唯識",
+   "reg": "cn",
+   "src": "Асанга, Васубандху, IV в.; Сюаньцзан, VII в.",
+   "thesis": "Только сознание",
+   "y": 66,
+   "n": -30,
+   "pk": -60,
+   "tb": 10,
+   "rPK": "Раздельность островного бытия есть конструкция сознания, наведённая привычкой (васана) и подкреплённая повторением. Семена посеяны — значит, могут быть пересеяны.",
+   "rTB": "Хранилищное сознание удерживает семена там, где они посеяны, а не там, где хотелось бы. Островное наполнялось сорок лет, и обратной перезаписи в этой системе не предусмотрено.",
+   "real": "Лучшее описание информационной войны в каноне: обе стороны работают не с территорией, а с потоком впечатлений, оседающих как склонность."
+  },
+  {
+   "id": "e24",
+   "canon": "e",
+   "num": 24,
+   "name": "Тяньтай",
+   "cn": "天台",
+   "reg": "cn",
+   "src": "Чжии, VI в.",
+   "thesis": "Три тысячи миров в одном мгновении мысли",
+   "y": 60,
+   "n": -30,
+   "pk": -65,
+   "tb": 10,
+   "rPK": "一念三千 — целое присутствует в каждой части. Часть, объявившая себя целым, просто не разглядела, чего именно она часть.",
+   "rTB": "В той же системе каждая из трёх тысяч сфер содержит все остальные без изъятия. Взаимовключение не устанавливает старшинства — оно его отменяет.",
+   "real": "Философия, в которой отношение части и целого не иерархично. Именно поэтому её не цитирует ни одна из сторон."
+  },
+  {
+   "id": "e25",
+   "canon": "e",
+   "num": 25,
+   "name": "Хуаянь",
+   "cn": "華嚴",
+   "reg": "cn",
+   "src": "Фацзан, VII в.",
+   "thesis": "Сеть Индры: всё отражает всё",
+   "y": 68,
+   "n": -10,
+   "pk": -45,
+   "tb": 40,
+   "rPK": "事事無礙 — между явлениями нет преград. Граница в проливе искусственна и держится единственно на договорённости считать её границей.",
+   "rTB": "В сети Индры ни одна жемчужина не является источником прочих: каждая отражает все и не подчинена ни одной. Это описание сети без центра, а не сети с центром.",
+   "real": "Точная модель цепочки поставок: узел незаменим не размером, а числом отражений в нём."
+  },
+  {
+   "id": "e26",
+   "canon": "e",
+   "num": 26,
+   "name": "Чань",
+   "cn": "禪",
+   "reg": "cn",
+   "src": "Хуэйнэн, VII в.; традиция возводит к Бодхидхарме",
+   "thesis": "Вне слов и знаков",
+   "y": 54,
+   "n": 0,
+   "pk": -35,
+   "tb": 50,
+   "rPK": "不立文字 — не опираться на письменные знаки. Вся островная конструкция состоит из формулировок и держится исключительно ими.",
+   "rTB": "Тот же принцип снимает и притязание: резолюции, коммюнике и белые книги — тоже знаки. Палец, указывающий на луну, не есть луна.",
+   "real": "Единственная традиция, прямо утверждающая, что спор о словах словами не разрешается. Спор о проливе состоит из слов целиком."
+  },
+  {
+   "id": "e27",
+   "canon": "e",
+   "num": 27,
+   "name": "Чистая земля",
+   "cn": "淨土",
+   "reg": "cn",
+   "src": "Шаньдао, VII в.; Хонэн, Синран, XII–XIII вв.",
+   "thesis": "Спасение верой и именем",
+   "y": 46,
+   "n": 0,
+   "pk": -35,
+   "tb": 45,
+   "rPK": "Опора на иную силу (他力) есть стратегия зависимости: остров рассчитывает на обет, который дан не им и, строго говоря, не ему.",
+   "rTB": "Обет Амитабхи безусловен и не зависит от заслуг просящего — этим он и отличается от расчёта. Гарантия, работающая, пока в неё верят, — точное имя стратегической двусмысленности.",
+   "real": "Самая распространённая форма буддизма в регионе и самая честная модель союзнических отношений: обет, проверяемый ровно один раз и в самый последний момент."
+  },
+  {
+   "id": "e28",
+   "canon": "e",
+   "num": 28,
+   "name": "Виная",
+   "cn": "律宗",
+   "reg": "cn",
+   "src": "Даосюань, VII в.",
+   "thesis": "Границу общины устанавливает обряд",
+   "y": 58,
+   "n": -5,
+   "pk": -50,
+   "tb": 50,
+   "rPK": "Единство сангхи есть высшая ценность, а раскол общины числится среди пяти тягчайших деяний — рядом с убийством отца и матери, без смягчающих оговорок.",
+   "rTB": "Граница (сима) устанавливается собранием на месте, и внутри неё община полностью правомочна. Отдельная сима есть не раскол, а норма: так устроен весь буддийский мир две с половиной тысячи лет.",
+   "real": "Работающий ответ на вопрос, как быть одной традицией и множеством самоуправляемых общин одновременно. Ответу двадцать пять веков, и он ни разу не потребовал войны."
+  },
+  {
+   "id": "e29",
+   "canon": "e",
+   "num": 29,
+   "name": "Гуманистический буддизм",
+   "cn": "人間佛教",
+   "reg": "cn",
+   "src": "Тайсюй, 1920-е; Инь Шунь, XX в.",
+   "thesis": "Будда в мире, а не над миром",
+   "y": 72,
+   "n": 25,
+   "pk": -10,
+   "tb": 70,
+   "rPK": "Тайсюй и Инь Шунь — материковые монахи, и линия преемства ведёт на материк. Общее наследие старше и прочнее административной границы.",
+   "rTB": "Развернулось оно на острове: Цыцзи, Фогуаншань, Фагушань — крупнейшие в мире буддийские неправительственные организации, выросшие в условиях, которых на материке не было ни дня.",
+   "real": "Цыцзи работает более чем в полусотне стран под своим именем и своим флагом. Дипломатия, которой нет в реестре дипломатии и которую поэтому нельзя отозвать."
+  },
+  {
+   "id": "e30",
+   "canon": "e",
+   "num": 30,
+   "name": "Учение о принципе",
+   "cn": "理學",
+   "reg": "cn",
+   "src": "Чэн И, XI в.; Чжу Си, XII в.",
+   "thesis": "Ли предшествует вещам",
+   "y": 70,
+   "n": -50,
+   "pk": -85,
+   "tb": 5,
+   "rPK": "Принцип един и предшествует своим воплощениям. Как бы ни разошлись вещи, 理 у них один, и разошедшееся к нему возвращается — таков порядок, а не пожелание.",
+   "rTB": "理一分殊 — принцип един, проявления раздельны, и раздельность не есть дефект. Луна одна, отражений в тысяче рек тысяча, и ни одно из них не ложно.",
+   "real": "Формула 理一分殊 — самое точное описание «одного Китая» из всех существующих и самое неудобное для обеих сторон сразу."
+  },
+  {
+   "id": "e31",
+   "canon": "e",
+   "num": 31,
+   "name": "Учение о сердце",
+   "cn": "心學",
+   "reg": "cn",
+   "src": "Лу Цзююань, XII в.; Ван Янмин, XVI в.",
+   "thesis": "Единство знания и действия",
+   "y": 76,
+   "n": 5,
+   "pk": -35,
+   "tb": 65,
+   "rPK": "良知 — врождённое знание блага. Чувство родства не воспитывают, оно обнаруживается само, стоит убрать наносное и внешне наведённое.",
+   "rTB": "知行合一 — знание, не переходящее в действие, знанием не является. Что люди считают своим, видно по тому, как они голосуют, а не по тому, что они отвечают про предков.",
+   "real": "Ван Янмин — государственная философия Японии Мэйдзи и любимый автор нынешнего материкового руководства. Один текст, две несовместимые программы, ни одной подтасовки."
+  },
+  {
+   "id": "e32",
+   "canon": "e",
+   "num": 32,
+   "name": "Монизм ци",
+   "cn": "氣本論",
+   "reg": "cn",
+   "src": "Чжан Цзай, XI в.; Ван Фучжи, XVII в.",
+   "thesis": "Есть только ци, принцип есть его строй",
+   "y": 74,
+   "n": -30,
+   "pk": -65,
+   "tb": 20,
+   "rPK": "Ван Фучжи писал после падения Мин и ровно об этом: различие между Хуа и И реально, оно телесно, и восстановление целого есть восстановление тела, а не идеи.",
+   "rTB": "У него же 天下非一姓之私 — Поднебесная не есть частная собственность одной фамилии. Тело народа он отделял от тела правящего дома прямо и настойчиво.",
+   "real": "Философ, которого материк сделал предтечей собственного материализма, оставил самую сильную классическую формулировку против отождествления страны с правящей силой."
+  },
+  {
+   "id": "e33",
+   "canon": "e",
+   "num": 33,
+   "name": "Доказательное исследование",
+   "cn": "考據學",
+   "reg": "cn",
+   "src": "Гу Яньу, XVII в.; Дай Чжэнь, XVIII в.",
+   "thesis": "Проверять текст, а не веровать в него",
+   "y": 86,
+   "n": 15,
+   "pk": -20,
+   "tb": 70,
+   "rPK": "Метод обоюдоострый: филология с равным успехом разбирает и позднее происхождение островной идентичности, и её документальную тонкость.",
+   "rTB": "實事求是 — искать истину в самих делах. В резолюции 2758 нет слова «Тайвань». Это не интерпретация, а результат чтения, и проверяется он за минуту.",
+   "real": "Цинская текстология изобрела приём, которым сегодня разбирают коммюнике: смотреть, что в документе написано, а не что в него принято вчитывать."
+  },
+  {
+   "id": "e34",
+   "canon": "e",
+   "num": 34,
+   "name": "Практическое управление",
+   "cn": "經世致用",
+   "reg": "cn",
+   "src": "Гу Яньу, Хуан Цзунси, XVII в.",
+   "thesis": "Учение оправдывается пользой для управления",
+   "y": 82,
+   "n": 0,
+   "pk": -40,
+   "tb": 60,
+   "rPK": "Польза измеряется в масштабе целого: интеграция даёт рынок, ресурс и снятие военного риска. Счёт в пользу целого не требует идеологии.",
+   "rTB": "Тот же критерий на острове дал всеобщее медстрахование, семь смертей от ковида за весь 2020 год и полупроводниковую отрасль, спроектированную государственным институтом.",
+   "real": "Главный работающий критерий по обе стороны — и единственный, по которому стороны соглашаются считать одно и то же."
+  },
+  {
+   "id": "e35",
+   "canon": "e",
+   "num": 35,
+   "name": "Великое единение",
+   "cn": "大同",
+   "reg": "cn",
+   "src": "«Ли цзи», глава «Ли юнь»; Кан Ювэй, 1880–1900-е",
+   "thesis": "Поднебесная как общее достояние",
+   "y": 54,
+   "n": -35,
+   "pk": -70,
+   "tb": 10,
+   "rPK": "天下為公 — Поднебесная принадлежит всем. Отдельный порядок на отдельной территории есть ступень 小康, которую предстоит перерасти, а не конечное состояние.",
+   "rTB": "天下為公 написано рукой Сунь Ятсена на здании в Тайбэе и означает у него, что власть не принадлежит никому в собственность — в том числе и партии.",
+   "real": "Один лозунг, высеченный по обе стороны пролива, и два несовместимых прочтения слова «общее»."
+  },
+  {
+   "id": "e36",
+   "canon": "e",
+   "num": 36,
+   "name": "Три народных принципа",
+   "cn": "三民主義",
+   "reg": "cn",
+   "src": "Сунь Ятсен, 1905–1924",
+   "thesis": "Народность, народовластие, народное благосостояние",
+   "y": 84,
+   "n": -5,
+   "pk": -50,
+   "tb": 65,
+   "rPK": "Сунь Ятсен есть общий предок обеих партий, и его 民族主義 означало собирание нации, а не её деление. На материке ему стоят памятники, и стоят заслуженно.",
+   "rTB": "民權 — второй принцип, и он исполнен: прямые выборы, три смены власти, действующая процедура отзыва депутатов. Первый и третий цитируют все, второй реализован в одном месте.",
+   "real": "Единственная доктрина, вписанная в действующую конституцию одной стороны и в официальный пантеон другой. Спорят о том, какой из трёх принципов главный."
+  },
+  {
+   "id": "e37",
+   "canon": "e",
+   "num": 37,
+   "name": "Китаизация марксизма",
+   "cn": "馬克思主義中國化",
+   "reg": "cn",
+   "src": "Мао Цзэдун, 1938",
+   "thesis": "Всеобщая теория в национальной форме",
+   "y": 76,
+   "n": -70,
+   "pk": -95,
+   "tb": -20,
+   "rPK": "Незавершённость гражданской войны есть не спор о суверенитете, а последняя нерешённая задача революции. Форма её решения определяется национальными условиями, а не внешним правом.",
+   "rTB": "Национальные условия суть аргумент об исключении из общих правил. Он ровно с той же силой обосновывает, что у острова свои условия — отдельные и уже сорокалетние.",
+   "real": "Доктрина, придающая исключению статус метода. Спор о Тайване внутри неё не международный по определению — и это определение и есть предмет спора."
+  },
+  {
+   "id": "e38",
+   "canon": "e",
+   "num": 38,
+   "name": "Современное неоконфуцианство",
+   "cn": "當代新儒家",
+   "reg": "cn",
+   "src": "Манифест 1958 года: Моу Цзунсань, Тан Цзюньи и др.",
+   "thesis": "Демократия как развитие традиции",
+   "y": 78,
+   "n": 55,
+   "pk": 15,
+   "tb": 85,
+   "rPK": "Манифест 1958 года написан об одной культуре и обращён к миру от её имени, а не от имени одной администрации. Культура в нём заведомо шире государства.",
+   "rTB": "Он написан в изгнании и утверждает, что конфуцианская традиция способна породить науку и народовластие изнутри себя. Проверка была проведена на острове и заняла сорок лет.",
+   "real": "Моу Цзунсань, Тан Цзюньи, Сюй Фугуань, Чжан Цзюньмай. Единственная школа канона, вся зрелая работа которой сделана за пределами материка."
+  },
+  {
+   "id": "e39",
+   "canon": "e",
+   "num": 39,
+   "name": "Малый Китай",
+   "cn": "小中華",
+   "reg": "kr",
+   "src": "Чосон, XVII–XIX вв.",
+   "thesis": "Наследник цивилизации не там, где её столица",
+   "y": 80,
+   "n": 75,
+   "pk": 35,
+   "tb": 95,
+   "rPK": "Доктрина внешняя и корейская: она обосновывала верность павшей династии, а не отдельное государство, и завершилась полным подчинением новой.",
+   "rTB": "Чосон двести лет считал себя единственным хранителем ортодоксии после падения Мин, вёл летоисчисление по минским девизам и называл цинский двор варварским. Наследник может быть меньше, окраиннее и — по собственному счёту — подлиннее.",
+   "real": "Ближайший исторический аналог положения Тайбэя, и он не китайский. Прецедент существует, работал двести лет и закончился."
+  },
+  {
+   "id": "e40",
+   "canon": "e",
+   "num": 40,
+   "name": "Тонхак",
+   "cn": "東學",
+   "reg": "kr",
+   "src": "Чхве Чеу, 1860",
+   "thesis": "Восточное учение против западного",
+   "y": 58,
+   "n": 5,
+   "pk": -25,
+   "tb": 55,
+   "rPK": "Возникло как отпор западному вторжению — то есть ровно как то, чем материк называет собственное сопротивление внешнему вмешательству.",
+   "rTB": "人乃天 — человек и есть Небо. Доктрина, поставившая крестьянина вровень с мандатом, вылилась в восстание против собственного правительства, а не против чужого.",
+   "real": "Показывает, что «противостоять Западу» и «подчиняться ближайшей империи» — разные программы, и вторая обычно приходит следом за первой."
+  },
+  {
+   "id": "e41",
+   "canon": "e",
+   "num": 41,
+   "name": "Южные горы и реки",
+   "cn": "南國山河",
+   "reg": "vn",
+   "src": "Атрибутируется Ли Тхыонг Киету, 1077",
+   "thesis": "У Юга свой государь",
+   "y": 76,
+   "n": 85,
+   "pk": 50,
+   "tb": 95,
+   "rPK": "Вьетнам есть отдельная страна с отдельной историей и отдельной государственностью. Аналогия с приморской провинцией одной державы некорректна по существу.",
+   "rTB": "Тысяча лет общей письменности, общих экзаменов, общей конфуцианской бюрократии и одного канона — и всё равно отдельное государство. Стих 南國山河南帝居 датируют XI веком, и он ровно об этом.",
+   "real": "Самый сильный довод в пользу Тайбэя во всём восточном каноне — и он не тайваньский. Прецедент отдельности внутри общей цивилизации существует и старше тысячи лет."
+  },
+  {
+   "id": "e42",
+   "canon": "e",
+   "num": 42,
+   "name": "Кокугаку",
+   "cn": "国学",
+   "reg": "jp",
+   "src": "Мотоори Норинага, XVIII в.",
+   "thesis": "Очистить своё от континентального",
+   "y": 72,
+   "n": 35,
+   "pk": 0,
+   "tb": 80,
+   "rPK": "Мотоори Норинага строил японскую особость через отрицание китайского сердца (漢意). Дорога от этого до доктрины превосходства заняла полтора века и была пройдена целиком.",
+   "rTB": "Метод узнаваем: 本土化 есть та же операция. Собственный язык, собственные предки, собственная древность, найденная под слоем заимствованного.",
+   "real": "Единственный отработанный рецепт производства отдельной идентичности из общего наследия. Он работает, и известно, чем он кончается."
+  },
+  {
+   "id": "e43",
+   "canon": "e",
+   "num": 43,
+   "name": "Дзэн Догэна",
+   "cn": "道元禅",
+   "reg": "jp",
+   "src": "Догэн, «Сёбогэндзо», XIII в.",
+   "thesis": "Практика и есть просветление",
+   "y": 50,
+   "n": 0,
+   "pk": -35,
+   "tb": 45,
+   "rPK": "修證一等 — нет отдельной цели за пределами делания. Провозглашать состояние вместо того, чтобы в нём находиться, есть ошибка новичка.",
+   "rTB": "Ровно поэтому и не провозглашают. Государственность практикуется ежедневно, и практика не нуждается во внешнем подтверждении, чтобы быть практикой.",
+   "real": "Точная формула островной стратегии, найденная в чужой традиции: не объявлять, а делать, потому что делание и есть состояние."
+  },
+  {
+   "id": "e44",
+   "canon": "e",
+   "num": 44,
+   "name": "Бусидо",
+   "cn": "武士道",
+   "reg": "jp",
+   "src": "Ямамото Цунэтомо, «Хагакурэ», 1716; Нитобэ Инадзо, 1900",
+   "thesis": "Долг выше жизни",
+   "y": 44,
+   "n": -20,
+   "pk": -55,
+   "tb": 30,
+   "rPK": "Готовность умереть есть не стратегия, а её отсутствие. Сторона, у которой остаётся только доблесть, уже проиграла расчёт и оттягивает признание.",
+   "rTB": "Расчёт нападающего целиком построен на предположении о цене, которую защищающийся не заплатит. Доктрина, снимающая это предположение, меняет сам расчёт, ничего не добавляя к силам.",
+   "real": "Единственная переменная сдерживания, которую не берёт ни одна модель. «Хагакурэ» именно о ней, а не о войне."
+  },
+  {
+   "id": "e45",
+   "canon": "e",
+   "num": 45,
+   "name": "Киотская школа",
+   "cn": "京都学派",
+   "reg": "jp",
+   "src": "Нисида Китаро, Танабэ Хадзимэ, 1910–1940-е",
+   "thesis": "Абсолютное ничто как место",
+   "y": 64,
+   "n": -40,
+   "pk": -70,
+   "tb": 5,
+   "rPK": "Нисида дал язык для порядка, не сводимого к западному международному праву: место (басё) объемлет противоположности, не устраняя их и не выстраивая в ряд.",
+   "rTB": "Тот же язык в 1942 году обосновал «преодоление модерна» и Сферу сопроцветания. Философия места, у которой есть центр, есть империя с философской кафедрой.",
+   "real": "Самый сильный незападный аппарат для описания регионального порядка — и уже однажды применённый ровно к этому региону. Второй раз проверять дорого."
+  },
+  {
+   "id": "e46",
+   "canon": "e",
+   "num": 46,
+   "name": "Нихондзинрон",
+   "cn": "日本人論",
+   "reg": "jp",
+   "src": "Жанр 1960–1980-х годов",
+   "thesis": "Мы устроены иначе",
+   "y": 42,
+   "n": 25,
+   "pk": -10,
+   "tb": 60,
+   "rPK": "Жанр разоблачён как коммерческая мифология: уникальность конструируется, продаётся тиражами и нередко заказывается государством.",
+   "rTB": "Разоблачён и всё равно работает — потому что вопрос «кто мы» не решается верификацией. С 18 до 62 процентов за тридцать лет: это тоже не факт, а самоописание, и оно определяет поведение.",
+   "real": "Показывает, что идентичность не проверяется на истинность и от этого не становится менее действующей."
+  },
+  {
+   "id": "e47",
+   "canon": "e",
+   "num": 47,
+   "name": "Чойон",
+   "cn": "mchod-yon",
+   "reg": "bo",
+   "src": "Пхагпа и Хубилай, XIII в.; далай-ламы и Цин",
+   "thesis": "Наставник и покровитель",
+   "y": 70,
+   "n": -45,
+   "pk": -80,
+   "tb": 0,
+   "rPK": "Отношение духовного наставника и светского покровителя есть историческая форма связи, в которой центр обеспечивает защиту, а периферия сохраняет уклад. Ни оккупация, ни независимость.",
+   "rTB": "Именно эта неопределённость и стала аргументом задним числом: сторона, назначившая себя покровителем, впоследствии объяснила, что покровительство всегда было суверенитетом. И решает теперь, кто перерождается.",
+   "real": "Единственная реализованная в истории альтернатива выбору между суверенитетом и подчинением. Известно, чем она заканчивается, — и это главный довод против «одной страны, двух систем»."
+  },
+  {
+   "id": "e48",
+   "canon": "e",
+   "num": 48,
+   "name": "Адвайта-веданта",
+   "cn": "अद्वैत",
+   "reg": "in",
+   "src": "Шанкара, VIII в.",
+   "thesis": "Второго нет",
+   "y": 56,
+   "n": -60,
+   "pk": -90,
+   "tb": -15,
+   "rPK": "Различие есть наложение (адхьяса) на единую основу. Принимать видимость за сущность есть авидья, и вся конструкция раздельности держится на ней одной.",
+   "rTB": "Недвойственность отменяет и различие между сторонами. Если второго нет, то нет и того, кто мог бы присоединять: отменяются обе позиции сразу, а не одна из двух.",
+   "real": "Самая сильная философия единства в мировом каноне — и в ней у присоединяющего нет отдельного существования, чтобы присоединять."
+  },
+  {
+   "id": "e49",
+   "canon": "e",
+   "num": 49,
+   "name": "Вишишта-адвайта",
+   "cn": "विशिष्टाद्वैत",
+   "reg": "in",
+   "src": "Рамануджа, XI–XII вв.",
+   "thesis": "Единство различённого",
+   "y": 72,
+   "n": -25,
+   "pk": -60,
+   "tb": 30,
+   "rPK": "Рамануджа: единое реально и части реальны, но части суть тело целого и вне его бытия не имеют. Точнейшая формула «одной страны, двух систем», написанная в XI веке.",
+   "rTB": "В той же схеме тело не поглощается: части сохраняют собственную природу навсегда, и уничтожение различий разрушило бы целое. Гарантия встроена в конструкцию, а не обещана отдельно.",
+   "real": "Философски самая проработанная модель единства при сохранении различий. Вопрос к ней тот же, что к Гонконгу: чем именно обеспечено сохранение."
+  },
+  {
+   "id": "e50",
+   "canon": "e",
+   "num": 50,
+   "name": "Асабийя",
+   "cn": "عصبية",
+   "reg": "ir",
+   "src": "Ибн Хальдун, «Мукаддима», 1377",
+   "thesis": "Групповая сплочённость как ресурс",
+   "y": 82,
+   "n": -5,
+   "pk": -45,
+   "tb": 55,
+   "rPK": "Ибн Хальдун: сплочённость периферии высока, но конечна и растрачивается за три-четыре поколения оседлости. Островная сплочённость есть фаза, а не свойство.",
+   "rTB": "По той же теории империя теряет асабийю раньше и заменяет её аппаратом. Оборона периферии обходится дешевле, чем принуждение из ослабевшего центра.",
+   "real": "Единственная теория списка, делающая проверяемое предсказание об обеих сторонах сразу — и обе ставящая в положение убывающего ресурса."
+  },
+  {
+   "id": "e51",
+   "canon": "e",
+   "num": 51,
+   "name": "Ньяя",
+   "cn": "न्याय",
+   "reg": "in",
+   "src": "«Ньяя-сутры», между II в. до н. э. и II в. н. э.",
+   "thesis": "Источники достоверного знания",
+   "y": 78,
+   "n": -25,
+   "pk": -55,
+   "tb": 25,
+   "rPK": "Шабда — свидетельство авторитета — есть полноценный источник знания наравне с восприятием и выводом. Сто восемьдесят государств свидетельствуют одинаково.",
+   "rTB": "Ньяя требует, чтобы авторитет был компетентен и не имел интереса. Признание, обусловленное торговым доступом, свидетельством по этому критерию не является.",
+   "real": "Двухтысячелетняя теория познания, в которой прямо разобрано, когда чужое признание считается знанием, а когда только сообщением."
+  },
+  {
+   "id": "e52",
+   "canon": "e",
+   "num": 52,
+   "name": "Анэкантавада",
+   "cn": "अनेकान्तवाद",
+   "reg": "in",
+   "src": "Джайнизм; формализация — Сиддхасена, Самантабхадра, V–VII вв.",
+   "thesis": "У вещи много сторон",
+   "y": 88,
+   "n": 30,
+   "pk": 0,
+   "tb": 75,
+   "rPK": "Многосторонность не отменяет того, что с одной из сторон остров есть часть Китая, и эта сторона зафиксирована в подавляющем большинстве документов.",
+   "rTB": "Сьядвада требует ставить «в некотором отношении» (स्यात्) перед каждым утверждением. Ровно так написаны все рабочие формулировки пролива — и ровно поэтому они работают.",
+   "real": "Джайны формализовали то, чем дипломатия пользуется не называя: семичленное высказывание, где «есть», «нет» и «неописуемо» истинны одновременно и в разных отношениях."
+  },
+  {
+   "id": "e53",
+   "canon": "e",
+   "num": 53,
+   "name": "Чарвака",
+   "cn": "चार्वाक",
+   "reg": "in",
+   "src": "Школа Брихаспати; тексты утрачены, известна по изложениям оппонентов",
+   "thesis": "Достоверно лишь воспринимаемое",
+   "y": 60,
+   "n": -25,
+   "pk": -60,
+   "tb": 15,
+   "rPK": "Суверенитет, признание, самоопределение не суть наблюдаемые объекты. Наблюдаемы флот, ракеты, тоннаж и торговый оборот.",
+   "rTB": "Наблюдаемы также паспорт, суд, налоговая и очередь на избирательный участок. Государство дано эмпирически; спорна лишь его категория.",
+   "real": "Самая грубая и самая устойчивая позиция: она отбрасывает всё, о чём идёт спор, и оставляет ровно то, о чём не спорит никто."
+  },
+  {
+   "id": "e54",
+   "canon": "e",
+   "num": 54,
+   "name": "Раджамандала",
+   "cn": "राजमण्डल",
+   "reg": "in",
+   "src": "Каутилья, «Артхашастра», между IV в. до н. э. и II в. н. э.",
+   "thesis": "Сосед — враг, сосед соседа — друг",
+   "y": 84,
+   "n": -30,
+   "pk": -65,
+   "tb": 20,
+   "rPK": "Каутилья: соседнее государство враждебно по положению, а не по намерению. Сильнейший в мандале обязан подчинить или ослабить смежное — иначе его подчинят.",
+   "rTB": "Та же схема выстраивает Японию, Филиппины, Индию и Австралию в кольцо друзей второго порядка. Автоматически, без переговоров и без благодарности.",
+   "real": "Древнейшее и самое циничное описание системы, которую сегодня называют первой островной цепью. Она устроена ровно по мандале."
+  },
+  {
+   "id": "e55",
+   "canon": "e",
+   "num": 55,
+   "name": "Сатьяграха",
+   "cn": "सत्याग्रह",
+   "reg": "in",
+   "src": "Мохандас Ганди, 1906",
+   "thesis": "Держаться истины",
+   "y": 68,
+   "n": 30,
+   "pk": -10,
+   "tb": 75,
+   "rPK": "Ненасилие работало против власти, связанной собственным правом и общественным мнением метрополии. Против власти, не связанной ни тем ни другим, оно проверялось и результата не дало.",
+   "rTB": "Ганди требовал не пассивности, а отказа сотрудничать при готовности принять издержки. Гражданская оборона, распределённая связь и невозможность собрать коллаборационистский аппарат — это сатьяграха, переведённая в план.",
+   "real": "Единственная доктрина списка, целиком посвящённая вопросу, что делает население после того, как военный расчёт уже проигран."
+  }
+ ],
+ "optics": [
+  {
+   "canon": "w",
+   "key": "U/ACC",
+   "name": "Безусловный акселерационизм",
+   "sub": "Ник Ланд, CCRU, 1990-е — капитал как самостоятельный интеллект",
+   "paras": [
+    "Посылка: капитал — не инструмент в руках людей, а автономный процесс, который использует людей как субстрат для собственного усложнения. У него нет наших целей, и договориться с ним нельзя — можно только ускоряться вместе с ним или быть переработанным.",
+    "В этой оптике Тайвань — не страна. Это орган. Единственная точка планеты, где кремний доводят до степени организованности, при которой в нём начинает что-то считать: 77 % передовых пластин, 2-нанометровые линии, распроданные на год вперёд. Остров — гонада машинного разума, и всё остальное про него вторично."
+   ],
+   "worse": "Единица учёта — производственная мощность, а не население. Ущерб измеряется задержкой технологического процесса: разрушение фабрик — потеря, гибель людей вне производства — не переменная. Из двенадцати рамок только в этой потери населения отсутствуют в расчёте по построению, а не по упущению."
+  },
+  {
+   "canon": "w",
+   "key": "E/ACC",
+   "name": "Эффективный акселерационизм",
+   "sub": "Течение 2022 года — термодинамический императив: больше энергии, больше вычислений",
+   "paras": [
+    "Смягчённая и куда более популярная версия: вселенная награждает системы, наращивающие поток энергии и вычислений, и наш моральный долг — не мешать. Всё, что увеличивает совокупные мощности, хорошо; всё, что их снижает, плохо.",
+    "Приложенная к проливу, эта арифметика даёт однозначный вывод. Тайвань — узкое горло мирового вычислительного роста. Значит, любой, кто ставит под угрозу производство чипов, — противник космического порядка, а не участник территориального спора."
+   ],
+   "worse": "Критерий оценки войны — её влияние на мировой рост вычислительных мощностей. Следствий два. Первое: война недопустима в той мере, в какой останавливает производство, и безразлична, если производство сохраняется, — например, при переходе заводов под другой контроль целыми. Второе: вопрос о том, кто управляет островом, для критерия несуществен; остров оценивается как узел поставок, а не как политическое сообщество."
+  },
+  {
+   "canon": "w",
+   "key": "TERM",
+   "name": "Терминальный акселерационизм",
+   "sub": "Маргинальная ветвь 2010-х — коллапс не риск, а цель",
+   "paras": [
+    "Апокалиптическая ветвь: если система нежизнеспособна, продлевать её — жестокость. Ускорять надо не ради прорыва, а ради скорейшего конца. Течение маргинальное.",
+    "В этой оптике Тайвань выделен тем, что на острове выпускается основная часть самых совершенных микросхем, и перерыв в их производстве на годы задерживает всю мировую технологическую базу."
+   ],
+   "worse": "Концентрация производства в этой рамке — довод не за осторожность, а за удар. Меняется модель угрозы: государственный противник заинтересован сохранить заводы, носитель терминальной установки — нет, и сдерживание, построенное на взаимной заинтересованности в сохранности, против него не действует. Ответ, который обсуждают в отрасли и в правительствах, — распределение производства по нескольким странам как устранение единственной точки отказа."
+  },
+  {
+   "canon": "w",
+   "key": "L/ACC",
+   "name": "Левый акселерационизм",
+   "sub": "Ник Срничек и Алекс Уильямс, «Манифест акселерационистской политики», 2013",
+   "paras": [
+    "Единственная ветвь с положительной программой: не тормозить и не возвращаться назад, а использовать государственную мощь, планирование и технологии, чтобы проскочить капитализм и выйти за него.",
+    "Ирония в том, что самая успешная реализация этой программы — тайваньская. Государственный институт промышленных технологий, научный парк, спроектированный по чертежу, вырастили TSMC там, где рынок сам ничего бы не вырастил."
+   ],
+   "worse": "Программа прошла проверку практикой и дала результат, которого не предусматривала: государственное планирование произвело не выход за рынок, а поставщика, без которого не работает мировой рынок. Итог — концентрация стратегического ресурса в одной юрисдикции у линии возможного фронта, то есть та самая уязвимость, из-за которой вопрос острова стал вопросом мировой экономики."
+  },
+  {
+   "canon": "w",
+   "key": "HYP",
+   "name": "Гиперстиция",
+   "sub": "CCRU, 1990-е — вымыслы, которые сами делают себя реальными",
+   "paras": [
+    "Не миф и не ложь, а третье: утверждение, которое становится истинным оттого, что в него достаточно долго верят и действуют исходя из него. Оно приходит из будущего и достраивает себе прошлое.",
+    "«Консенсус 1992 года» — учебниковый случай: термина не существовало до 2000 года, президент того самого 1992-го отрицал, что соглашение было, — и десятилетиями это работало как реальная опора переговоров.",
+    "«Неизбежное воссоединение» — гиперстиция в активной фазе. Каждое повторение производит условия собственной истинности: бюджеты, доктрины, ожидания рынков, эмиграцию капитала."
+   ],
+   "worse": "Механизм замкнут: опровержение — тоже реакция, а реакция подтверждает, что утверждение действует. Выход из цикла — прекратить реагировать, но для каждой стороны это одностороннее молчание с издержками, и ни одна их не принимает. Наблюдаемый результат — бюджеты, доктрины и рыночные ожидания, привязанные к утверждению, которое никто не проверяет."
+  },
+  {
+   "canon": "w",
+   "key": "SCH",
+   "name": "Децизионизм Шмитта",
+   "sub": "Карл Шмитт, «Политическая теология», 1922 — суверен тот, кто решает об исключении",
+   "paras": [
+    "Политическое, по Шмитту, начинается с различения друга и врага, а суверенитет обнаруживается не в нормальной работе законов, а в моменте, когда кто-то приостанавливает их и решает.",
+    "Тайвань — идеальный шмиттовский объект: его статус и есть то самое исключение, на котором проверяется, кто здесь суверен. Пятьдесят лет юридической эквилибристики существуют ровно для того, чтобы момент решения не наступил."
+   ],
+   "worse": "Статус-кво здесь — не равновесие, а отложенное решение. Решение по Шмитту не выводится из нормы и не предсказывается из соотношения сил: его принимает суверен в момент, который сам и определяет. Для анализа это значит, что модели баланса сил описывают условия решения, но не его момент, а индикаторы готовности говорят о возможности, но не о намерении."
+  },
+  {
+   "canon": "w",
+   "key": "MOL",
+   "name": "Молох",
+   "sub": "Скотт Александер, «Размышления о Молохе», 2014 — все рациональны, итог катастрофичен",
+   "paras": [
+    "Каждый участник действует разумно в своих обстоятельствах. Пекин наращивает давление, потому что не наращивать — терять позицию. Тайбэй наращивает оборону, потому что не наращивать опаснее. Вашингтон удерживает двусмысленность, потому что ясность дороже.",
+    "Каждый шаг обоснован. Траектория — нет. Молох здесь имя для божества, которому все приносят жертвы и которому никто не поклоняется."
+   ],
+   "worse": "Ответственность не локализуется: каждый шаг каждого участника рационален при данных шагах остальных. Односторонняя сдержанность оборачивается потерей позиции, поэтому выход требует согласованного действия всех сразу. Переговоры, гарантии и меры доверия рассчитаны на конфликт интересов; ловушка координации требует механизма принуждения к соблюдению, а в проливе его нет."
+  },
+  {
+   "canon": "w",
+   "key": "LONG",
+   "name": "Лонгтермизм",
+   "sub": "Ник Бостром, Тоби Орд, Уильям Макаскилл, 2003–2022 — вес будущих поколений",
+   "paras": [
+    "Если в расчёт входят все, кто когда-либо будет жить, то нынешние восемь миллиардов — тонкая полоска на графике, а решения надо принимать по влиянию на далёкое будущее.",
+    "Приложенный к проливу, этот подход даёт два противоположных вывода. Первая: 23 миллиона живых — округление рядом с триллионами будущих, и остров стоит разменять, если это стабилизирует развитие ИИ. Вторая: остров надо защищать любой ценой, потому что через него проходит вся дальнейшая траектория."
+   ],
+   "worse": "В обеих версиях население острова входит в расчёт с весом, пренебрежимым рядом с числом будущих людей, и решение определяется не им, а влиянием на долгосрочную траекторию. Версии расходятся только в оценке траектории — разменять остров ради стабильного развития ИИ или удерживать любой ценой ради того же. Рамка распространена среди части исследователей и инвесторов в ИИ и потому влияет на оценку тайваньского риска в отрасли."
+  },
+  {
+   "canon": "w",
+   "key": "NEC",
+   "name": "Некрополитика",
+   "sub": "Ашиль Мбембе, «Некрополитика», 2003 — власть определять, кто может жить",
+   "paras": [
+    "Развитие идеи биополитики: суверенитет проявляется не в управлении жизнью, а в способности назначать смерть и создавать «миры смерти» — территории, где население существует в подвешенном состоянии между жизнью и её отменой.",
+    "Серая зона описывается этим точно. 5709 самолётных заходов за год, перерезанные кабели, учения-блокады, экстерриториальные нормы. Не война и не мир, а поддерживаемое состояние, в котором обычная жизнь идёт при постоянном условии."
+   ],
+   "worse": "Давление в этой рамке — не подготовка к событию, а само событие, растянутое во времени. Для реагирования это значит, что механизмы, запускаемые порогом, — вооружённым нападением, объявленной блокадой — не срабатывают: порог не пересекается. Право вооружённых конфликтов и союзнические обязательства сформулированы для события; серая зона устроена так, чтобы события не было."
+  },
+  {
+   "canon": "w",
+   "key": "SIM",
+   "name": "Прецессия симулякров",
+   "sub": "Жан Бодрийяр, «Войны в Заливе не было», 1991",
+   "paras": [
+    "Знаменитый тезис о том, что война в Заливе не состоялась как событие — состоялась как поток образов, полностью заместивший собой происходящее. Знак перестаёт отсылать к реальности и начинает её производить.",
+    "Тайваньский конфликт существует преимущественно как поток сигналов: заходы авиации, транзиты кораблей, формулировки коммюнике, курсы акций, учения, названные учениями. Каждая сторона считывает знаки другой и отвечает знаком."
+   ],
+   "worse": "Если конфликт ведётся сигналами, обе стороны обучены читать каждое действие как сообщение. Отсюда риск ошибки распознавания: учения, внешне неотличимые от подготовки к операции, приучают наблюдателя считать подготовку учениями. Классический прецедент — октябрь 1973 года, когда египетская подготовка была замечена и прочитана как манёвры. Проблема разведки в этой рамке — не нехватка данных, а привычка к их толкованию."
+  },
+  {
+   "canon": "w",
+   "key": "DE",
+   "name": "Тёмное Просвещение",
+   "sub": "Кёртис Ярвин, Ник Ланд, 2007–2012 — демократия как разлагающаяся система",
+   "paras": [
+    "Течение, утверждающее, что представительное правление структурно неэффективно, а управление государством как корпорацией — с несменяемым руководством и долгим горизонтом — превосходит его по всем измеримым параметрам.",
+    "Тайвань в этой рамке — не образец, а иллюстрация издержек: разделённое правление, заблокированный оборонный бюджет, специальный законопроект, урезанный с 1,25 трлн до 780 млрд, конфликты, уходящие в конституционный суд."
+   ],
+   "worse": "Рамка переворачивает основной внешнеполитический довод Тайбэя: демократия, которую остров предъявляет как основание для поддержки, здесь оценивается как источник медленных решений и заблокированных бюджетов. Практический вес зависит от того, разделяют ли эту оценку в странах-поставщиках вооружений; у рамки есть сторонники в части технологической и политической элиты США."
+  },
+  {
+   "canon": "w",
+   "key": "VWH",
+   "name": "Гипотеза уязвимого мира",
+   "sub": "Ник Бостром, «Гипотеза уязвимого мира», 2019",
+   "paras": [
+    "Мысль о том, что среди возможных технологий есть такие, при которых открытое общество с распределённой властью не выживает, и единственная защита — либо глобальный надзор, либо единый центр принятия решений.",
+    "Узкое горло на одном острове — сильнейший из существующих аргументов в пользу этой гипотезы. Одна точка отказа для всей мировой вычислительной инфраструктуры выглядит как ровно та уязвимость, ради устранения которой предлагается пожертвовать распределённостью."
+   ],
+   "worse": "Уязвимость узла становится доводом за централизацию контроля над ним — независимо от того, кто этот контроль осуществляет. Противоречие рамки в проливе: защита узла ведёт к концентрации власти над островом, а она и есть предмет конфликта. Альтернатива, которую рамка не рассматривает, — устранить уязвимость распределением производства, а не усилением надзора."
+  },
+  {
+   "canon": "e",
+   "key": "弱民",
+   "name": "Слабый народ",
+   "sub": "«Книга правителя области Шан», IV в. до н. э.",
+   "paras": [
+    "Посылка изложена без метафор: 民弱國強，國強民弱 — народ слаб, государство сильно; государство сильно, народ слаб. Сильный народ и сильное государство объявлены несовместимыми, и выбор сделан в первом же абзаце. Средства перечислены там же: держать население занятым, небогатым, необразованным и лишённым иных путей возвышения, кроме земледелия и войны.",
+    "Приложенная к проливу, эта оптика читает благополучие острова не как достижение, а как диагноз. Высокий доход, поголовная грамотность, свободная пресса, плотная сеть гражданских объединений, привычка спорить с начальством — по Шан Яну это перечень признаков государства, которое скоро не сможет ничего."
+   ],
+   "worse": "Целью становится не территория и не согласие населения, а его способность действовать как субъект: доход, связи, институты. Инструменты — экономические, информационные и правовые, и ни один по отдельности не подпадает под определение вооружённого нападения. Для страхования, судебных исков и союзнических обязательств, привязанных к этому определению, такая операция не видна."
+  },
+  {
+   "canon": "e",
+   "key": "二柄",
+   "name": "Две рукояти",
+   "sub": "Хань Фэй, III в. до н. э.",
+   "paras": [
+    "Правитель управляет двумя рукоятями — карой и наградой — и ничем более. Доверие исключено методически, а не по мизантропии: Хань Фэй отдельно перечисляет, что жена желает смерти мужу, наследник — отцу, министр — падения господину, и это не обвинение, а расчёт интересов, который в его системе всегда сходится.",
+    "В такой оптике всякая договорённость есть временное совпадение интересов, а всякая гарантия — приманка, оплаченная будущим. Обещание автономии здесь не лживо. Оно просто не принадлежит к разряду вещей, которые исполняются."
+   ],
+   "worse": "Обязательство здесь не имеет самостоятельной силы: исполняется то, что подкреплено наградой или карой в момент исполнения. Для переговоров это значит, что гарантия действует, пока у гарантирующей стороны есть интерес её соблюдать или у получающей — средство принудить. На острове проверочным случаем считают Гонконг: Совместная декларация 1984 года обещала сохранение уклада до 2047 года, а закон о национальной безопасности 2020 года был воспринят как досрочное изменение условий. Пекин считает декларацию исполненной, а вопрос внутренним."
+  },
+  {
+   "canon": "e",
+   "key": "勢",
+   "name": "Стратегия склона",
+   "sub": "Сунь-цзы; Франсуа Жюльен, «Склонность вещей», 1992",
+   "paras": [
+    "勢 — не сила и не план, а расположение вещей, из которого исход следует сам. Стратег не выигрывает сражение, он создаёт конфигурацию, в которой сражения не потребуется: 不戰而屈人之兵 — подчинить чужое войско, не сражаясь, есть высшее.",
+    "Пролив есть учебная демонстрация. Двадцать лет не происходит ни одного события, и каждый год положение хуже предыдущего. Заходы авиации, перерезанные кабели, споры о юрисдикции, страховые ставки, отъезд инженеров, вымывание признаний по одному в год — ни один пункт не является нападением, и ни один не обратим."
+   ],
+   "worse": "Стратегия не создаёт момента для ответа: оборона, союзные обязательства и гарантии запускаются событием, а события нет. Каждое отдельное действие остаётся ниже порога реакции; изменение накапливается в сумме. Противодействие требует реагировать на тренд, а не на событие — то есть принимать решение без повода, что политически труднее всего."
+  },
+  {
+   "canon": "e",
+   "key": "超限戰",
+   "name": "Война без ограничений",
+   "sub": "Цяо Лян и Ван Сяньсуй, старшие полковники НОАК, 1999",
+   "paras": [
+    "Тезис: технологическое превосходство противника обходится не догоняющим вооружением, а расширением поля боя за пределы военного. Перечислены войны финансовая, торговая, правовая, сетевая, психологическая, ресурсная, экологическая, контрабандная — и террористическая в том же ряду, как один приём среди прочих.",
+    "Ключевая формулировка — об отсутствии области, которая не была бы полем боя, и о том, что различение военного и гражданского перестаёт быть операционально осмысленным."
+   ],
+   "worse": "Различие военного и гражданского, на котором построено право вооружённых конфликтов, здесь не отменяется, а теряет предмет: если противоборство ведётся в финансах, праве, сетях и вещании, гражданские институты — банки, суды, выборы, СМИ — становятся его средой. Книга не призывает атаковать население; она описывает противоборство так, что у защищённой категории лиц и объектов в нём нет отдельного места."
+  },
+  {
+   "canon": "e",
+   "key": "天下",
+   "name": "Тянься 2.0",
+   "sub": "Чжао Тинъян, «Система Поднебесной», 2005, и современное возрождение",
+   "paras": [
+    "Мир как единая система без внешней стороны: не международные отношения между суверенами, а внутренний порядок Поднебесной, где всё есть часть. Предлагается как незападная альтернатива вестфальской системе, публикуется в рецензируемых журналах и обсуждается всерьёз, в том числе доброжелательными критиками.",
+    "Достоинство модели в том, что она снимает вопрос о войне между суверенами, поскольку суверенов нет. Издержка в том, что она снимает и понятие внешнего: у системы без наружной стороны не может быть отделения, потому что отделяться некуда."
+   ],
+   "worse": "Независимость в этой рамке не опровергается, а не может быть сформулирована: у системы без внешней стороны нет понятия выхода из неё. Основное возражение (Уильям Каллахан, 2008, и другие) касается центра: концентрическая система его предполагает, а процедура определения центра в модели не описана."
+  },
+  {
+   "canon": "e",
+   "key": "朝貢",
+   "name": "Иерархический мир",
+   "sub": "Данническая система как рабочая альтернатива; Дэвид Кан, 2010",
+   "paras": [
+    "Наблюдение, обсуждаемое всерьёз и оспариваемое (Дэвид Кан, «East Asia Before the West», 2010): в Восточной Азии при даннической системе межгосударственных войн было заметно меньше, чем в Европе того же периода. Иерархия покупала мир, и покупала дёшево — ритуальное признание старшинства в обмен на автономию, торговлю и невмешательство во внутренние дела.",
+    "Приложенное к проливу, это выглядит готовым решением: остров сохраняет всё, кроме символического равенства. Формула «одна страна, две системы» есть попытка воспроизвести именно эту сделку."
+   ],
+   "worse": "Сделка держится на ограничении центра, а гарантом ограничения выступает сам центр. Исторически ограничение обеспечивал не договор, а отсутствие средств — связи, аппарата и логистики, позволяющих управлять периферией глубже ритуала. Современный центр этими средствами располагает, поэтому историческая аналогия переносит форму сделки, но не условие, на котором она держалась."
+  },
+  {
+   "canon": "e",
+   "key": "天命",
+   "name": "Мандат задним числом",
+   "sub": "Небесный мандат как процедура",
+   "paras": [
+    "Мандат опознаётся только по результату: победивший имел его, проигравший утратил. Процедуры проверки до события не существует, и это не пробел конструкции, а сама конструкция — иначе мандат пришлось бы кому-то выдавать, и вопрос о полномочиях сместился бы на выдающего.",
+    "Отсюда следует, что неправильных исходов не бывает. Всякий результат оказывается подтверждением легитимности того, кто его достиг, и оценка совпадает с итогом с точностью до знака."
+   ],
+   "worse": "Легитимность определяется исходом, поэтому различие между правомерным и свершившимся исчезает у всех участников, включая проигравшего. Сторона, принимающая схему, заранее признаёт законным любой результат силового решения. Возражение возможно только вне схемы — из права или из понятия согласия управляемых."
+  },
+  {
+   "canon": "e",
+   "key": "國恥",
+   "name": "Столетие унижения как метод",
+   "sub": "Историческая рамка 1839–1949",
+   "paras": [
+    "Рамка, в которой нынешнее положение есть прямое продолжение периода от опиумных войн до основания республики, а всякая уступка — его повторение. Рамка не выдумана: события были, и они были такими, как описано, и обида в её основании подлинная.",
+    "Особенность её в том, что у неё нет условия закрытия. Обида, встроенная в определение нации, не может быть удовлетворена, потому что удовлетворение упразднило бы определение."
+   ],
+   "worse": "Рамка не содержит условия закрытия, поэтому любой ход другой стороны её подтверждает: уступка читается как слабость, твёрдость — как повторение унижения, нейтральность — как соучастие. Для переговоров это значит, что уступки противоположной стороны не снижают напряжения: рамка не описывает состояния, при котором требование удовлетворено."
+  },
+  {
+   "canon": "e",
+   "key": "無我",
+   "name": "Дзэн на войне",
+   "sub": "Судзуки Дайсэцу, Харада Согаку и другие, 1930–1940-е; Брайан Виктория, 1997",
+   "paras": [
+    "Классическая посылка: постоянного «я» нет. Формулировка, дошедшая до массовой аудитории: 殺人刀・活人劍 — меч, отнимающий жизнь, есть меч, дающий жизнь. Если нет «я», то нет ни убивающего, ни убиваемого, а есть действие, совершаемое без привязанности к результату.",
+    "Это не искажение маргиналов. Брайан Виктория документально показал, что ведущие фигуры японского дзэна — включая Судзуки, известного Западу как проповедника мира, — подводили эту доктрину под военную подготовку, и что после войны большинство из них не отреклось."
+   ],
+   "worse": "Механизм действует на уровне исполнителя, а не государства: снятие различия между действующим и объектом действия убирает основание для личной ответственности, не требуя ни ненависти, ни идеологической убеждённости. Из двенадцати рамок только эта работает в момент выполнения приказа. Ряд японских школ дзэн признал военное сотрудничество официально: Сото — в 1992 году, Мёсиндзи — в 2001-м."
+  },
+  {
+   "canon": "e",
+   "key": "業",
+   "name": "Карма как объяснение положения",
+   "sub": "Популярное прочтение закона действия",
+   "paras": [
+    "Строгое прочтение: нынешнее положение существа есть следствие его собственных прошлых действий. Прочтение не еретическое, оно буквальное, и в народной форме господствует по всей Азии от Коломбо до Улан-Батора.",
+    "Приложенное к населению целиком, оно превращает историю в бухгалтерию. Всё, что случилось с народом, есть то, что он накопил; всё, что случится, — то, что он заслужил; и никакого третьего разряда событий не предусмотрено."
+   ],
+   "worse": "Страдание получает объяснение через прошлое самого пострадавшего, поэтому вопрос о внешней ответственности не возникает, а помощь и возмещение выглядят неуместными. Буддийские школы это прочтение ограничивают: в каноне перечислены причины переживаемого помимо кармы — в том числе в «Сивака-сутте», где карма названа лишь одной из восьми."
+  },
+  {
+   "canon": "e",
+   "key": "近代の超克",
+   "name": "Преодоление модерна",
+   "sub": "Киотская школа и её круг, 1941–1942",
+   "paras": [
+    "В 1941–1942 годах прошли два цикла обсуждений: круглые столы журнала «Тюо корон» «Всемирно-историческая позиция и Япония» (Косака Масааки, Кояма Ивао, Ниситани Кэйдзи, Судзуки Сигэтака) и симпозиум журнала «Бунгакукай» «Преодоление модерна» в июле 1942 года. Общий тезис: западная модель миропорядка исчерпана, и Восточной Азии предстоит выработать новый принцип всемирной истории. Тексты читаются и переиздаются до сих пор.",
+    "Практический вывод был очевиден и назывался Сферой сопроцветания Великой Восточной Азии. Философия не обслуживала пропаганду задним числом: она шла впереди и снабжала её понятийным аппаратом, которого у военных не было."
+   ],
+   "worse": "Конструкция воспроизводима: тезис о несправедливости существующего миропорядка и о необходимости нового, более целостного, обосновывает перестройку регионального порядка без обращения к расизму или обману. Её применение к Восточной Азии в 1940-е — основной исторический прецедент, и всякое предложение регионального порядка как освобождения от западного опирается на ту же схему."
+  },
+  {
+   "canon": "e",
+   "key": "關係",
+   "name": "Реляционное «я»",
+   "sub": "Роджер Эймс, Генри Роузмонт, ролевая этика, 2000–2010-е",
+   "paras": [
+    "Тезис уважаемых синологов, сочувствующих традиции: конфуцианская личность есть не автономный индивид с правами, а узел отношений — сын, отец, подданный, друг, ученик. Вне ролей не остаётся ничего, и «права человека» в западном смысле описывают объект, которого в этой антропологии просто нет.",
+    "Как антропология это может быть верно, и защищается всерьёз. Как политический инструмент это устраняет носителя. Право народа решать свою судьбу требует, чтобы существовал кто-то, чья это судьба."
+   ],
+   "worse": "Если личность исчерпывается ролями, у права на самоопределение нет носителя — нет субъекта, чьё согласие требуется. Позиция выдвигается как защита традиции от западного универсализма и оправдания насилия не содержит; её действие в споре — не отказ в согласии, а снятие вопроса о нём. Возражение внутри самой традиции — Мэн-цзы: народ ценнее алтарей, и мандат подтверждается народом."
+  }
+ ],
+ "docs": [
+  {
+   "origin": "cn",
+   "meta": "1999 · 超限戰 · Издательство литературы и искусства НОАК",
+   "title": "Война, превосходящая пределы",
+   "sub": "Цяо Лян и Ван Сяньсуй, старшие полковники ВВС НОАК · переведена на десяток языков; за пределами Китая цитируется чаще, чем внутри",
+   "blocks": [
+    [
+     "p",
+     "Книга отвечает на один вопрос: как более слабая сторона побеждает технологически превосходящую. Ответ — расширить поле боя за пределы военного. Перечислены войны финансовая, торговая, правовая, сетевая, психологическая, ресурсная, экологическая, контрабандная, наркотическая и террористическая — в одном перечне и без выделения."
+    ],
+    [
+     "p",
+     "Логика изложена прямо: у современного противоборства нет области, которая ему не принадлежала бы, и различение военного и гражданского перестаёт быть операционально осмысленным. Средством воздействия становится всё, чем можно воздействовать: биржа, суд, сеть, вещание, продовольствие, валютный курс, страховая ставка."
+    ],
+    [
+     "ann",
+     "Гражданское население",
+     "Раздела о гражданском населении в книге нет. После расширения предмета противоборства на финансы, право и вещание такому разделу нет отдельного места: гражданская сфера становится средой противоборства, а не защищённой категорией."
+    ],
+    [
+     "ann",
+     "Название",
+     "超限 — «превосходящее пределы». Английское издание вышло как «Unrestricted Warfare» — «неограниченная война»."
+    ],
+    [
+     "fair",
+     "Статус книги регулярно преувеличивают. Это не устав, не доктринальный документ и не план, а публицистика двух офицеров, изданная ведомственным издательством и вызвавшая спор внутри страны. Авторы указывали, что описывают тенденцию, а не выдвигают программу, и что перечень методов — это перечень возможного, а не должного."
+    ],
+    [
+     "ann",
+     "Описание и рекомендация",
+     "Оговорка снимает с книги статус программы, но не меняет её состава: перечень методов пригоден к использованию независимо от того, как авторы определили его жанр."
+    ]
+   ]
+  },
+  {
+   "origin": "cn",
+   "meta": "2005 · «Антисепаратистский закон» КНР, 14 марта · ВСНП: 2896 за, 0 против, 2 воздержались",
+   "title": "Максимально возможная защита",
+   "sub": "Десять статей · и белые книги по тайваньскому вопросу 1993, 2000 и августа 2022 года",
+   "blocks": [
+    [
+     "p",
+     "Статьи 5–7 описывают мирный путь. После объединения Тайвань может сохранять систему, отличную от материковой, и пользоваться высокой степенью автономии. Переговоры ведутся на равных и поэтапно; в перечне тем — прекращение состояния враждебности, меры военного доверия, политический статус тайваньских властей и их международное пространство, соответствующее этому статусу."
+    ],
+    [
+     "p",
+     "Статья 8 называет три условия, при любом из которых государство применяет «немирные способы и иные необходимые меры»: отделение под любым названием и любым способом; крупные происшествия, влекущие отделение; полное исчерпание возможностей мирного объединения. Решение принимают и исполняют Государственный совет и Центральный военный совет с последующим докладом Постоянному комитету ВСНП."
+    ],
+    [
+     "p",
+     "Статья 9, следующая сразу за ней: при применении немирных способов государство прилагает максимально возможные усилия для защиты жизни, имущества и законных прав гражданского населения Тайваня и иностранцев на Тайване."
+    ],
+    [
+     "ann",
+     "Кто определяет «максимально возможное»",
+     "Гарантия защиты гражданского населения (ст. 9) и основание для немирных мер (ст. 8) содержатся в одном законе и исполняются одними органами. Объём «максимально возможных усилий» определяет та же сторона, которая решает о применении силы. Третье условие статьи 8 — исчерпание мирных возможностей — внешней проверке не поддаётся; оценку выносит действующая сторона."
+    ],
+    [
+     "ann",
+     "Сличение редакций",
+     "Белые книги 1993 и 2000 годов обещали после объединения не размещать на Тайване войска и административный персонал. В белой книге августа 2022 года этого положения нет. Официального заявления об изменении позиции не было; изменение устанавливается только сравнением текстов."
+    ]
+   ]
+  },
+  {
+   "origin": "us",
+   "meta": "2021 · Parameters 51 (4), зима 2021–2022, с. 23–36 · doi:10.55540/0031-1723.3089",
+   "title": "Broken Nest",
+   "sub": "Джаред Маккинни (Университет ВВС США) и Питер Харрис (Университет штата Колорадо) · ежеквартальник Военного колледжа армии США · самая скачиваемая статья журнала за год",
+   "blocks": [
+    [
+     "p",
+     "Статья предлагает пакет «точечного сдерживания». Тайбэю и Вашингтону рекомендовано заранее подготовить уничтожение мощностей TSMC на случай вторжения и публично об этом объявить. По формулировке авторов, Пекин должен абсолютно поверить, что производство будет уничтожено: при сомнении в готовности исполнить угрозу сдерживание не работает. Предлагается автоматический механизм, срабатывающий по факту вторжения. Цель — сделать остров «не просто непривлекательным при захвате силой, но и дорогим в содержании»."
+    ],
+    [
+     "p",
+     "Там же — предложение публично нацелить ракеты на материковые линии производства микросхем, включая шанхайский завод SMIC, и отдельным пунктом — заранее подготовить эвакуацию и оформление квалифицированных тайваньских специалистов полупроводниковой отрасли в США и союзные страны."
+    ],
+    [
+     "ann",
+     "Кого касается эвакуация",
+     "Эвакуация предусмотрена для специалистов отрасли. Меры в отношении остального населения острова в статье не рассматриваются — они вне её предмета."
+    ],
+    [
+     "ann",
+     "Название",
+     "Отсылка к пословице 覆巢之下無完卵 — «под опрокинутым гнездом не бывает целых яиц»: при крушении целого не уцелеет и часть."
+    ],
+    [
+     "p",
+     "Статью широко критиковали. Global Taiwan Institute отвечал, что угроза уничтожить TSMC вряд ли остановит вторжение и непопулярна на Тайване; Канцелярия по делам Тайваня Госсовета КНР заявила, что объединение затевается не ради TSMC. Идея тем не менее осталась в обсуждении: Элбридж Колби, затем назначенный заместителем министра обороны США по политике, публично поддерживал уничтожение производства и добавлял, что решение об этом не следует оставлять правительству и армии Тайваня."
+    ],
+    [
+     "ann",
+     "Кто решает",
+     "В версии Колби право распоряжаться заводами отделено от правительства, на территории которого они находятся."
+    ]
+   ]
+  },
+  {
+   "origin": "us",
+   "meta": "2023 · CSIS, «The First Battle of the Next War», январь · сценарный год — 2026",
+   "title": "Двадцать четыре итерации",
+   "sub": "Марк Кэншиан, Мэтью Кэншиан, Эрик Хегинботам · самая обширная публичная военная игра по проливу",
+   "blocks": [
+    [
+     "p",
+     "Работа опубликована открыто, чтобы общественная дискуссия опиралась на проверяемые допущения: закрытые игры непрозрачны. Правила выведены из исторических данных — десантная ёмкость рассчитана по Нормандии, Окинаве и Фолклендам. Игру провели двадцать четыре раза в разных вариантах допущений."
+    ],
+    [
+     "p",
+     "Основной вывод: в большинстве итераций вторжение проваливается — десант не удерживает плацдармы, и Тайвань сохраняет самоуправление. Авторы называют четыре условия этого исхода: тайваньские сухопутные силы удерживают оборону; США вступают в войну сразу, поскольку «украинский вариант» — поставки без участия — после блокады острова невозможен; США могут использовать базы в Японии; у США достаточно дальнобойных противокорабельных ракет."
+    ],
+    [
+     "p",
+     "Цена посчитана подробно. Два авианосца. От десяти до двадцати крупных надводных кораблей. От двухсот до четырёхсот самолётов. Около 3200 погибших американских военных за три недели — примерно половина потерь за двадцать лет в Ираке и Афганистане. Порядка 10 000 погибших с китайской стороны и около 30 000 пленных; потеря девяноста процентов десантного флота."
+    ],
+    [
+     "ann",
+     "Гражданское население",
+     "Формат военной игры учитывает силы, потери сил и экономический ущерб. Оценки гражданских потерь на острове в отчёте нет; последствия для населения описаны через разрушение экономики. Это ограничение метода, общее для жанра, а не решение авторов."
+    ]
+   ]
+  },
+  {
+   "origin": "jp",
+   "meta": "2024 · Япония, план эвакуации островов Сакисима · утверждён в марте, отработан на учениях 2025 года",
+   "title": "Сто двадцать тысяч за шесть суток",
+   "sub": "Пять муниципалитетов Сакисима · приём в 32 муниципалитетах семи префектур Кюсю и префектуры Ямагути",
+   "blocks": [
+    [
+     "p",
+     "План предусматривает вывоз около 110 тысяч жителей и 10 тысяч приезжих с островов Исигаки, Мияко, Такэтоми, Йонагуни и Тарама судами и самолётами за шесть суток. Часть эвакуируемых доставляется самолётами в Фукуоку и Кагосиму с развозкой автобусами по заранее расписанным гостиницам, часть — морем в Ямагути и префектуры Кюсю. На первый месяц размещения назначены 32 муниципалитета."
+    ],
+    [
+     "p",
+     "Сценарий официально не назван. Йонагуни находится в 110 километрах от Тайваня."
+    ],
+    [
+     "ann",
+     "Граница плана",
+     "План охватывает людей под японской юрисдикцией и составлен по принципу ответственности правительства за своих граждан. Для населения Тайваня плана такого рода нет: вывезти 23 миллиона человек с острова физически невозможно, и гражданская оборона Тайваня построена на укрытии на месте, запасах и связи, а не на вывозе."
+    ]
+   ]
+  }
+ ],
+ "docsSum": "Общее у пяти документов — положение гражданского населения острова. В двух оно не выделено как категория: в книге 1999 года — по построению предмета, в военной игре 2023 года — по формату. В законе 2005 года оно выделено, но объём защиты определяет та же сторона, что решает о применении силы. В статье 2021 года и в японском плане 2024 года меры предусмотрены для части людей: для инженеров отрасли и для граждан Японии.",
+ "levers": [
+  [
+   "w",
+   "",
+   "Утилитаризм",
+   "Численность становится весом в расчёте: 1,4 млрд против 23 млн."
+  ],
+  [
+   "w",
+   "",
+   "Лонгтермизм",
+   "Живущие входят в расчёт с весом, пренебрежимым рядом с будущими поколениями."
+  ],
+  [
+   "w",
+   "",
+   "Безусловный акселерационизм",
+   "Единица учёта — производственный процесс; население не переменная."
+  ],
+  [
+   "w",
+   "",
+   "Эссенциализм",
+   "Принадлежность задана категорией; самоопределение жителей вторично."
+  ],
+  [
+   "w",
+   "",
+   "Фатализм",
+   "Исход объявлен предрешённым; сопротивление учитывается как издержка без результата."
+  ],
+  [
+   "e",
+   "天下",
+   "Тянься",
+   "Нет внешней стороны — нет и понятия отделения."
+  ],
+  [
+   "e",
+   "顧全大局",
+   "Общая картина",
+   "Часть уступает целому; границы целого определяет тот, кто требует уступки."
+  ],
+  [
+   "e",
+   "天命",
+   "Мандат Неба",
+   "Легитимность определяется исходом; любой исход легитимен."
+  ],
+  [
+   "e",
+   "關係",
+   "Реляционное «я»",
+   "Личность исчерпывается ролями; у права на самоопределение нет носителя."
+  ],
+  [
+   "e",
+   "弱民",
+   "Слабый народ",
+   "Благополучие населения рассматривается как препятствие силе государства."
+  ]
+ ],
+ "abyss": [
+  {
+   "title": "Отказ от морали как таковой",
+   "specs": [
+    {
+     "canon": "w",
+     "name": "Теория ошибки",
+     "who": "Джон Мэки, 1977",
+     "paras": [
+      "Моральные суждения претендуют на описание объективных фактов — но таких фактов в мире нет. Значит, все они не «относительны» и не «спорны», а попросту ложны. Утверждение «пытать детей дурно» ложно ровно в том же смысле, в каком ложно «Зевс метает молнии»: предмета не существует.",
+      "Это самая академически респектабельная позиция в списке и одновременно самая разъедающая. Она не предлагает другую мораль — она снимает саму категорию."
+     ],
+     "breaks": "Мэки, изложив теорию ошибки, спокойно перешёл ко второй части книги и написал нормативную этику. Это не непоследовательность, а признание: теория описательно связна и практически неисполнима. Прожить в ней не может никто, включая её автора, — и вопрос, почему именно, остаётся открытым уже полвека."
+    },
+    {
+     "canon": "w",
+     "name": "Эгоизм Штирнера",
+     "who": "Макс Штирнер, 1844",
+     "paras": [
+      "Государство, человечество, нравственность, справедливость, Бог — всё это «призраки», Spuk: идеи, которые завелись в голове и командуют своим носителем. Реален лишь Единственный и то, что он способен взять. Обязательств не существует, потому что не существует того, перед кем они были бы.",
+      "Штирнер — крайняя точка, дальше которой индивидуализм не идёт. Маркс потратил на его опровержение объём больший, чем сам «Единственный»."
+     ],
+     "breaks": "Сразу в двух местах. «Союз эгоистов», которым Штирнер заменяет общество, требует, чтобы участники держали слово, — то есть возвращает обязательство, только неназванным. А сам Единственный, очищенный от всех определений, оказывается самой пустой абстракцией во всей книге: последний призрак, которого автор не заметил."
+    },
+    {
+     "canon": "w",
+     "name": "Сад как философ",
+     "who": "Донасьен де Сад, 1780-е",
+     "paras": [
+      "Природа не знает морали. Она производит и уничтожает без разбора, и то, что мы называем жестокостью, есть просто участие в её работе. Сострадание — искусственная выучка, слабость, которую следует преодолеть.",
+      "Значение Сада в том, что он не аморалист поневоле, а первый, кто попытался вывести аморализм из природы систематически."
+     ],
+     "breaks": "Это натуралистическая ошибка в чистом виде: из того, что нечто происходит, не следует, что так и должно. Но есть слом изящнее: вся система требует жертвы, способной страдать и понимать своё положение, — иначе не работает ни один эпизод. Она нуждается ровно в том моральном статусе, который отрицает."
+    },
+    {
+     "canon": "e",
+     "name": "Ян Чжу",
+     "who": "楊朱, IV в. до н. э. · «за волосок не отдал бы Поднебесную»",
+     "paras": [
+      "Мэн-цзы излагает его так: если бы, выдернув один волос, Ян Чжу мог принести пользу всей Поднебесной, он бы не выдернул. Учение 為我 — «ради себя» — отрицает не мораль вообще, а её обязывающую силу: долга перед целым нет, потому что нет и целого, способного требовать.",
+      "Ян Чжу есть крайняя точка китайской мысли, дальше которой она не заходила ни разу за две с половиной тысячи лет. Мэн-цзы поставил его в пару с Мо-цзы как двух врагов порядка: один отрицает государя, другой — отца."
+     ],
+     "breaks": "Собственных текстов не сохранилось: всё известное о Ян Чжу дошло в изложении тех, кто его опровергал. Учение, целиком состоящее из цитат врагов, нельзя ни принять, ни оспорить, — и это не случайность его судьбы, а следствие его содержания. Доктрина, запрещающая тратить себя на Поднебесную, не станет тратить себя и на то, чтобы записать себя для Поднебесной."
+    },
+    {
+     "canon": "e",
+     "name": "«Книга правителя области Шан»",
+     "who": "商君書, IV в. до н. э.",
+     "paras": [
+      "Добродетели перечислены как вредители. 六蝨 — «шесть вшей» — это обряд и музыка, стихи и история, добродетель и совершенствование, почтительность и братская любовь, честность и разумность. Государство, где это ценят, будет расчленено соседями; список приводится без иронии.",
+      "Это не цинизм и не парадокс, а последовательная теория: всякая ценность, дающая человеку основание для поступка помимо награды и кары, отнимает у власти рычаг. Устранение таких оснований есть техническая задача."
+     ],
+     "breaks": "На собственном авторе, и документально. Шан Ян, лишившийся покровителя, бежал и попытался заночевать на постоялом дворе; хозяин отказал, потому что введённый самим Шан Яном закон запрещал принимать постояльца без удостоверения. Его казнили разрыванием колесницами. 作法自斃 — «установивший закон, им и погублен» — вошло в язык поговоркой. Теория, не предусмотревшая исключения для теоретика, исполняется буквально."
+    },
+    {
+     "canon": "e",
+     "name": "Хань Фэй: две рукояти",
+     "who": "韓非子, III в. до н. э.",
+     "paras": [
+      "Вершина легизма и лучший его текст. Правитель не должен обнаруживать предпочтений, ибо обнаруженное предпочтение есть рычаг в руках министра. Не должен доверять, ибо интерес всякого приближённого противоположен его собственному. Не должен опираться на добродетельных, ибо добродетельных мало, а метод обязан работать на любом материале.",
+      "Писал он лучше всех в своей школе, и это признавали враги: Цинь Шихуан, прочитав его трактаты, сказал, что умер бы довольным, если бы мог встретиться с автором."
+     ],
+     "breaks": "Автор приехал в Цинь и был там уморен в тюрьме — по наущению Ли Сы, соученика по школе Сюнь-цзы, который счёл его опасным конкурентом. Система, устроенная так, чтобы правитель не доверял никому, не содержит места, с которого её создатель был бы в безопасности. Она работает безупречно — против всех, включая написавшего её."
+    }
+   ]
+  },
+  {
+   "title": "Отчаяние как система",
+   "specs": [
+    {
+     "canon": "w",
+     "name": "Философия искупления",
+     "who": "Филипп Майнлендер, 1876",
+     "paras": [
+      "Бог существовал — и решил, что небытие лучше бытия. Не имея возможности просто исчезнуть, он раздробил себя на мир, и вся космическая история есть растянутое исполнение этого решения. Энтропия — не физический закон, а воля к смерти, доведённая до конца. Задача человека — не мешать.",
+      "Майнлендер покончил с собой в ночь, когда книгу привезли из типографии. Ему было тридцать четыре."
+     ],
+     "breaks": "Это теодицея, которой нужен упразднённый ею Бог. Всё построение держится на первичном решении, а решать может только тот, кто есть. Убрав Бога, система теряет единственную посылку, из которой выводит остальное, и превращается в описание термодинамики с добавленной интонацией."
+    },
+    {
+     "canon": "w",
+     "name": "Последний Мессия",
+     "who": "Петер Вессель Заппфе, 1933",
+     "paras": [
+      "Сознание — эволюционный перебор. Как рога ирландского оленя выросли до размера, при котором стали помехой, так и осознанность переросла то, что организм способен вынести. Держимся мы четырьмя приёмами подавления: изоляцией, закреплением, отвлечением и сублимацией.",
+      "Заппфе был альпинистом и юмористом. Это существенно: его пессимизм не поза."
+     ],
+     "breaks": "На собственном четвёртом пункте. Изложенная теория есть сублимация — то самое, что она описывает как защитный механизм. Она не может быть высказана, не став примером самой себя. Это делает её не ложной, а непроверяемой: конструкция, объясняющая любое возражение как подавление, объясняет слишком много."
+    },
+    {
+     "canon": "w",
+     "name": "Заговор против человеческой расы",
+     "who": "Томас Лиготти, 2010",
+     "paras": [
+      "Быть личностью — быть марионеткой, которая считает, что двигается сама. Сознание «злокачественно бесполезно»: преимуществ не даёт, зато обеспечивает знание о собственной смерти. Всё человеческое — работа по сокрытию этого от себя.",
+      "Написано мастером литературы ужаса, и это чувствуется: сила текста в интонации, а не в посылках."
+     ],
+     "breaks": "Лиготти честнее большинства в списке — он сам говорит, что предъявляет настроение, а не доказательство. Но отсюда следует вывод, которого он не делает: если аргумент держится на интонации, убеждает он не рассуждением, а заражением. Настроение не бывает истинным."
+    },
+    {
+     "canon": "w",
+     "name": "Пессимизм как стиль",
+     "who": "Эмиль Чоран, XX век",
+     "paras": [
+      "Отказ от системы вообще: никаких построений, только афоризм. «Не стоит труда убивать себя, ведь убиваешь себя всегда слишком поздно». Отчаяние доведено до жанра и лишено претензии на истину.",
+      "Чоран — единственный здесь, кто не выдаёт своё состояние за устройство мира."
+     ],
+     "breaks": "Формально нигде — и в этом дело. Прожив восемьдесят четыре года, Чоран показал, чем на самом деле является философский пессимизм: способом обращения с настроением, а не выводом из посылок. Самый честный автор яруса оказался и самым безобидным."
+    },
+    {
+     "canon": "e",
+     "name": "Век конца Дхармы",
+     "who": "末法 · маппо, VI–XIII вв.",
+     "paras": [
+      "Периодизация: после ухода Будды учение сохраняется в полной силе, затем в подобии, затем наступает эпоха, когда текст ещё есть, а осуществление уже невозможно. В Японии дату вычислили и назвали — 1052 год. Дальше остаётся только опора на иную силу, потому что собственных сил не хватает ни у кого.",
+      "Из этого вышли великие вещи: вся школа Чистой земли, Синран, идея спасения, не зависящего от заслуг. Но у периодизации есть вторая ветвь — убеждение, что чинить нечего."
+     ],
+     "breaks": "Эпоха упадка датируется её носителями всегда одинаково — «сейчас», и делает это тысячу лет подряд. Схема, в которой любое ухудшение подтверждает диагноз, а любое улучшение объявляется временным, не описывает время. Она описывает настроение, снабжённое календарём."
+    },
+    {
+     "canon": "e",
+     "name": "Кали-юга",
+     "who": "Индийская схема четырёх веков",
+     "paras": [
+      "Мы находимся в последней и худшей юге: дхарма стоит на одной ноге вместо четырёх, правители грабят, знание утрачено, срок жизни сокращается. Схема встречается в пуранах, живёт в народном употреблении и была подхвачена европейскими традиционалистами, которым понадобилось объяснение упадка без ответственности за него.",
+      "Практическое следствие одно: улучшение невозможно, доступно лишь сохранение остатка среди развалин."
+     ],
+     "breaks": "Кали-юга длится 432 000 лет, из которых прошло около пяти тысяч. Утверждение, охватывающее срок в сто раз больший всей письменной истории, не может быть опровергнуто ни одним наблюдением — а значит, ничего и не утверждает. Практический вред при этом вполне конкретен: схема выдаёт разрешение не действовать, и выдаёт его на четыреста тысяч лет вперёд."
+    },
+    {
+     "canon": "e",
+     "name": "«Встретишь Будду — убей Будду»",
+     "who": "Линьцзи Исюань, IX в.",
+     "paras": [
+      "Формула известна за пределами традиции лучше, чем внутри: встретишь Будду — убей Будду, встретишь патриарха — убей патриарха. Никакой авторитет, включая высший, не должен становиться предметом привязанности; всё, что можно превратить в опору, следует отбросить.",
+      "В своей рамке это точный терапевтический инструмент, и он работает: сказано человеку, застрявшему на образе, и ровно для того, чтобы образ снять."
+     ],
+     "breaks": "Произнесено внутри монастыря, человеком, соблюдавшим устав, для учеников, соблюдавших устав, и адресовано конкретному препятствию в конкретной практике. Вынутая из рамки, формула превращается в разрешение общего вида. Рамка здесь не контекст и не украшение — она несущая часть: именно наличие правила делает осмысленным указание не цепляться за правило. Убрав правило, получают не свободу, а лозунг."
+    }
+   ]
+  },
+  {
+   "title": "Предел расчёта",
+   "specs": [
+    {
+     "canon": "w",
+     "name": "Благожелательный подрыватель мира",
+     "who": "Р. Н. Смарт, 1958",
+     "paras": [
+      "Возьмём негативный утилитаризм: единственная моральная цель — минимизировать страдание. Посылка выглядит скромной и даже сострадательной. Но из неё строго следует, что оптимальное действие — мгновенное и безболезненное прекращение всей чувствующей жизни: нет носителя — нет страдания, и результат недостижим никакими другими средствами.",
+      "Это не выпад маргинала, а стандартное возражение из учебников этики, адресованное Попперу. И оно валидно: чтобы избежать вывода, приходится отбрасывать посылку."
+     ],
+     "breaks": "Нигде — вот что делает его страшным. Аргумент безупречен и потому работает как reductio: он опровергает не мир, а исходное правило. Урок общий и неприятный: этика, оптимизирующая единственный параметр, рано или поздно выдаёт чудовищный оптимум. Любая, а не только эта."
+    },
+    {
+     "canon": "e",
+     "name": "Прекращение рождения",
+     "who": "Джайнская и буддийская сотериология; саллекхана",
+     "paras": [
+      "Цель — прекращение перерождений; идеальный итог — отсутствие новых существ. Джайнизм довёл это до института: саллекхана, ритуальный уход через постепенный отказ от пищи, практикуется до сих пор, и в 2015 году Верховный суд Индии приостановил её запрет, вынесенный высоким судом Раджастхана.",
+      "Довод строг и знаком европейской этике под другим именем: если существование сопряжено со страданием, то не начинать лучше, чем начать и претерпеть."
+     ],
+     "breaks": "Ломается не вывод, а способ его заимствования. Саллекхана обставлена условиями, и каждое её ограничивает: отсутствие страсти и отчаяния, неизлечимость либо крайняя старость, публичность решения, надзор общины, обратимость до последнего дня. Именно эти условия отличают её от самоубийства — и именно их первым делом отбрасывает всякий, кто берёт вывод отдельно. Практика, продержавшаяся два тысячелетия, держалась на ограничителях, а не на посылке."
+    },
+    {
+     "canon": "e",
+     "name": "顧全大局",
+     "who": "«Ради общей картины»",
+     "paras": [
+      "Не философия, а рабочая формула, встроенная во всю политическую культуру региона: частное уступает целому, меньшее — большему, часть — общей ситуации. Возразить по существу нечего: в любой этике есть место жертве ради целого, и без него этика не работает.",
+      "Особенность формулы в её грамматике. Она употребляется исключительно сверху вниз и только в адрес того, кто уступает."
+     ],
+     "breaks": "大局 — «общая картина» — не определяется тем, кого просят уступить, и не определяется вообще: границы целого назначает произносящий формулу. Это не этический принцип, а способ адресации. Проверка простая: за всю историю употребления не отмечено случая, когда бы формулу применили к себе. Аргумент, который нельзя обратить на говорящего, аргументом не является."
+    }
+   ]
+  },
+  {
+   "title": "Аморализм как программа",
+   "specs": [
+    {
+     "canon": "w",
+     "name": "Катехизис революционера",
+     "who": "Сергей Нечаев, 1869",
+     "paras": [
+      "Революционер — человек обречённый. У него нет ни интересов, ни чувств, ни привязанностей, ни собственности, ни даже имени. Нравственно всё, что способствует делу; безнравственно всё, что мешает. Товарищи разделены на разряды по степени полезности и расходуемости.",
+      "Достоевский написал «Бесов», прочитав материалы процесса."
+     ],
+     "breaks": "На первом же применении. Через несколько месяцев Нечаев организовал убийство студента Иванова — не врага, а соратника, усомнившегося в его полномочиях. Инструментальная мораль не имеет правила остановки, и первое, что она перерабатывает, — собственное движение. Доктрине понадобилось меньше года, чтобы это доказать."
+    },
+    {
+     "canon": "w",
+     "name": "Размышления о насилии",
+     "who": "Жорж Сорель, 1908",
+     "paras": [
+      "Всеобщая стачка — миф, и вопрос о его истинности неуместен: миф ценен не соответствием фактам, а способностью двигать массы. Насилие при этом не средство, а очищающее начало, возвращающее обществу утраченную серьёзность.",
+      "Первая систематическая попытка обосновать политическую ложь как инструмент, а не как порок."
+     ],
+     "breaks": "На собственном критерии эффективности. Миф, выбранный за мобилизующую силу, мобилизует кого угодно: в течение десяти лет построения Сореля были подхвачены и синдикалистами, и итальянским фашизмом, причём вторыми успешнее. Инструмент, который невозможно закрепить за целью, инструментом не является."
+    },
+    {
+     "canon": "w",
+     "name": "Анти-технологизм",
+     "who": "Теодор Качинский, 1995",
+     "paras": [
+      "Индустриальная система по своему устройству уничтожает автономию и не поддаётся реформированию: любая попытка починить её изнутри лишь усиливает зависимость. Следовательно, её надо не исправлять, а обрушивать.",
+      "Диагностическая часть текста всерьёз обсуждается философами техники: наблюдения о суррогатной деятельности и утрате автономии узнаваемы и без автора."
+     ],
+     "breaks": "На стыке двух частей. Тезис о принципиальной нереформируемости заявлен, но нигде не доказан, — а именно он единственный отделяет критику от программы. Проверка вышла эмпирической: действия, выведенные из недоказанной посылки, убили людей, не имевших отношения ни к посылке, ни к выводу."
+    },
+    {
+     "canon": "e",
+     "name": "兵不厭詐",
+     "who": "Стратагема как всеобщий метод",
+     "paras": [
+      "«Война не гнушается обмана» — и, растянутое за пределы войны, это становится мировоззрением: тридцать шесть стратагем, где всякое отношение есть скрытая партия, а прямота — либо приём, либо глупость.",
+      "В таком виде оно и живёт в массовой культуре по обе стороны пролива: как учебник по управлению, продажам, карьере и семье, изданный миллионными тиражами."
+     ],
+     "breaks": "На посылке самого Сунь-цзы. Второй раздел «Военного канона» посвящён тому, что война разорительна: затяжная кампания истощает казну, и потому её надо кончать быстро либо не начинать. Хитрость у Сунь-цзы рациональна ровно потому, что война есть дорогое исключение. Универсальная стратагема снимает эту дороговизну, а вместе с ней и всё основание метода: если обманывать выгодно всегда, то не работает уже ничто, включая обман."
+    },
+    {
+     "canon": "e",
+     "name": "Кита Икки: план переустройства",
+     "who": "日本改造法案大綱, 1923",
+     "paras": [
+      "Программа: приостановить конституцию, ввести военное положение, ограничить крупную собственность, а затем освободить Азию силой японского оружия. Смесь социализма и паназиатского национализма, написанная всерьёз и читавшаяся всерьёз молодыми офицерами.",
+      "Влияние доказано практикой: участники мятежа 26 февраля 1936 года читали Киту, и это ему предъявили."
+     ],
+     "breaks": "Кита не организовывал мятеж, а по ряду свидетельств отговаривал от него — и был казнён в 1937 году как его идейный источник. Доктрина очищающего переворота не содержит и не может содержать правила о том, кто именно его совершит и в какой момент остановится. Автор оказался в положении, из которого нельзя ни подтвердить, ни отозвать собственный текст: инструмент передан, а рукоятки к нему не предусмотрено."
+    },
+    {
+     "canon": "e",
+     "name": "Поа: убийство как милосердие",
+     "who": "Аум Синрикё, 1984–1995",
+     "paras": [
+      "Асахара Сёко взял тибетский термин пхова — перенос сознания в момент смерти — и объявил, что убийство человека, накапливающего дурную карму, избавляет убитого от худших перерождений. Убитый, таким образом, облагодетельствован. На этом основании была построена вся практика организации, включая зариновую атаку в токийском метро.",
+      "Заимствование не было полной выдумкой: в тибетской традиции есть сюжет об убийстве царя Ландармы из сострадания, и в махаянских текстах существует спор о «сострадательном убийстве». Материал был взят настоящий."
+     ],
+     "breaks": "В классической форме требование одно и оно решающее: совершающий принимает на себя полную кармическую расплату и не получает никакой выгоды — ни власти, ни имущества, ни безопасности, ни устранения врага. Это и есть проверка, встроенная в доктрину: если действие выгодно, оно не сострадательно по определению. У Аум каждый случай был выгоден Аум. Условие, отличающее милосердие от убийства, было отброшено первым — и отбрасывается первым всегда."
+    }
+   ]
+  },
+  {
+   "title": "Терминальный случай",
+   "specs": [
+    {
+     "canon": "w",
+     "name": "Воинствующий акселерационизм",
+     "who": "Сетевые группы 2010–2020-х",
+     "paras": [
+      "Формально: либеральное общество следует не переубеждать, а доводить до распада насилием, чтобы на обломках построить иное. Практически: доктрина, обслуживающая террор одиночек и малых ячеек — Atomwaffen Division, The Base, Terrorgram и производные, признанные террористическими в ряде юрисдикций.",
+      "Слово «акселерационизм» здесь заимствовано у совершенно другой интеллектуальной линии и опустошено: от исходных авторов не осталось ни посылок, ни метода — только термин, придающий уличной практике вид доктрины. Те, у кого слово взято, от такого использования отказываются.",
+      "Это единственная позиция в списке, где философская часть возникла позже практики и ради неё."
+     ],
+     "breaks": "В четырёх местах сразу. Первое: нет теории следующего шага — всякая версия обрывается на «обрушении», и пустота на месте продолжения не пробел, а всё содержание, потому что любой конкретный ответ можно было бы проверить. Второе: доктрина живёт заимствованным престижем — слово делает работу, которую не тянет содержание. Третье, решающее: по собственному критерию она фальсифицирована практикой — каждая атака повышала возможности надзора и консолидировала общество против исполнителей, то есть давала результат, обратный заявленному, и это повторялось достаточно раз, чтобы считаться закономерностью. Четвёртое: ожидание близкого распада существует с 1860-х и не подтвердилось ни разу. Учение, которое продолжают исповедовать после многократного опровержения собственной практикой, теорией в собственном смысле не является."
+    },
+    {
+     "canon": "e",
+     "name": "969 и «защита расы и религии»",
+     "who": "Мьянма, 2012–2017",
+     "paras": [
+      "Движение, оформившееся вокруг нескольких проповедников и числа 969, и созданная затем организация защиты расы и религии выдвинули доктрину: сангха и буддийское большинство находятся под демографической угрозой, и защита учения оправдывает исключительные меры. Далее последовали бойкоты, законы о браке и обращении, погромы и изгнание сотен тысяч человек.",
+      "Философская часть возникла после практики и ради неё. Число 969 сконструировано как ответ на торговую формулу 786, употребляемую мусульманскими лавочниками; текстовой опоры у него нет никакой.",
+      "Это единственная позиция яруса, где традиция с двухтысячелетним запретом на убийство была переоснащена под насилие без единого нового аргумента — одной лишь сменой адресата у аргументов уже существующих."
+     ],
+     "breaks": "В четырёх местах сразу. Первое: виная прямо запрещает монаху участие в подобном, и это не толкование, а перечень. Второе: «защита сасаны» в каноне означает сохранение текста и практики, а не демографии, — подмена совершена молча и никем не защищалась. Третье, решающее: по собственному критерию доктрина провалилась — авторитет мьянманской сангхи, который она бралась защищать, обрушился в буддийском мире, а государство, воспользовавшееся движением, распустило его, как только надобность прошла. Четвёртое: ни один текст движения не описывает состояния, при котором цель считалась бы достигнутой. Учение без условия остановки и без условия провала теорией в собственном смысле не является."
+    }
+   ]
+  }
+ ]
+};
+
+if (typeof window !== "undefined") window.__STRAIT__ = STRAIT;
+if (typeof module !== "undefined") module.exports = STRAIT;
+</script>
+<script>
+"use strict";
+(function(){
+var S = window.__STRAIT__, D = S.doctrines;
+var REGNAME = {eu:"Европа",cn:"Китай","in":"Индия",ir:"Персия",jp:"Япония",kr:"Корея",vn:"Вьетнам",bo:"Тибет"};
+var REGGRP  = {eu:"w",cn:"cn","in":"ip",ir:"ip",jp:"hr",kr:"hr",vn:"hr",bo:"hr"};
+var CANON = {w:"европейский канон", e:"восточный канон"};
+var CANON_SHORT = {w:"евр.", e:"вост."};
+var ORIGIN = {cn:"КНР", us:"США", jp:"Япония"};
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function xpct(x){ return 4+(x+100)/200*92; }
+function signed(v){ return (v>0?"+":v<0?"−":"")+Math.abs(v); }
+function mean(a){ return a.length ? Math.round(a.reduce(function(x,y){return x+y;},0)/a.length) : 0; }
+function lean(x){ return x<=-20?"m":(x>=20?"i":""); }
+function drift(d){ return Math.abs(d.tb-d.pk); }
+function byCanon(c){ return D.filter(function(d){ return d.canon===c; }); }
+function tally(arr){
+  var t={m:0,i:0,n:0};
+  arr.forEach(function(d){ var c=lean(d.n); if(c==="m") t.m++; else if(c==="i") t.i++; else t.n++; });
+  t.mean=mean(arr.map(function(d){return d.n;}));
+  t.drift=mean(arr.map(drift));
+  t.rev=arr.filter(function(d){return drift(d)>=100;}).length;
+  return t;
+}
+var W=byCanon("w"), E=byCanon("e"), TW=tally(W), TE=tally(E);
+function grpMean(g){ return mean(D.filter(function(d){return REGGRP[d.reg]===g;}).map(function(d){return d.n;})); }
+function grpCount(g){ return D.filter(function(d){return REGGRP[d.reg]===g;}).length; }
+
+/* ---------- шапка ---------- */
+document.getElementById("stats").innerHTML=
+  '<div class="stat"><b>110</b><span>доктрин: 55 европейских и 55 восточных</span></div>'+
+  '<div class="stat"><b>'+signed(TW.mean)+' / '+signed(TE.mean)+'</b><span>средний наклон при нейтральном чтении: европейский канон / восточный</span></div>'+
+  '<div class="stat"><b>'+TW.drift+' / '+TE.drift+'</b><span>средний сдвиг при смене точки чтения, из 200 возможных</span></div>'+
+  '<div class="stat"><b>'+TW.rev+' / '+TE.rev+'</b><span>обращаются полностью — сдвиг 100 и больше</span></div>'+
+  '<div class="stat n"><b>'+TW.n+' / '+TE.n+'</b><span>двойного назначения — не склоняются никуда</span></div>';
+
+/* ---------- карта ---------- */
+var mode="n", filt="all", sel=null;
+var plot=document.getElementById("plot"), tip=document.getElementById("tip");
+var meanline=document.getElementById("meanline"), meanlabel=document.getElementById("meanlabel");
+function inFilter(d){
+  if(filt==="all") return true;
+  if(filt==="w"||filt==="e") return d.canon===filt;
+  return REGGRP[d.reg]===filt;
+}
+function jit(i){ return ((i*37)%11-5)*0.55; }
+
+D.forEach(function(d,i){
+  var b=document.createElement("button");
+  b.type="button"; b.setAttribute("aria-label",d.name+", "+CANON[d.canon]);
+  b.addEventListener("mouseenter",function(){ showTip(b,d); });
+  b.addEventListener("mouseleave",hideTip);
+  b.addEventListener("focus",function(){ showTip(b,d); });
+  b.addEventListener("blur",hideTip);
+  b.addEventListener("click",function(){ select(d.id); });
+  plot.appendChild(b);
+  d.el=b; d.idx=i;
+});
+
+function place(){
+  var xs=[];
+  D.forEach(function(d){
+    var x=d[mode], vis=inFilter(d);
+    d.el.style.left=(xpct(x)+jit(d.idx))+"%";
+    d.el.style.bottom=(6+d.y/100*86)+"%";
+    d.el.className="die "+d.canon+" "+lean(x)+(sel===d.id?" on":"")+(vis?"":" dim");
+    d.el.setAttribute("tabindex",vis?"0":"-1");
+    if(vis) xs.push(x);
+  });
+  var avg=mean(xs);
+  meanline.style.left=xpct(avg)+"%";
+  meanlabel.textContent="среднее "+signed(avg);
+}
+function showTip(b,d){
+  tip.textContent=d.num+". "+d.name+" · "+CANON_SHORT[d.canon];
+  tip.style.left=b.style.left; tip.style.bottom=b.style.bottom;
+  tip.classList.add("show");
+}
+function hideTip(){ tip.classList.remove("show"); }
+
+document.getElementById("mapnote").innerHTML=
+  'Средний наклон по происхождению при нейтральном чтении: европейский канон <b>'+signed(TW.mean)+'</b>; '+
+  'Китай <b>'+signed(grpMean("cn"))+'</b> ('+grpCount("cn")+' записей); '+
+  'Индия и Персия <b>'+signed(grpMean("ip"))+'</b> ('+grpCount("ip")+'); '+
+  'наследники канона — Япония, Корея, Вьетнам, Тибет — <b>'+signed(grpMean("hr"))+'</b> ('+grpCount("hr")+'). '+
+  'Доктрины, выработанные в государствах, унаследовавших канон, но не входивших в Китай, в среднем усиливают островную позицию.';
+
+function select(id){
+  sel=id; place();
+  var d=D.filter(function(x){return x.id===id;})[0];
+  var dr=drift(d);
+  document.getElementById("detail").innerHTML=
+    '<div class="dhead"><span class="dnum">'+d.num+' / 55</span><h3>'+esc(d.name)+'</h3>'+
+      (d.cn?'<span class="dcn">'+esc(d.cn)+'</span>':'')+
+      '<span class="dreg">'+REGNAME[d.reg]+'</span><span class="cbadge">'+CANON[d.canon]+'</span></div>'+
+    '<p class="dsrc">'+esc(d.src)+'</p>'+
+    '<p class="dthesis">'+esc(d.thesis)+'</p>'+
+    '<div class="reads">'+
+      '<div class="read m"><h4>Как этим пользуется Пекин</h4><p>'+esc(d.rPK)+'</p></div>'+
+      '<div class="read i"><h4>Как этим пользуется Тайбэй</h4><p>'+esc(d.rTB)+'</p></div>'+
+    '</div>'+
+    '<div class="verdict"><h4>Что оно объясняет на самом деле</h4><p>'+esc(d.real)+'</p></div>'+
+    '<div class="drift">Сдвиг при смене точки чтения: '+dr+' из 200'+
+      '<span class="bar" style="width:'+(dr/200*160)+'px"></span>'+
+      (dr>=100?"доктрина полностью обратима":dr>=55?"доктрина обратима частично":"доктрина сопротивляется перевороту")+
+    '</div>';
+}
+
+function bindGroup(attr, set){
+  Array.prototype.forEach.call(document.querySelectorAll(".ctrls button["+attr+"]"),function(b){
+    b.addEventListener("click",function(){
+      set(b.getAttribute(attr));
+      Array.prototype.forEach.call(document.querySelectorAll(".ctrls button["+attr+"]"),function(o){
+        o.setAttribute("aria-pressed", o===b ? "true":"false");
+      });
+      place();
+    });
+  });
+}
+bindGroup("data-mode", function(v){ mode=v; });
+bindGroup("data-f", function(v){ filt=v; });
+
+/* ---------- сличение ---------- */
+function strip(el,arr){
+  var h="", vals=arr.map(function(d){return d.n;});
+  vals.forEach(function(v){ h+='<i class="'+lean(v)+'" style="left:'+xpct(v)+'%"></i>'; });
+  var mn=mean(vals);
+  h+='<div class="mk" style="left:'+xpct(mn)+'%"></div>';
+  h+='<div class="mklab" style="left:'+xpct(mn)+'%">среднее '+signed(mn)+'</div>';
+  el.insertAdjacentHTML("beforeend",h);
+}
+strip(document.getElementById("stripW"),W);
+strip(document.getElementById("stripE"),E);
+(function(){
+  var rows=[
+    ["Склоняются к материковой позиции",TW.m,TE.m,""],
+    ["Не склоняются никуда",TW.n,TE.n,""],
+    ["Склоняются к островной позиции",TW.i,TE.i,""],
+    ["Средний наклон списка",signed(TW.mean),signed(TE.mean),"hi"],
+    ["Средний сдвиг при смене точки чтения",TW.drift,TE.drift,"hi"],
+    ["Обращаются полностью (сдвиг ≥ 100)",TW.rev,TE.rev,""]
+  ];
+  var h='<thead><tr><th>Показатель по 55 доктринам</th><th>Европейский канон</th><th>Восточный канон</th></tr></thead><tbody>';
+  rows.forEach(function(r){ h+='<tr class="'+r[3]+'"><td>'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td></tr>'; });
+  document.getElementById("cmptbl").innerHTML=h+'</tbody>';
+})();
+document.getElementById("cmpnote").innerHTML=
+  'Наклоны каталогов противоположны: европейский в среднем усиливает островную позицию ('+signed(TW.mean)+'), восточный — материковую ('+signed(TE.mean)+'). '+
+  'Средний сдвиг при смене точки чтения при этом почти совпадает — <b>'+TW.drift+'</b> и <b>'+TE.drift+'</b>. '+
+  'Обратимость не зависит от традиции: она возникает при любом чтении доктрины в пользу одной из сторон, а наклон карты определяется выбором каталога.';
+
+/* ---------- раскрывающиеся списки ---------- */
+function toggler(root, btnSel, wrapPrefix){
+  Array.prototype.forEach.call(root.querySelectorAll(btnSel),function(b){
+    b.addEventListener("click",function(){
+      var w=document.getElementById(wrapPrefix+b.dataset.i);
+      var op=w.classList.toggle("open");
+      b.setAttribute("aria-expanded",op?"true":"false");
+      b.querySelector(".pm").textContent=op?"−":"+";
+    });
+  });
+}
+
+/* ---------- тёмный отсек ---------- */
+(function(){
+  var h="", idx=0;
+  [["w","Европейские рамки"],["e","Восточные рамки"]].forEach(function(g){
+    h+='<div class="grp">'+g[1]+'</div>';
+    S.optics.filter(function(o){return o.canon===g[0];}).forEach(function(o){
+      var latin=/^[\x00-\x7f]+$/.test(o.key);
+      h+='<div class="acc" id="acc'+idx+'">'+
+         '<button class="accbtn" type="button" aria-expanded="false" data-i="'+idx+'">'+
+           '<span class="k'+(latin?" latin":"")+'">'+esc(o.key)+'</span>'+
+           '<span>'+esc(o.name)+'<span class="sub">'+esc(o.sub)+'</span></span>'+
+           '<span class="pm">+</span>'+
+         '</button><div class="accbody">'+
+           o.paras.map(function(p){return "<p>"+esc(p)+"</p>";}).join("")+
+           '<div class="worse"><b>Чем это делает хуже</b>'+esc(o.worse)+'</div>'+
+         '</div></div>';
+      idx++;
+    });
+  });
+  var root=document.getElementById("darklist"); root.innerHTML=h;
+  toggler(root,".accbtn","acc");
+})();
+
+/* ---------- документы ---------- */
+(function(){
+  var h="";
+  S.docs.forEach(function(d){
+    h+='<div class="doc"><div class="docmeta">'+esc(d.meta)+'<span class="origin">'+ORIGIN[d.origin]+'</span></div>'+
+       '<h3>'+esc(d.title)+'</h3><p class="docsub">'+esc(d.sub)+'</p>';
+    d.blocks.forEach(function(b){
+      if(b[0]==="p")    h+='<p>'+esc(b[1])+'</p>';
+      if(b[0]==="fair") h+='<p class="fair">'+esc(b[1])+'</p>';
+      if(b[0]==="ann")  h+='<div class="ann"><b>'+esc(b[1])+'</b>'+esc(b[2])+'</div>';
+    });
+    h+='</div>';
+  });
+  document.getElementById("doclist").innerHTML=h;
+  document.getElementById("docsum").innerHTML='<b>Итог по пяти документам</b>'+esc(S.docsSum);
+})();
+
+/* ---------- машина оправданий ---------- */
+(function(){
+  var side=document.getElementById("mside"), pick=document.getElementById("mdoc"),
+      out=document.getElementById("mout"), cnt=document.getElementById("mcount");
+  var seen={}, made=0;
+  [["w","Европейский канон"],["e","Восточный канон"]].forEach(function(g){
+    var og=document.createElement("optgroup"); og.label=g[1];
+    byCanon(g[0]).forEach(function(d){
+      var o=document.createElement("option"); o.value=d.id; o.textContent=d.num+". "+d.name; og.appendChild(o);
+    });
+    pick.appendChild(og);
+  });
+  function count(){ cnt.textContent="Собрано обоснований: "+made+" из 220."; }
+  function build(){
+    var d=D.filter(function(x){return x.id===pick.value;})[0]; if(!d) return;
+    var s=side.value, who=(s==="pk")?"Пекин":"Тайбэй", body=(s==="pk")?d.rPK:d.rTB, pos=(s==="pk")?d.pk:d.tb;
+    if(!seen[s+":"+d.id]){ seen[s+":"+d.id]=1; made++; }
+    out.innerHTML=
+      '<div class="mtag">'+who+' · '+esc(d.name)+(d.cn?' <span class="mcn">'+esc(d.cn)+'</span>':'')+'</div>'+
+      '<p class="mprem">Посылка доктрины: '+esc(d.thesis)+'.</p>'+
+      '<p class="mbody">'+esc(body)+'</p>'+
+      '<p class="msign">Собрано из таблицы. Смещение относительно нейтрального чтения: '+signed(pos-d.n)+
+        ' пунктов. Обоснование для противоположной стороны — в том же меню.</p>';
+    count();
+  }
+  document.getElementById("mgo").addEventListener("click",build);
+  document.getElementById("mrnd").addEventListener("click",function(){
+    side.value=(Math.random()<0.5)?"pk":"tb";
+    pick.value=D[Math.floor(Math.random()*D.length)].id;
+    build();
+  });
+  count();
+})();
+
+/* ---------- что показывает карта ---------- */
+document.getElementById("methodlist").innerHTML=
+  '<li><b>Обратимость не зависит от традиции.</b> Средний сдвиг при смене точки чтения — '+TW.drift+' пунктов из 200 у европейского канона и '+TE.drift+' у восточного; полностью обращаются '+TW.rev+' и '+TE.rev+' доктрин. Два каталога, собранные независимо, дают одну и ту же обратимость.</li>'+
+  '<li><b>Наклон задаёт каталог.</b> При нейтральном чтении европейский канон даёт '+TW.i+' доктрин к островной позиции против '+TW.m+' к материковой, восточный — '+TE.m+' к материковой против '+TE.i+' к островной. Результат определяется выбором списка, а выбор списка методом не обосновывается.</li>'+
+  '<li><b>Общие учителя.</b> Конфуций, Мэн-цзы, Ван Янмин, Сунь Ятсен — наследие обеих сторон, с храмами, учебниками и государственными церемониями по обе стороны пролива. Координата «чью позицию усиливает» для них — оценка прочтения, а не свойство учения.</li>'+
+  '<li><b>Начертание.</b> Иероглифика набрана полными знаками (<span class="cjk">正體字</span>), как на Тайване; на материке пишут сокращёнными. Нейтрального варианта нет.</li>';
+document.getElementById("levers").innerHTML=S.levers.map(function(l){
+  return '<div class="lever"><span class="cb">'+CANON[l[0]]+'</span><b>'+(l[1]?'<span class="cjk">'+esc(l[1])+'</span>':'')+esc(l[2])+'</b><span>'+esc(l[3])+'</span></div>';
+}).join("");
+
+/* ---------- нижний ярус ---------- */
+(function(){
+  var h="", k=0;
+  S.abyss.forEach(function(g){
+    h+='<div class="grp">'+esc(g.title)+'</div>';
+    g.specs.forEach(function(sp){
+      k++;
+      h+='<div class="spec" id="sp'+k+'">'+
+         '<button class="specbtn" type="button" aria-expanded="false" data-i="'+k+'">'+
+           '<span class="n">'+(k<10?"0":"")+k+'</span>'+
+           '<span>'+esc(sp.name)+'<span class="cb">'+CANON_SHORT[sp.canon]+'</span><span class="who">'+esc(sp.who)+'</span></span>'+
+           '<span class="pm">+</span>'+
+         '</button><div class="specbody">'+
+           sp.paras.map(function(p){return "<p>"+esc(p)+"</p>";}).join("")+
+           '<div class="breaks"><b>Где ломается</b><p>'+esc(sp.breaks)+'</p></div>'+
+         '</div></div>';
+    });
+  });
+  var root=document.getElementById("abysslist"); root.innerHTML=h;
+  toggler(root,".specbtn","sp");
+})();
+
+/* ---------- подвал ---------- */
+(function(){
+  var c={}; E.forEach(function(d){ c[d.reg]=(c[d.reg]||0)+1; });
+  var order=["cn","in","ir","jp","kr","vn","bo"];
+  document.getElementById("ecomp").textContent=order.filter(function(r){return c[r];}).map(function(r){return REGNAME[r]+" — "+c[r];}).join(", ")+".";
+})();
+
+place();
+select("w16");
+})();
+</script>
+</body>
+
+</html>

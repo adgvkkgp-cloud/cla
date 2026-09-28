@@ -50,6 +50,7 @@ TARGETS = [
     ("face", "Таксономия лица", "face/TAXONOMY_FACE.html", ""),
     ("telo", "Таксономия телосложения", "telo/TAXONOMY_TELO.html", ""),
     ("food", "Мега-таксономия еды", "TAXONOMY_MEGA.html", ""),
+    ("strait", "Пролив аргументов", "strait/STRAIT.html", ""),
 ]
 
 
