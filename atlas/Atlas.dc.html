@@ -185,7 +185,7 @@
     <div class="tx-search" style="position:relative; flex:0 1 370px; min-width:160px; width:min(370px,44vw);">
       <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:11px; padding:8px 11px;">
         <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 48 575 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
+        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 48 599 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
         <sc-if value="{{ search }}"><button sc-camel-on-click="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
       </div>
       <sc-if value="{{ showResults }}">
@@ -292,6 +292,31 @@
 
           <sc-if value="{{ sel.hasDescription }}"><p style="margin:18px 0 0; font-size:14.5px; line-height:1.6; color:#d3d7e6;">{{ sel.description }}</p></sc-if>
 
+          <sc-if value="{{ sel.hasTree }}">
+            <div style="margin-top:16px; background:rgba(120,140,255,.05); border:1px solid rgba(140,160,255,.16); border-radius:13px; padding:14px 15px;">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:#8e96c4; margin-bottom:8px;">Систематика</div>
+              <sc-if value="{{ sel.hasDef }}"><p style="margin:0 0 10px; font-size:13.5px; line-height:1.6; color:#dfe3f2;">{{ sel.def }}</p></sc-if>
+              <sc-if value="{{ sel.hasUp }}">
+                <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:6px; font-size:12.5px; color:#8f95ab;">
+                  <span>{{ sel.upLabel }}:</span>
+                  <button sc-camel-on-click="{{ sel.onUp }}" style="border:0; background:none; color:#b9c2f2; font:inherit; font-size:12.5px; padding:0; cursor:pointer; text-decoration:underline; text-underline-offset:3px;">{{ sel.upTitle }}</button>
+                </div>
+                <sc-if value="{{ sel.hasBy }}"><div style="font-size:12px; color:#737a92; margin-top:3px;">{{ sel.by }}</div></sc-if>
+              </sc-if>
+              <sc-for list="{{ sel.tgroups }}" as="g" hint-placeholder-count="2">
+                <div style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.4px; text-transform:uppercase; color:#6c7288; margin:12px 0 6px;">{{ g.label }}</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <sc-for list="{{ g.chips }}" as="c" hint-placeholder-count="3">
+                    <button sc-camel-on-click="{{ c.onClick }}" style="display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); color:#c4c8da; font:inherit; font-size:12px; padding:5px 10px; border-radius:8px; cursor:pointer; max-width:100%;" style-hover="background:rgba(255,255,255,.08)"><span style="width:6px;height:6px;border-radius:50%;flex:0 0 auto; background: {{ c.color }};"></span><span>{{ c.label }}</span></button>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ sel.hasHome }}">
+            <button sc-camel-on-click="{{ sel.onHome }}" style="margin-top:12px; width:100%; text-align:left; border:1px solid rgba(140,160,255,.2); background:rgba(120,140,255,.06); color:#c9d0f5; font:inherit; font-size:12.5px; line-height:1.45; padding:10px 12px; border-radius:11px; cursor:pointer;" style-hover="background:rgba(120,140,255,.12)">Основное место в дереве: {{ sel.homeLabel }} →</button>
+          </sc-if>
+
           <sc-if value="{{ sel.hasDetail }}">
             <div style="margin-top:16px; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.07); border-radius:13px; padding:14px 15px;">
               <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.5px; text-transform:uppercase; color:#7a8098; margin-bottom:7px;">Механизм</div>
@@ -385,14 +410,18 @@
               <sc-if value="{{ s.open }}">
                 <div style="display:flex; flex-direction:column; border-top:1px solid rgba(255,255,255,.06);">
                   <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="5">
+                    <sc-if value="{{ r.isHead }}"><div style="display:flex; gap:11px; padding:8px 14px 3px; border-top:1px solid rgba(255,255,255,.03); font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.4px; text-transform:uppercase; color:#6c7288;"><span style="flex:0 0 auto; width:26px;"></span><span style="flex:0 0 auto; width: {{ r.ind }};"></span><span>{{ r.head }}</span></div></sc-if>
+                    <sc-if value="{{ r.isRow }}">
                     <button sc-camel-on-click="{{ r.onClick }}" style="display:flex; align-items:baseline; gap:11px; width:100%; text-align:left; border:0; border-top:1px solid rgba(255,255,255,.04); background: {{ r.bg }}; color:inherit; font:inherit; padding: {{ rowPad }}; cursor:pointer;" style-hover="background:rgba(255,255,255,.045)">
                       <span style="flex:0 0 auto; width:26px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#4d5368;">{{ r.num }}</span>
+                      <span style="flex:0 0 auto; width: {{ r.ind }};"></span>
                       <span style="flex:1; min-width:0;">
-                        <span style="display:block; font-size: {{ rowFs }}; font-weight:500; color:#e7e9f2; line-height:1.4;"><sc-for list="{{ r.parts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.28); color:#fff; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span>
+                        <span style="display:block; font-size: {{ rowFs }}; font-weight:500; color:#e7e9f2; line-height:1.4;"><span style="color:#7c83a0;">{{ r.mark }}</span><sc-for list="{{ r.parts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.28); color:#fff; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span>
                         <sc-if value="{{ r.hasDesc }}"><span style="display:block; font-size: {{ rowDfs }}; line-height:1.5; color:#8f95ab; margin-top:2px;"><sc-for list="{{ r.dparts }}" as="p" hint-placeholder-count="1"><sc-if value="{{ p.hl }}"><mark style="background:rgba(120,146,255,.18); color:#dfe3f2; border-radius:3px; padding:0 1px;">{{ p.t }}</mark></sc-if><sc-if value="{{ p.plain }}"><span>{{ p.t }}</span></sc-if></sc-for></span></sc-if>
                       </span>
                       <span style="flex:0 0 auto; font-size:11px; letter-spacing:1px; color:#6c7288;">{{ r.badges }}</span>
                     </button>
+                    </sc-if>
                   </sc-for>
                   <sc-if value="{{ s.hasMore }}">
                     <button sc-camel-on-click="{{ s.onMore }}" style="border:0; border-top:1px solid rgba(255,255,255,.04); background:rgba(255,255,255,.02); color:#8f95ab; font:inherit; font-size:12px; padding:9px; cursor:pointer;" style-hover="background:rgba(255,255,255,.06); color:#fff">Ещё {{ s.moreN }} в разделе</button>
@@ -610,7 +639,7 @@
   <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
     <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:#0a0b10; z-index:60;">
       <div style="width:34px;height:34px;border:3px solid rgba(255,255,255,.15); border-top-color:oklch(0.8 0.13 265); border-radius:50%; animation:txspin .8s linear infinite;"></div>
-      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 48 575 тем…</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 48 599 тем…</div>
     </div>
   </sc-if>
 </div>
@@ -711,12 +740,37 @@ class Component extends DCLogic {
     }
     if(K==='section'){
       const sec=this.sections[node.si];
-      const arr=sec.entries.map(e=>{ const n=this._mk({ kind:'entry', si:node.si, entryId:e.id, label:e.title, icon:'', hue:node.hue, color:this._c(node.hue,0.7,0.055), entry:e, tag:e.tag }); n.parent=node; n._facets=this._facetsOf(e); n.count=n._facets.length; return n; });
+      const arr=sec.entries.filter(e=>!e.up).map(e=>this._entryNode(node,e));
       return this._cluster(arr,node);
     }
     if(K==='bucket'){ return this._cluster(node._items,node); }
-    if(K==='entry'){ return node._facets.map(f=>{ const n=this._mk({ kind:'facet', label:f.label, icon:f.icon, hue:node.hue, color:f.color, text:f.text }); n.parent=node; return n; }); }
+    if(K==='entry'){ return this._treeKids(node).concat(node._facets.map(f=>{ const n=this._mk({ kind:'facet', label:f.label, icon:f.icon, hue:node.hue, color:f.color, text:f.text }); n.parent=node; return n; })); }
     return [];
+  }
+
+  _entryNode(parent,e){
+    const n=this._mk({ kind:'entry', si:parent.si, entryId:e.id, label:e.title, icon:'', hue:parent.hue, color:this._c(parent.hue,0.7,0.055), entry:e, tag:e.tag });
+    n.parent=parent; n._facets=this._facetsOf(e);
+    const T=this.treeIdx&&this.treeIdx[parent.si];
+    n._treeN=!T?0:(e.rel==='основание'
+      ? (T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')).length
+      : (T.kids.get(e.title)||[]).filter(c=>c.rel!=='основание').length);
+    n.count=n._facets.length+n._treeN; return n;
+  }
+  // Ветви понятия на карте: деление с позицией-основанием — через неё,
+  // деление без такой позиции — через группу «виды по …», признаки — прямо.
+  _treeKids(node){
+    const T=this.treeIdx&&this.treeIdx[node.si]; if(!T||!node.entry) return [];
+    const e=node.entry;
+    if(e.rel==='основание') return (T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')).map(c=>this._entryNode(node,c));
+    const out=[];
+    for(const g of this._treeGroups(T,e)){
+      if(g.basis){ out.push(this._entryNode(node,g.basis)); continue; }
+      const items=g.items.map(c=>this._entryNode(node,c));
+      if(!g.label){ out.push(...items); continue; }
+      const b=this._mkBucket(g.label,items,node); b._group=true; out.push(b);
+    }
+    return out;
   }
 
   _facetsOf(e){
@@ -760,7 +814,7 @@ class Component extends DCLogic {
   }
 
   _hasKids(n){
-    if(n.kind==='entry') return n._facets && n._facets.length>0;
+    if(n.kind==='entry') return (n._facets && n._facets.length>0) || n._treeN>0;
     if(n.kind==='facet') return false;
     return true;
   }
@@ -786,9 +840,9 @@ class Component extends DCLogic {
   }
   _findInTree(node,pred){
     if(pred(node)) return node;
-    if(node.kind==='entry'||node.kind==='facet') return null;
+    if(node.kind==='facet' || (node.kind==='entry' && !node._treeN)) return null;
     if(!node.children) node.children=this._children(node);
-    for(const c of node.children){ if(pred(c)) return c; if(c.kind==='bucket'||c.kind==='sub'||c.kind==='domain'){ const r=this._findInTree(c,pred); if(r) return r; } }
+    for(const c of node.children){ if(pred(c)) return c; if(c.kind==='bucket'||c.kind==='sub'||c.kind==='domain'||(c.kind==='entry'&&c._treeN)){ const r=this._findInTree(c,pred); if(r) return r; } }
     return null;
   }
   _openResult=(si,entryId)=>{
@@ -798,7 +852,16 @@ class Component extends DCLogic {
     for(const c of chain){ if(!c.children) c.children=this._children(c); c.expanded=true; }
     this.focus=sN; this._syncPath(); this._relayout(); this._renderMap(); this._fit(true);
     const eN=this._findInTree(sN, x=>x.kind==='entry' && x.entryId===entryId);
-    if(eN){ this._relayout(); this._renderMap(); this._select(eN); }
+    if(eN){ let p=eN.parent; while(p && p!==sN){ if(!p.children) p.children=this._children(p); p.expanded=true; p=p.parent; }
+      // Позиция дерева: в центр — само понятие, если у него есть виды, иначе его род;
+      // посторонние ветви внутри сворачиваются, чтобы карта не мельчала.
+      let F=eN._treeN?eN:eN.parent; while(F && F!==sN && (F.kind==='bucket' || (F.entry && F.entry.rel==='основание'))) F=F.parent;
+      const deep=F && F!==sN && F.kind==='entry';
+      if(deep){ const keep=new Set(); for(let q=eN;q;q=q.parent) keep.add(q);
+        const fold=n=>{ for(const c of (n.children||[])){ if(!keep.has(c)) c.expanded=false; fold(c); } }; fold(F);
+        if(eN._treeN){ if(!eN.children) eN.children=this._children(eN); eN.expanded=true; }
+        this.focus=F; this._syncPath(); }
+      this._relayout(); this._renderMap(); if(deep) this._fit(true); this._select(eN); }
   };
 
   onCloseSel=()=>{ const prev=this._selId; this._selId=null; this.setState({selected:null, detail:null, detailKey:null});
@@ -817,7 +880,7 @@ class Component extends DCLogic {
       kindLabel:this._kindLabel(node.kind), pathLabel:chain.join('  ›  '), hasPath:chain.length>0,
       hasCount:false, canDive:this._hasKids(node), onDive:()=>this._dive(node),
       hasDescription:false, hasDetail:false, hasMale:false, hasFemale:false, chips:[], hasChips:false, moreChips:0,
-      chipsLabel:'Внутри', hasMap:false };
+      chipsLabel:'Внутри', hasMap:false, hasTree:false, hasHome:false, tgroups:[] };
     if(node.count!=null){ v.hasCount=true; v.countLabel=this._countLabel(node); }
     if(node.kind==='entry' && node.entry){
       const e=node.entry;
@@ -825,18 +888,19 @@ class Component extends DCLogic {
       v.hasDetail=this._ne(e.detail); v.detail=e.detail||'';
       v.hasMale=this._ne(e.male); v.male=e.male||'';
       v.hasFemale=this._ne(e.female); v.female=e.female||'';
+      Object.assign(v,this._treeInfo(node.si,e,'map'));
     }
     if(node.kind==='facet'){ v.hasDescription=true; v.description=node.text; }
     if(node.kind!=='entry' && node.kind!=='facet'){
       let chips=[], more=0;
-      if(node.kind==='section'){ const sec=this.sections[node.si]; chips=sec.entries.slice(0,16).map(e=>({label:e.title,color:node.color})); more=Math.max(0,sec.entries.length-16); }
+      if(node.kind==='section'){ const top=this.sections[node.si].entries.filter(e=>!e.up); chips=top.slice(0,16).map(e=>({label:e.title,color:node.color})); more=Math.max(0,top.length-16); }
       else { if(!node.children) node.children=this._children(node); chips=node.children.slice(0,16).map(k=>({label:k.label,color:k.color,onClick:()=>this._dive(k)})); more=Math.max(0,node.children.length-16); }
       v.chips=chips; v.hasChips=chips.length>0; v.moreChips=more;
     }
     return v;
   }
   _kindLabel(k){ return { root:'Корень', domain:'Домен', sub:'Дисциплина', section:'Раздел', bucket:'Группа', entry:'Тема', facet:'Грань' }[k]||''; }
-  _countLabel(n){ const c=n.count; if(n.kind==='section') return c+' тем'; if(n.kind==='bucket') return c+' позиций'; if(n.kind==='entry') return c+' граней'; return c+' разделов'; }
+  _countLabel(n){ const c=n.count; if(n.kind==='section') return c+' тем'; if(n.kind==='bucket') return c+' позиций'; if(n.kind==='entry') return n._treeN ? (n._treeN+' в дереве'+(n._facets.length?' · '+n._facets.length+' граней':'')) : c+' граней'; return c+' разделов'; }
 
   _syncPath(){ const p=[]; let n=this.focus; while(n){ p.unshift({ id:n.id, label:n.label, icon:n.icon||'' }); n=n.parent; } this.setState({ path:p }); }
 
@@ -996,8 +1060,8 @@ class Component extends DCLogic {
     const rem=new Set(this._removing); cancelAnimationFrame(this._raf);
     const step=(now)=>{
       const p=Math.min(1,(now-st)/D), e=1-Math.pow(1-p,3);
-      for(const [id,rec] of this.els){ if(rec.kind!=='node') continue; const n=rec.node; let tx,ty; if(rem.has(id)){ const q=n.parent; tx=q?q.x:n.x; ty=q?q.y:n.y; } else { tx=n.x; ty=n.y; } n._rx=n._fx+(tx-n._fx)*e; n._ry=n._fy+(ty-n._fy)*e; rec.el.setAttribute('transform','translate('+n._rx+','+n._ry+')'); rec.el.style.opacity= rem.has(id)?(1-p):(rec._fresh?p:1); }
-      for(const [id,rec] of this.els){ if(rec.kind!=='link') continue; const n=rec.node, q=n.parent; const ax=(q._rx!=null?q._rx:q.x), ay=(q._ry!=null?q._ry:q.y), bx=(n._rx!=null?n._rx:n.x), by=(n._ry!=null?n._ry:n.y); rec.el.setAttribute('d','M'+ax+','+ay+'L'+bx+','+by); const base=this._linkOpacity()*(n.depth<=1?1:0.7); rec.el.style.opacity= rem.has(id)?base*(1-p):(rec._fresh?base*p:base); rec.el.setAttribute('stroke',n.color); rec.el.setAttribute('stroke-width',Math.max(0.4,3.2-n.depth*0.7)); }
+      for(const [id,rec] of this.els){ if(rec.kind!=='node') continue; const n=rec.node; let tx,ty; if(rem.has(id)){ const q=n.parent, ok=q&&q.x!=null; tx=ok?q.x:n.x; ty=ok?q.y:n.y; } else { tx=n.x; ty=n.y; } n._rx=n._fx+(tx-n._fx)*e; n._ry=n._fy+(ty-n._fy)*e; rec.el.setAttribute('transform','translate('+n._rx+','+n._ry+')'); rec.el.style.opacity= rem.has(id)?(1-p):(rec._fresh?p:1); }
+      for(const [id,rec] of this.els){ if(rec.kind!=='link') continue; const n=rec.node, q=n.parent; const bx=(n._rx!=null?n._rx:n.x), by=(n._ry!=null?n._ry:n.y), ax=(q._rx!=null?q._rx:(q.x!=null?q.x:bx)), ay=(q._ry!=null?q._ry:(q.y!=null?q.y:by)); rec.el.setAttribute('d','M'+ax+','+ay+'L'+bx+','+by); const base=this._linkOpacity()*(n.depth<=1?1:0.7); rec.el.style.opacity= rem.has(id)?base*(1-p):(rec._fresh?base*p:base); rec.el.setAttribute('stroke',n.color); rec.el.setAttribute('stroke-width',Math.max(0.4,3.2-n.depth*0.7)); }
       if(p<1) this._raf=requestAnimationFrame(step);
       else { for(const [,rec] of this.els) rec._fresh=false; for(const id of rem){ const rec=this.els.get(id); if(rec){ rec.el.remove(); this.els.delete(id); } } }
     };
@@ -1028,6 +1092,68 @@ class Component extends DCLogic {
     });
     this.levelList=[...lv.values()].sort((a,b)=>b.n-a.n);
     this.tagList=[...tg.entries()].sort((a,b)=>b[1]-a[1]).map(p=>({ t:p[0], n:p[1] }));
+    this._buildTree();
+  }
+
+  // ---------- систематика: род, вид, основание деления ----------
+  // Поля up / rel / by / diff / o проставляет при сборке src/data/tree.ts.
+  // Разделы без дерева не меняются: у их позиций нет up.
+  _buildTree(){
+    this.treeIdx=[]; this.sidx=new Map();
+    this.sections.forEach((sec,si)=>{
+      this.sidx.set(sec.id,si);
+      if(!sec.entries.some(e=>e.up)) return;
+      const kids=new Map();
+      for(const e of sec.entries) if(e.up){ if(!kids.has(e.up)) kids.set(e.up,[]); kids.get(e.up).push(e); }
+      for(const l of kids.values()) l.sort((a,b)=>(a.o||0)-(b.o||0));
+      const T={ kids:kids, pos:new Map(), seq:[] };
+      const visit=(e,d)=>{
+        T.pos.set(e.id,{ k:T.seq.length, d:d }); T.seq.push({ e:e, d:d });
+        for(const g of this._treeGroups(T,e)){
+          if(g.basis){ T.pos.set(g.basis.id,{ k:T.seq.length, d:d+1 }); T.seq.push({ e:g.basis, d:d+1 }); }
+          else if(g.label) T.seq.push({ head:g.label, d:d+1 });
+          for(const c of g.items) visit(c, d+(g.basis||g.label?2:1));
+        }
+      };
+      sec.entries.filter(e=>!e.up).forEach(e=>visit(e,0));
+      this.treeIdx[si]=T;
+    });
+  }
+  // Дети понятия по делениям: [{ rel, by, label, basis, items }].
+  _treeGroups(T,e){
+    const kids=T.kids.get(e.title)||[], out=[], gm=new Map();
+    for(const c of kids){
+      if(c.rel==='признаки'){ out.push({ rel:'признаки', label:'', basis:null, items:[c], o:c.o||0 }); continue; }
+      if(c.rel==='основание') continue;
+      const k=c.rel+'\u0000'+c.by;
+      if(!gm.has(k)){ const g={ rel:c.rel, by:c.by, items:[], o:c.o||0, basis:kids.find(x=>x.rel==='основание'&&x.by===c.by)||null };
+        g.label=g.basis?'':this._byLabel(c.rel,c.by); gm.set(k,g); out.push(g); }
+      gm.get(k).items.push(c);
+    }
+    return out.sort((a,b)=>a.o-b.o);
+  }
+  _byLabel(rel,by){ return rel==='вид' && /^по /.test(by||'') ? 'виды '+by : (by||''); }
+  _lc(t){ return t && !/^[A-ZА-ЯЁ]{2}/.test(t) ? t[0].toLowerCase()+t.slice(1) : t; }
+  _relMark(e){ return { 'основание':'◇ ', 'признаки':'≡ ' }[e.rel]||''; }
+  _treeInfo(si,e,mode){
+    const out={ hasTree:false, hasDef:false, def:'', hasUp:false, upLabel:'', upTitle:'', onUp:null, hasBy:false, by:'', tgroups:[], hasHome:false, homeLabel:'', onHome:null };
+    const go=(s2,t2)=>{ const sec2=this.sections[s2], e2=sec2&&sec2.entries.find(x=>x.title===t2); if(!e2) return ()=>{};
+      return mode==='map' ? ()=>this._openResult(s2,e2.id) : ()=>{ const i=this.fidx.get(s2+':'+e2.id); if(i!=null) this.onFocus(i); }; };
+    if(e.home && this.sidx){ const s2=this.sidx.get(e.home.s); if(s2!=null){ out.hasHome=true; out.homeLabel=this.sections[s2].title+'  ›  '+e.home.t; out.onHome=go(s2,e.home.t); } }
+    const T=this.treeIdx&&this.treeIdx[si]; if(!T) return out;
+    if(!e.up && !(T.kids.get(e.title)||[]).length) return out;
+    out.hasTree=true;
+    if(e.rel==='вид' && e.diff){ out.hasDef=true; out.def=e.title+' — '+this._lc(e.up)+', '+e.diff+'.'; }
+    if(e.up){ out.hasUp=true; out.upTitle=e.up; out.onUp=go(si,e.up);
+      out.upLabel={ 'вид':'Род', 'часть':'Входит в', 'основание':'Делит понятие', 'признаки':'Признаки понятия' }[e.rel]||'Выше';
+      if(e.by && e.rel==='вид'){ out.hasBy=true; out.by='основание деления: '+e.by; }
+      if(e.by && e.rel==='основание'){ out.hasBy=true; out.by=e.by; } }
+    const col=this.secMeta[si].color, chip=c=>({ label:c.title, color:col, onClick:go(si,c.title) });
+    if(e.rel==='вид'){ const sib=(T.kids.get(e.up)||[]).filter(c=>c!==e && c.rel==='вид' && c.by===e.by); if(sib.length) out.tgroups.push({ label:'Соседние виды', chips:sib.map(chip) }); }
+    if(e.rel==='основание'){ const m=(T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')); if(m.length) out.tgroups.push({ label:'Члены деления', chips:m.map(chip) }); }
+    else for(const g of this._treeGroups(T,e)){ if(!g.items.length) continue;
+      out.tgroups.push({ label:g.rel==='признаки'?'Признаки':this._byLabel(g.rel,g.by), chips:g.items.map(chip) }); }
+    return out;
   }
   _fl(r){ if(r.fl===null){ const e=r.e; r.fl=this._norm(e.title+' '+(e.description||'')+' '+(e.detail||'')+' '+(e.male||'')+' '+(e.female||'')+' '+(e.tag||'')+' '+this.secMeta[r.si].title); } return r.fl; }
 
@@ -1173,7 +1299,7 @@ class Component extends DCLogic {
   _entryView(r){
     const e=r.e, m=this.secMeta[r.si], dm=this._domMeta(m.did), idx=this.fidx.get(r.si+':'+e.id);
     const rel=this.tok?this._related(idx,8):[];
-    return { id:'e'+r.si+'-'+e.id, kind:'entry', kindLabel:'Тема', color:m.color, label:e.title,
+    return Object.assign({ id:'e'+r.si+'-'+e.id, kind:'entry', kindLabel:'Тема', color:m.color, label:e.title,
       hasPath:true, pathLabel:dm.title+'  ›  '+m.sub+'  ›  '+m.title,
       hasCount:!!e.tag, countLabel:e.tag||'', canDive:false,
       hasMap:true, onMap:()=>this._openResult(r.si,e.id),
@@ -1182,7 +1308,7 @@ class Component extends DCLogic {
       hasDetail:this._ne(e.detail), detail:e.detail||'',
       hasMale:this._ne(e.male), male:e.male||'', hasFemale:this._ne(e.female), female:e.female||'',
       chipsLabel:'Рядом по смыслу', hasChips:rel.length>0, moreChips:0,
-      chips:rel.map(o=>({ label:this._short(this.flat[o.idx].t,44), color:this.secMeta[this.flat[o.idx].si].color, onClick:()=>this.onFocus(o.idx) })) }; }
+      chips:rel.map(o=>({ label:this._short(this.flat[o.idx].t,44), color:this.secMeta[this.flat[o.idx].si].color, onClick:()=>this.onFocus(o.idx) })) }, this._treeInfo(r.si,e,'list')); }
 
   onPick=(r)=>{ this.setState({ detail:this._entryView(r), detailKey:r.si+':'+r.e.id }); };
   onFocus=(idx)=>{ const r=this.flat[idx]; if(!r) return;
@@ -1257,7 +1383,7 @@ class Component extends DCLogic {
       onTabMap:this.onTabMap, onTabList:this.onTabList, onTabTable:this.onTabTable,
       onTabTiles:this.onTabTiles, onTabCols:this.onTabCols, onTabGraph:this.onTabGraph, onTabPairs:this.onTabPairs,
       statSections:(this.sections?this.sections.length:615).toLocaleString('ru'),
-      statEntries:(this._entryCount||48575).toLocaleString('ru'),
+      statEntries:(this._entryCount||48599).toLocaleString('ru'),
       mapRef:this.mapRef,
       path:(s.path||[]).map((p,i,arr)=>({ id:p.id, label:p.label, icon:p.icon, notLast:i<arr.length-1, onClick:()=>this._diveById(p.id) })),
       legend:(this.domIndex?this.DOMAINS.filter(d=>this.domIndex[d.id]&&this.domIndex[d.id].subs.size):[]).map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), onClick:()=>this._diveTo(d.id) })),
@@ -1303,18 +1429,24 @@ class Component extends DCLogic {
     v.secRows=shown.map(g=>{
       const m=this.secMeta[g.si];
       const open=(s.openSec[g.si]!==undefined)?s.openSec[g.si]:(st.length>0);
-      const lim=s.secLim[g.si]||50, rows=open?g.recs.slice(0,lim):[];
+      const lim=s.secLim[g.si]||50, T=this.treeIdx&&this.treeIdx[g.si];
+      let rows=[];
+      if(open && T && !st.length){
+        const byId=new Map(g.recs.map(r=>[r.e.id,r]));
+        let n=0; for(const x of T.seq){ if(n>=lim) break; if(x.head){ rows.push({ head:x.head, d:x.d }); continue; } const r=byId.get(x.e.id); if(r){ rows.push({ r:r, d:x.d }); n++; } }
+      } else if(open) rows=g.recs.slice(0,lim).map(r=>({ r:r, d:T&&T.pos.get(r.e.id)?T.pos.get(r.e.id).d:0 }));
+      const shownN=rows.filter(x=>x.r).length; let num=0;
       return { si:g.si, icon:m.icon, title:m.title, color:m.color,
         meta: st.length?(this._fmt(g.recs.length)+' из '+this._fmt(m.n)):(this._fmt(m.n)+' тем'),
         hasSub:!!m.subtitle, subtitle:m.subtitle, chev:open?'▾':'▸', open:open,
         onToggle:()=>{ const o=Object.assign({},s.openSec); o[g.si]=!open; this.setState({ openSec:o }); },
-        hasMore:open && g.recs.length>rows.length, moreN:this._fmt(g.recs.length-rows.length),
+        hasMore:open && g.recs.length>shownN, moreN:this._fmt(g.recs.length-shownN),
         onMore:()=>{ const l=Object.assign({},s.secLim); l[g.si]=lim+150; this.setState({ secLim:l }); },
-        rows:rows.map((r,i)=>({ num:String(i+1), parts:this._parts(r.t,st),
+        rows:rows.map(x=>x.head ? { isHead:true, isRow:false, head:x.head, ind:(x.d*16)+'px' } : (r=>({ isHead:false, isRow:true, ind:(x.d*16)+'px', mark:this._relMark(r.e), num:String(++num), parts:this._parts(r.t,st),
           hasDesc:wd&&this._ne(r.e.description), dparts:this._parts(this._short(r.e.description||'',260),st),
           badges:(r.hasD?'❉':'')+(r.hasM?'♂':'')+(r.hasF?'♀':''),
           bg:dk===(r.si+':'+r.e.id)?'rgba(120,140,255,.11)':'transparent',
-          onClick:()=>this.onPick(r) })) };
+          onClick:()=>this.onPick(r) }))(x.r)) };
     });
 
     const tb=ready?this._tbl():[], tlim=s.tblLimit||150, ar=s.tblDir>0?' ↑':' ↓';
