@@ -110,6 +110,7 @@ import { tree13, homes13 } from "./tree13";
 import { tree14, homes14 } from "./tree14";
 import { tree15, homes15 } from "./tree15";
 import { tree16, homes16 } from "./tree16";
+import { tree17, homes17 } from "./tree17";
 import { applyFacets, facets1, facets2, facets3, facets4, facets5, facets6, facets7, facets8, facets9, facets10, facets11, facets12, facets13, facets14, facets15, facets16, facets17, facets18, facets19, facets20 } from "./facets";
 import { applyDetails, details1, details2, details3, details4, details5, details6, details7, details8, details9, details10, details11, details12, details13, details14, details15, details16, details17, details18, details19, details20, details21, details22, details23, details24, details25, details26, details27 } from "./details";
 
@@ -1086,7 +1087,7 @@ applyFacets(allSections, [facets1, facets2, facets3, facets4, facets5, facets6, 
 
 // Систематика — род, вид, основание деления — ставится, когда все
 // заголовки окончательны, и до ярлыков.
-applyTree(allSections, [tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9, tree10, tree11, tree12, tree13, tree14, tree15, tree16], [homes1, homes2, homes3, homes4, homes5, homes6, homes7, homes8, homes9, homes10, homes11, homes12, homes13, homes14, homes15, homes16]);
+applyTree(allSections, [tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9, tree10, tree11, tree12, tree13, tree14, tree15, tree16, tree17], [homes1, homes2, homes3, homes4, homes5, homes6, homes7, homes8, homes9, homes10, homes11, homes12, homes13, homes14, homes15, homes16, homes17]);
 
 // Ярлыки проставляются последними — после того, как добор дописал
 // все позиции, чтобы правила прошли и по ним тоже.
