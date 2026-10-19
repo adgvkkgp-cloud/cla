@@ -185,7 +185,7 @@
     <div class="tx-search" style="position:relative; flex:0 1 370px; min-width:160px; width:min(370px,44vw);">
       <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:11px; padding:8px 11px;">
         <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 48 943 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
+        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 49 044 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
         <sc-if value="{{ search }}"><button sc-camel-on-click="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
       </div>
       <sc-if value="{{ showResults }}">
@@ -639,7 +639,7 @@
   <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
     <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:#0a0b10; z-index:60;">
       <div style="width:34px;height:34px;border:3px solid rgba(255,255,255,.15); border-top-color:oklch(0.8 0.13 265); border-radius:50%; animation:txspin .8s linear infinite;"></div>
-      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 48 943 тем…</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 49 044 тем…</div>
     </div>
   </sc-if>
 </div>
@@ -843,11 +843,18 @@ class Component extends DCLogic {
   }
   // Путь к позиции может идти через узел-основание из другого раздела,
   // поэтому спуск не ограничен разделом; раздел сверяет сам pred.
+  // Сначала — без спуска в позиции: позиция, стоящая на своём месте,
+  // важнее её копии внутри чужой ветви.
   _findInTree(node,pred){
+    const shallow=n=>{ if(pred(n)) return n; if(n.kind==='entry'||n.kind==='facet') return null;
+      if(!n.children) n.children=this._children(n); for(const c of n.children){ const r=shallow(c); if(r) return r; } return null; };
+    return shallow(node) || this._findDeep(node,pred);
+  }
+  _findDeep(node,pred){
     if(pred(node)) return node;
     if(node.kind==='facet' || (node.kind==='entry' && !node._treeN)) return null;
     if(!node.children) node.children=this._children(node);
-    for(const c of node.children){ if(pred(c)) return c; if(c.kind==='bucket'||c.kind==='sub'||c.kind==='domain'||(c.kind==='entry'&&c._treeN)){ const r=this._findInTree(c,pred); if(r) return r; } }
+    for(const c of node.children){ if(pred(c)) return c; if(c.kind==='bucket'||c.kind==='sub'||c.kind==='domain'||(c.kind==='entry'&&c._treeN)){ const r=this._findDeep(c,pred); if(r) return r; } }
     return null;
   }
   _openResult=(si,entryId)=>{
@@ -861,7 +868,8 @@ class Component extends DCLogic {
       // Позиция дерева: в центр — само понятие, если у него есть виды, иначе его род;
       // посторонние ветви внутри сворачиваются, чтобы карта не мельчала.
       let F=eN._treeN?eN:eN.parent; while(F && F!==sN && (F.kind==='bucket' || (F.entry && F.entry.rel==='основание'))) F=F.parent;
-      const deep=F && F!==sN && F.kind==='entry';
+      let deep=F && F!==sN && F.kind==='entry';
+      if(!deep && eN._treeN){ F=eN; deep=true; } // основание в корне раздела-классификации
       if(deep){ const keep=new Set(); for(let q=eN;q;q=q.parent) keep.add(q);
         const fold=n=>{ for(const c of (n.children||[])){ if(!keep.has(c)) c.expanded=false; fold(c); } }; fold(F);
         if(eN._treeN){ if(!eN.children) eN.children=this._children(eN); eN.expanded=true; }
@@ -1395,7 +1403,7 @@ class Component extends DCLogic {
       onTabMap:this.onTabMap, onTabList:this.onTabList, onTabTable:this.onTabTable,
       onTabTiles:this.onTabTiles, onTabCols:this.onTabCols, onTabGraph:this.onTabGraph, onTabPairs:this.onTabPairs,
       statSections:(this.sections?this.sections.length:615).toLocaleString('ru'),
-      statEntries:(this._entryCount||48943).toLocaleString('ru'),
+      statEntries:(this._entryCount||49044).toLocaleString('ru'),
       mapRef:this.mapRef,
       path:(s.path||[]).map((p,i,arr)=>({ id:p.id, label:p.label, icon:p.icon, notLast:i<arr.length-1, onClick:()=>this._diveById(p.id) })),
       legend:(this.domIndex?this.DOMAINS.filter(d=>this.domIndex[d.id]&&this.domIndex[d.id].subs.size):[]).map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), onClick:()=>this._diveTo(d.id) })),
