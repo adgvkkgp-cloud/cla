@@ -1165,7 +1165,7 @@ class Component extends DCLogic {
     if(!e.up && !(T.kids.get(e.title)||[]).length) return out;
     out.hasTree=true;
     const ps=this._upSi(e,si), Tp=this.treeIdx[ps]||T, far=ps!==si;
-    if(e.rel==='вид' && e.diff){ out.hasDef=true; out.def=e.title+' — '+this._lc(e.up)+this._diffJoin(e.diff)+e.diff+'.'; }
+    if(e.rel==='вид' && e.diff){ out.hasDef=true; out.def=e.title+' — '+this._lc(e.up.replace(/ \([^)]*\)$/, ''))+this._diffJoin(e.diff)+e.diff+'.'; }
     if(e.up){ out.hasUp=true; out.upTitle=e.up+(far?'  ·  '+this.sections[ps].title:''); out.onUp=go(ps,e.up);
       out.upLabel={ 'вид':'Род', 'часть':'Входит в', 'основание':'Делит понятие', 'признаки':'Признаки понятия', 'положение':'Относится к' }[e.rel]||'Выше';
       if(e.by && e.rel==='вид'){ out.hasBy=true; out.by='основание деления: '+e.by; }
