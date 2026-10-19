@@ -185,7 +185,7 @@
     <div class="tx-search" style="position:relative; flex:0 1 370px; min-width:160px; width:min(370px,44vw);">
       <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:11px; padding:8px 11px;">
         <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 48 620 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
+        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 48 706 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
         <sc-if value="{{ search }}"><button sc-camel-on-click="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
       </div>
       <sc-if value="{{ showResults }}">
@@ -639,7 +639,7 @@
   <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
     <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:#0a0b10; z-index:60;">
       <div style="width:34px;height:34px;border:3px solid rgba(255,255,255,.15); border-top-color:oklch(0.8 0.13 265); border-radius:50%; animation:txspin .8s linear infinite;"></div>
-      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 48 620 тем…</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 48 706 тем…</div>
     </div>
   </sc-if>
 </div>
@@ -740,7 +740,7 @@ class Component extends DCLogic {
     }
     if(K==='section'){
       const sec=this.sections[node.si];
-      const arr=sec.entries.filter(e=>!e.up).map(e=>this._entryNode(node,e));
+      const arr=sec.entries.filter(e=>this._isTop(e)).map(e=>this._entryNode(node,e));
       return this._cluster(arr,node);
     }
     if(K==='bucket'){ return this._cluster(node._items,node); }
@@ -749,21 +749,23 @@ class Component extends DCLogic {
   }
 
   _entryNode(parent,e){
-    const n=this._mk({ kind:'entry', si:parent.si, entryId:e.id, label:e.title, icon:'', hue:parent.hue, color:this._c(parent.hue,0.7,0.055), entry:e, tag:e.tag });
+    const si=this._siOf(e,parent.si);
+    const n=this._mk({ kind:'entry', si:si, entryId:e.id, label:e.title, icon:'', hue:parent.hue, color:this._c(parent.hue,0.7,0.055), entry:e, tag:e.tag });
     n.parent=parent; n._facets=this._facetsOf(e);
-    const T=this.treeIdx&&this.treeIdx[parent.si];
-    n._treeN=!T?0:(e.rel==='основание'
-      ? (T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')).length
-      : (T.kids.get(e.title)||[]).filter(c=>c.rel!=='основание').length);
+    const T=this.treeIdx&&this.treeIdx[si], Tp=this.treeIdx&&this.treeIdx[this._upSi(e,si)];
+    n._treeN=e.rel==='основание'
+      ? (Tp?(Tp.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')).length:0)
+      : (T?(T.kids.get(e.title)||[]).filter(c=>c.rel!=='основание').length:0);
     n.count=n._facets.length+n._treeN; return n;
   }
   // Ветви понятия на карте: деление с позицией-основанием — через неё,
   // деление без такой позиции — через группу «виды по …», признаки и
   // единственная группа — прямо: различать там нечего.
   _treeKids(node){
-    const T=this.treeIdx&&this.treeIdx[node.si]; if(!T||!node.entry) return [];
+    if(!node.entry||!this.treeIdx) return [];
     const e=node.entry;
-    if(e.rel==='основание') return (T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')).map(c=>this._entryNode(node,c));
+    if(e.rel==='основание'){ const Tp=this.treeIdx[this._upSi(e,node.si)]; return Tp?(Tp.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')).map(c=>this._entryNode(node,c)):[]; }
+    const T=this.treeIdx[node.si]; if(!T) return [];
     const out=[], groups=this._treeGroups(T,e);
     for(const g of groups){
       if(g.basis){ out.push(this._entryNode(node,g.basis)); continue; }
@@ -839,6 +841,8 @@ class Component extends DCLogic {
     const sN=this._findInTree(dN, n=>n.kind==='sub' && n.subKey===sub); if(!sN) return null;
     return this._findInTree(sN, n=>n.kind==='section' && n.si===si);
   }
+  // Путь к позиции может идти через узел-основание из другого раздела,
+  // поэтому спуск не ограничен разделом; раздел сверяет сам pred.
   _findInTree(node,pred){
     if(pred(node)) return node;
     if(node.kind==='facet' || (node.kind==='entry' && !node._treeN)) return null;
@@ -852,7 +856,7 @@ class Component extends DCLogic {
     let n=sN; const chain=[]; while(n){ chain.unshift(n); n=n.parent; }
     for(const c of chain){ if(!c.children) c.children=this._children(c); c.expanded=true; }
     this.focus=sN; this._syncPath(); this._relayout(); this._renderMap(); this._fit(true);
-    const eN=this._findInTree(sN, x=>x.kind==='entry' && x.entryId===entryId);
+    const eN=this._findInTree(sN, x=>x.kind==='entry' && x.si===si && x.entryId===entryId);
     if(eN){ let p=eN.parent; while(p && p!==sN){ if(!p.children) p.children=this._children(p); p.expanded=true; p=p.parent; }
       // Позиция дерева: в центр — само понятие, если у него есть виды, иначе его род;
       // посторонние ветви внутри сворачиваются, чтобы карта не мельчала.
@@ -862,7 +866,7 @@ class Component extends DCLogic {
         const fold=n=>{ for(const c of (n.children||[])){ if(!keep.has(c)) c.expanded=false; fold(c); } }; fold(F);
         if(eN._treeN){ if(!eN.children) eN.children=this._children(eN); eN.expanded=true; }
         this.focus=F; this._syncPath(); }
-      this._relayout(); this._renderMap(); if(deep) this._fit(true); this._select(eN); }
+      this._relayout(); this._renderMap(); this._fit(true); this._select(eN); }
   };
 
   onCloseSel=()=>{ const prev=this._selId; this._selId=null; this.setState({selected:null, detail:null, detailKey:null});
@@ -894,7 +898,7 @@ class Component extends DCLogic {
     if(node.kind==='facet'){ v.hasDescription=true; v.description=node.text; }
     if(node.kind!=='entry' && node.kind!=='facet'){
       let chips=[], more=0;
-      if(node.kind==='section'){ const top=this.sections[node.si].entries.filter(e=>!e.up); chips=top.slice(0,16).map(e=>({label:e.title,color:node.color})); more=Math.max(0,top.length-16); }
+      if(node.kind==='section'){ const top=this.sections[node.si].entries.filter(e=>this._isTop(e)); chips=top.slice(0,16).map(e=>({label:e.title,color:node.color})); more=Math.max(0,top.length-16); }
       else { if(!node.children) node.children=this._children(node); chips=node.children.slice(0,16).map(k=>({label:k.label,color:k.color,onClick:()=>this._dive(k)})); more=Math.max(0,node.children.length-16); }
       v.chips=chips; v.hasChips=chips.length>0; v.moreChips=more;
     }
@@ -1099,27 +1103,32 @@ class Component extends DCLogic {
   // ---------- систематика: род, вид, основание деления ----------
   // Поля up / rel / by / diff / o проставляет при сборке src/data/tree.ts.
   // Разделы без дерева не меняются: у их позиций нет up.
+  // Род может лежать в другом разделе (upS): тогда позиция — корень в своём
+  // разделе, а в разделе рода она видна как его вид в панели и на карте.
   _buildTree(){
-    this.treeIdx=[]; this.sidx=new Map();
-    this.sections.forEach((sec,si)=>{
-      this.sidx.set(sec.id,si);
-      if(!sec.entries.some(e=>e.up)) return;
-      const kids=new Map();
-      for(const e of sec.entries) if(e.up){ if(!kids.has(e.up)) kids.set(e.up,[]); kids.get(e.up).push(e); }
-      for(const l of kids.values()) l.sort((a,b)=>(a.o||0)-(b.o||0));
-      const T={ kids:kids, pos:new Map(), seq:[] };
+    this.treeIdx=[]; this.sidx=new Map(); this.eSi=new Map();
+    this.sections.forEach((sec,si)=>this.sidx.set(sec.id,si));
+    const T=si=>this.treeIdx[si]||(this.treeIdx[si]={ kids:new Map(), pos:new Map(), seq:[] });
+    this.sections.forEach((sec,si)=>{ for(const e of sec.entries) if(e.up){
+      this.eSi.set(e,si); T(si); const ps=this._upSi(e,si), K=T(ps).kids;
+      if(!K.has(e.up)) K.set(e.up,[]); K.get(e.up).push(e); } });
+    this.treeIdx.forEach((t,si)=>{ if(!t) return;
+      for(const l of t.kids.values()) l.sort((a,b)=>(a.o||0)-(b.o||0));
+      const own=c=>this._siOf(c,si)===si;
       const visit=(e,d)=>{
-        T.pos.set(e.id,{ k:T.seq.length, d:d }); T.seq.push({ e:e, d:d });
-        for(const g of this._treeGroups(T,e)){
-          if(g.basis){ T.pos.set(g.basis.id,{ k:T.seq.length, d:d+1 }); T.seq.push({ e:g.basis, d:d+1 }); }
-          else if(g.label) T.seq.push({ head:g.label, d:d+1 });
-          for(const c of g.items) visit(c, d+(g.basis||g.label?2:1));
+        t.pos.set(e.id,{ k:t.seq.length, d:d }); t.seq.push({ e:e, d:d });
+        for(const g of this._treeGroups(t,e)){ const items=g.items.filter(own); if(!items.length && !g.basis) continue;
+          if(g.basis){ t.pos.set(g.basis.id,{ k:t.seq.length, d:d+1 }); t.seq.push({ e:g.basis, d:d+1 }); }
+          else if(g.label) t.seq.push({ head:g.label, d:d+1 });
+          for(const c of items) visit(c, d+(g.basis||g.label?2:1));
         }
       };
-      sec.entries.filter(e=>!e.up).forEach(e=>visit(e,0));
-      this.treeIdx[si]=T;
+      this.sections[si].entries.filter(e=>this._isTop(e)).forEach(e=>visit(e,0));
     });
   }
+  _siOf(e,si){ const v=this.eSi&&this.eSi.get(e); return v==null?si:v; }
+  _upSi(e,si){ if(!e.upS) return si; const v=this.sidx.get(e.upS); return v==null?si:v; }
+  _isTop(e){ return !e.up || !!e.upS; }
   // Дети понятия по делениям: [{ rel, by, label, basis, items }].
   _treeGroups(T,e){
     const kids=T.kids.get(e.title)||[], out=[], gm=new Map();
@@ -1144,14 +1153,16 @@ class Component extends DCLogic {
     const T=this.treeIdx&&this.treeIdx[si]; if(!T) return out;
     if(!e.up && !(T.kids.get(e.title)||[]).length) return out;
     out.hasTree=true;
+    const ps=this._upSi(e,si), Tp=this.treeIdx[ps]||T, far=ps!==si;
     if(e.rel==='вид' && e.diff){ out.hasDef=true; out.def=e.title+' — '+this._lc(e.up)+', '+e.diff+'.'; }
-    if(e.up){ out.hasUp=true; out.upTitle=e.up; out.onUp=go(si,e.up);
+    if(e.up){ out.hasUp=true; out.upTitle=e.up+(far?'  ·  '+this.sections[ps].title:''); out.onUp=go(ps,e.up);
       out.upLabel={ 'вид':'Род', 'часть':'Входит в', 'основание':'Делит понятие', 'признаки':'Признаки понятия', 'положение':'Относится к' }[e.rel]||'Выше';
       if(e.by && e.rel==='вид'){ out.hasBy=true; out.by='основание деления: '+e.by; }
       if(e.by && e.rel!=='вид'){ out.hasBy=true; out.by=e.by; } }
-    const col=this.secMeta[si].color, chip=c=>({ label:c.title, color:col, onClick:go(si,c.title) });
-    if(e.rel==='вид'){ const sib=(T.kids.get(e.up)||[]).filter(c=>c!==e && c.rel==='вид' && c.by===e.by); if(sib.length) out.tgroups.push({ label:'Соседние виды', chips:sib.map(chip) }); }
-    if(e.rel==='основание'){ const m=(T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')); if(m.length) out.tgroups.push({ label:'Члены деления', chips:m.map(chip) }); }
+    // Чип ведёт в раздел самой позиции; позиция из другого раздела помечена стрелкой.
+    const chip=c=>{ const cs=this._siOf(c,si); return { label:c.title+(cs!==si?' ↗':''), color:this.secMeta[cs].color, onClick:go(cs,c.title) }; };
+    if(e.rel==='вид'){ const sib=(Tp.kids.get(e.up)||[]).filter(c=>c!==e && c.rel==='вид' && c.by===e.by); if(sib.length) out.tgroups.push({ label:'Соседние виды', chips:sib.map(chip) }); }
+    if(e.rel==='основание'){ const m=(Tp.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')); if(m.length) out.tgroups.push({ label:'Члены деления', chips:m.map(chip) }); }
     else for(const g of this._treeGroups(T,e)){ if(!g.items.length) continue;
       out.tgroups.push({ label:g.rel==='признаки'?'Признаки':this._byLabel(g.rel,g.by), chips:g.items.map(chip) }); }
     return out;
@@ -1384,7 +1395,7 @@ class Component extends DCLogic {
       onTabMap:this.onTabMap, onTabList:this.onTabList, onTabTable:this.onTabTable,
       onTabTiles:this.onTabTiles, onTabCols:this.onTabCols, onTabGraph:this.onTabGraph, onTabPairs:this.onTabPairs,
       statSections:(this.sections?this.sections.length:615).toLocaleString('ru'),
-      statEntries:(this._entryCount||48620).toLocaleString('ru'),
+      statEntries:(this._entryCount||48706).toLocaleString('ru'),
       mapRef:this.mapRef,
       path:(s.path||[]).map((p,i,arr)=>({ id:p.id, label:p.label, icon:p.icon, notLast:i<arr.length-1, onClick:()=>this._diveById(p.id) })),
       legend:(this.domIndex?this.DOMAINS.filter(d=>this.domIndex[d.id]&&this.domIndex[d.id].subs.size):[]).map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), onClick:()=>this._diveTo(d.id) })),

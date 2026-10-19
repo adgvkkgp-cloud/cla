@@ -48,6 +48,14 @@ import type { Section, Entry } from "./sections";
 // home — ссылка на основное место понятия. Одно понятие живёт во
 // многих разделах; дерево у него одно, остальные места ссылаются туда.
 //
+// Род может лежать в другом разделе: "x20-tgp::Норма права". Понятие
+// остаётся там, где оно подробно описано, а деление собирается из
+// разных разделов без копий. Порядок выбора: род — в профильном
+// разделе; вид — там, где он уже описан; позиция-основание — рядом
+// с родом, а если там её нет — в разделе-классификации; недостающий
+// вид дописывается к роду. Дубль, которому нет места в дереве,
+// получает home.
+//
 // Сборку роняют:
 //   • родитель, основание или дом не найдены; заголовок в разделе
 //     не единственный; дописываемая позиция уже есть;
@@ -77,12 +85,24 @@ export type HomeTable = Record<string, Record<string, [string, string]>>;
 export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTable[]): void {
   const errs: string[] = [];
   const secById = new Map(sections.map((s) => [s.id, s]));
-  const find = (s: Section, t: string) => s.entries.find((e) => e.title === t);
+  const find = (s: Section | undefined, t: string) => s && s.entries.find((e) => e.title === t);
+  const count = (s: Section, t: string) => s.entries.reduce((n, e) => n + (e.title === t ? 1 : 0), 0);
+  // Ссылка «раздел::Заголовок» ведёт в другой раздел; без префикса — в свой.
+  const split = (ref: string, sid: string): [string, string] => {
+    const i = ref.indexOf("::");
+    return i < 0 ? [sid, ref] : [ref.slice(0, i), ref.slice(i + 2)];
+  };
+  const parentOf = (n: Node) =>
+    "genus" in n ? n.genus : "whole" in n ? n.whole : "basisOf" in n ? n.basisOf : "signsOf" in n ? n.signsOf : n.about;
+  const specs: [string, Section, TreeSpec][] = [];
 
+  // 1. Добор и узлы.
   for (const table of trees) {
     for (const [sid, spec] of Object.entries(table)) {
       const sec = secById.get(sid);
       if (!sec) { errs.push(`раздел ${sid} не найден`); continue; }
+      if (specs.some(([x]) => x === sid)) { errs.push(`раздел ${sid} описан в двух таблицах`); continue; }
+      specs.push([sid, sec, spec]);
       const where = (t: string) => `${sid} :: «${t}»`;
 
       // Добор недостающих ступеней — в конец раздела, нумерация продолжается.
@@ -91,74 +111,51 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
         if (!d || !d.trim()) errs.push(`${where(t)}: дописывается без описания`);
         sec.entries.push({ id: sec.entries.length + 1, title: t, description: d });
       }
-      const count = new Map<string, number>();
-      for (const e of sec.entries) count.set(e.title, (count.get(e.title) || 0) + 1);
-      const refs = new Set([...Object.keys(spec.nodes), ...(spec.free || [])]);
-      for (const n of Object.values(spec.nodes)) {
-        const up = "genus" in n ? n.genus : "whole" in n ? n.whole : "basisOf" in n ? n.basisOf : "signsOf" in n ? n.signsOf : n.about;
-        refs.add(up);
+      for (const t of [...Object.keys(spec.nodes), ...(spec.free || [])]) {
+        const c = count(sec, t);
+        if (c > 1) errs.push(`${where(t)}: заголовок встречается в разделе ${c} раза`);
       }
-      for (const t of refs) if ((count.get(t) || 0) > 1) errs.push(`${where(t)}: заголовок встречается в разделе ${count.get(t)} раза`);
 
       let ord = 0;
       for (const [title, n] of Object.entries(spec.nodes)) {
         const e = find(sec, title);
         if (!e) { errs.push(`${where(title)}: позиция не найдена`); continue; }
         e.o = ++ord;
-        const link = (up: string) => { if (!find(sec, up)) errs.push(`${where(title)}: родитель «${up}» не найден`); return up; };
+        const [us, ut] = split(parentOf(n), sid);
+        const usec = secById.get(us);
+        if (!usec) errs.push(`${where(title)}: раздел родителя ${us} не найден`);
+        else if (!find(usec, ut)) errs.push(`${where(title)}: родитель «${ut}»${us === sid ? "" : " в " + us} не найден`);
+        else if (count(usec, ut) > 1) errs.push(`${where(title)}: родитель «${ut}» в ${us} неоднозначен`);
+        const up = { up: ut, ...(us === sid ? {} : { upS: us }) };
         if ("genus" in n) {
           if (!n.by) errs.push(`${where(title)}: вид без основания деления`);
           if (!n.diff || !n.diff.trim()) errs.push(`${where(title)}: вид без видового отличия`);
-          Object.assign(e, { up: link(n.genus), rel: "вид", by: n.by, diff: n.diff });
+          Object.assign(e, up, { rel: "вид", by: n.by, diff: n.diff });
         } else if ("whole" in n) {
-          Object.assign(e, { up: link(n.whole), rel: "часть", by: n.by });
+          Object.assign(e, up, { rel: "часть", by: n.by });
         } else if ("basisOf" in n) {
-          Object.assign(e, { up: link(n.basisOf), rel: "основание", by: n.by });
+          Object.assign(e, up, { rel: "основание", by: n.by });
         } else if ("signsOf" in n) {
-          Object.assign(e, { up: link(n.signsOf), rel: "признаки" });
-        } else if ("about" in n) {
+          Object.assign(e, up, { rel: "признаки" });
+        } else {
           if (!n.by) errs.push(`${where(title)}: положение без подписи группы`);
-          Object.assign(e, { up: link(n.about), rel: "положение", by: n.by });
+          Object.assign(e, up, { rel: "положение", by: n.by });
         }
-      }
-
-      // Циклы по родителям.
-      for (const e of sec.entries) {
-        const seen = new Set<string>(); let cur: Entry | undefined = e;
-        while (cur && cur.up) {
-          if (seen.has(cur.title)) { errs.push(`${where(e.title)}: цикл по родителям`); break; }
-          seen.add(cur.title); cur = find(sec, cur.up);
-        }
-      }
-
-      // Деления: (род, основание) → виды; в каждом не меньше двух.
-      const div = new Map<string, string[]>();
-      for (const e of sec.entries) if (e.rel === "вид") {
-        const k = e.up + "\u0000" + e.by; div.set(k, [...(div.get(k) || []), e.title]);
-      }
-      for (const [k, members] of div) if (members.length < 2) {
-        const [g, by] = k.split("\u0000");
-        errs.push(`${sid} :: «${g}», деление «${by}»: один вид (${members[0]}) — это не деление`);
-      }
-      // Позиция-основание должна описывать существующее деление или группу частей.
-      for (const e of sec.entries) if (e.rel === "основание") {
-        const has = sec.entries.some((x) => x.up === e.up && x.by === e.by && (x.rel === "вид" || x.rel === "часть"));
-        if (!has) errs.push(`${where(e.title)}: основание «${e.by}» не описывает ни одного деления «${e.up}»`);
-      }
-      // Свободные позиции: есть в разделе и действительно вне дерева.
-      const free = new Set(spec.free || []);
-      for (const t of free) {
-        if (!find(sec, t)) errs.push(`${where(t)}: свободная позиция не найдена`);
-        else if (spec.nodes[t] || sec.entries.some((x) => x.up === t)) errs.push(`${where(t)}: объявлена свободной, но стоит в дереве`);
-      }
-      // Раздел, систематизированный целиком: всё в дереве, кроме свободных.
-      if (spec.complete) {
-        const placed = (e: Entry) => !!e.up || free.has(e.title) || sec.entries.some((x) => x.up === e.title);
-        for (const e of sec.entries) if (!placed(e)) errs.push(`${where(e.title)}: вне дерева в разделе, отмеченном как систематизированный`);
       }
     }
   }
 
+  // Дети каждого понятия — из всех разделов.
+  const key = (sid: string, t: string) => sid + "\u0000" + t;
+  const kids = new Map<string, [string, Entry][]>();
+  for (const [sid, sec] of specs) for (const e of sec.entries) if (e.up) {
+    const k = key(e.upS || sid, e.up);
+    if (!kids.has(k)) kids.set(k, []);
+    kids.get(k)!.push([sid, e]);
+  }
+  const inTree = (sid: string, e: Entry) => !!e.up || kids.has(key(sid, e.title));
+
+  // 2. Основное место понятия.
   for (const table of homes) {
     for (const [sid, rows] of Object.entries(table)) {
       const sec = secById.get(sid);
@@ -166,14 +163,53 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
       for (const [title, [hs, ht]] of Object.entries(rows)) {
         const e = find(sec, title);
         if (!e) { errs.push(`${sid} :: «${title}»: позиция не найдена (дом)`); continue; }
-        const hsec = secById.get(hs);
-        const target = hsec && find(hsec, ht);
+        const target = find(secById.get(hs), ht);
         if (!target) { errs.push(`${sid} :: «${title}»: дом ${hs} :: «${ht}» не найден`); continue; }
-        if (!target.up && !hsec!.entries.some((x) => x.up === ht)) errs.push(`${sid} :: «${title}»: дом «${ht}» не стоит в дереве`);
-        if (e.up) errs.push(`${sid} :: «${title}»: у позиции уже есть место в дереве, дом ей не нужен`);
+        if (!inTree(hs, target)) errs.push(`${sid} :: «${title}»: дом «${ht}» не стоит в дереве`);
+        if (inTree(sid, e)) errs.push(`${sid} :: «${title}»: у позиции уже есть место в дереве, дом ей не нужен`);
+        if (hs === sid) errs.push(`${sid} :: «${title}»: дом в том же разделе — это не ссылка, а повтор`);
+        if (e.home) errs.push(`${sid} :: «${title}»: дом указан дважды`);
         e.home = { s: hs, t: ht };
       }
     }
+  }
+
+  // 3. Проверки.
+  // Циклы по родителям — в том числе через разделы.
+  for (const [sid, sec] of specs) for (const e of sec.entries) {
+    const seen = new Set<string>(); let cs = sid; let cur: Entry | undefined = e;
+    while (cur && cur.up) {
+      const k = key(cs, cur.title);
+      if (seen.has(k)) { errs.push(`${sid} :: «${e.title}»: цикл по родителям`); break; }
+      seen.add(k); cs = cur.upS || cs; cur = find(secById.get(cs), cur.up);
+    }
+  }
+  // Деления: (род, основание) → виды из любых разделов; в каждом не меньше двух.
+  for (const [k, list] of kids) {
+    const div = new Map<string, string[]>();
+    for (const [, e] of list) if (e.rel === "вид") div.set(e.by!, [...(div.get(e.by!) || []), e.title]);
+    const [gs, g] = k.split("\u0000");
+    for (const [by, members] of div) if (members.length < 2)
+      errs.push(`${gs} :: «${g}», деление «${by}»: один вид (${members[0]}) — это не деление`);
+    // Позиция-основание должна описывать существующее деление или группу частей.
+    for (const [bs, e] of list) if (e.rel === "основание" && !list.some(([, x]) => x.by === e.by && (x.rel === "вид" || x.rel === "часть")))
+      errs.push(`${bs} :: «${e.title}»: основание «${e.by}» не описывает ни одного деления «${g}»`);
+  }
+  for (const [sid, sec, spec] of specs) {
+    const where = (t: string) => `${sid} :: «${t}»`;
+    // Свободные позиции: есть в разделе и действительно вне дерева.
+    const free = new Set(spec.free || []);
+    for (const t of free) {
+      const e = find(sec, t);
+      if (!e) errs.push(`${where(t)}: свободная позиция не найдена`);
+      else if (inTree(sid, e)) errs.push(`${where(t)}: объявлена свободной, но стоит в дереве`);
+      else if (e.home) errs.push(`${where(t)}: объявлена свободной, но ведёт в дерево`);
+    }
+    // Раздел, систематизированный целиком: каждая позиция стоит в дереве,
+    // ведёт в дерево другого раздела (home) или объявлена свободной.
+    if (spec.complete)
+      for (const e of sec.entries) if (!inTree(sid, e) && !e.home && !free.has(e.title))
+        errs.push(`${where(e.title)}: вне дерева в разделе, отмеченном как систематизированный`);
   }
 
   if (errs.length) {
