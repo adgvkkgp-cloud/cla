@@ -185,7 +185,7 @@
     <div class="tx-search" style="position:relative; flex:0 1 370px; min-width:160px; width:min(370px,44vw);">
       <div style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:11px; padding:8px 11px;">
         <svg width="16" height="16" sc-camel-view-box="0 0 24 24" fill="none" stroke="#8b90a6" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
-        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 48 599 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
+        <input value="{{ search }}" sc-camel-on-input="{{ onSearch }}" placeholder="Поиск по 48 620 темам…" style="flex:1; min-width:0; background:transparent; border:0; outline:0; color:#eceef4; font:inherit; font-size:13.5px;">
         <sc-if value="{{ search }}"><button sc-camel-on-click="{{ onSearchClear }}" style="border:0;background:transparent;color:#8b90a6;cursor:pointer;font-size:15px;padding:0 2px;">✕</button></sc-if>
       </div>
       <sc-if value="{{ showResults }}">
@@ -639,7 +639,7 @@
   <sc-if value="{{ loading }}" hint-placeholder-val="{{ true }}">
     <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:#0a0b10; z-index:60;">
       <div style="width:34px;height:34px;border:3px solid rgba(255,255,255,.15); border-top-color:oklch(0.8 0.13 265); border-radius:50%; animation:txspin .8s linear infinite;"></div>
-      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 48 599 тем…</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#7a8098;">Собираем 48 620 тем…</div>
     </div>
   </sc-if>
 </div>
@@ -758,16 +758,17 @@ class Component extends DCLogic {
     n.count=n._facets.length+n._treeN; return n;
   }
   // Ветви понятия на карте: деление с позицией-основанием — через неё,
-  // деление без такой позиции — через группу «виды по …», признаки — прямо.
+  // деление без такой позиции — через группу «виды по …», признаки и
+  // единственная группа — прямо: различать там нечего.
   _treeKids(node){
     const T=this.treeIdx&&this.treeIdx[node.si]; if(!T||!node.entry) return [];
     const e=node.entry;
     if(e.rel==='основание') return (T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')).map(c=>this._entryNode(node,c));
-    const out=[];
-    for(const g of this._treeGroups(T,e)){
+    const out=[], groups=this._treeGroups(T,e);
+    for(const g of groups){
       if(g.basis){ out.push(this._entryNode(node,g.basis)); continue; }
       const items=g.items.map(c=>this._entryNode(node,c));
-      if(!g.label){ out.push(...items); continue; }
+      if(!g.label || groups.length===1){ out.push(...items); continue; }
       const b=this._mkBucket(g.label,items,node); b._group=true; out.push(b);
     }
     return out;
@@ -1145,9 +1146,9 @@ class Component extends DCLogic {
     out.hasTree=true;
     if(e.rel==='вид' && e.diff){ out.hasDef=true; out.def=e.title+' — '+this._lc(e.up)+', '+e.diff+'.'; }
     if(e.up){ out.hasUp=true; out.upTitle=e.up; out.onUp=go(si,e.up);
-      out.upLabel={ 'вид':'Род', 'часть':'Входит в', 'основание':'Делит понятие', 'признаки':'Признаки понятия' }[e.rel]||'Выше';
+      out.upLabel={ 'вид':'Род', 'часть':'Входит в', 'основание':'Делит понятие', 'признаки':'Признаки понятия', 'положение':'Относится к' }[e.rel]||'Выше';
       if(e.by && e.rel==='вид'){ out.hasBy=true; out.by='основание деления: '+e.by; }
-      if(e.by && e.rel==='основание'){ out.hasBy=true; out.by=e.by; } }
+      if(e.by && e.rel!=='вид'){ out.hasBy=true; out.by=e.by; } }
     const col=this.secMeta[si].color, chip=c=>({ label:c.title, color:col, onClick:go(si,c.title) });
     if(e.rel==='вид'){ const sib=(T.kids.get(e.up)||[]).filter(c=>c!==e && c.rel==='вид' && c.by===e.by); if(sib.length) out.tgroups.push({ label:'Соседние виды', chips:sib.map(chip) }); }
     if(e.rel==='основание'){ const m=(T.kids.get(e.up)||[]).filter(c=>c.by===e.by&&(c.rel==='вид'||c.rel==='часть')); if(m.length) out.tgroups.push({ label:'Члены деления', chips:m.map(chip) }); }
@@ -1383,7 +1384,7 @@ class Component extends DCLogic {
       onTabMap:this.onTabMap, onTabList:this.onTabList, onTabTable:this.onTabTable,
       onTabTiles:this.onTabTiles, onTabCols:this.onTabCols, onTabGraph:this.onTabGraph, onTabPairs:this.onTabPairs,
       statSections:(this.sections?this.sections.length:615).toLocaleString('ru'),
-      statEntries:(this._entryCount||48599).toLocaleString('ru'),
+      statEntries:(this._entryCount||48620).toLocaleString('ru'),
       mapRef:this.mapRef,
       path:(s.path||[]).map((p,i,arr)=>({ id:p.id, label:p.label, icon:p.icon, notLast:i<arr.length-1, onClick:()=>this._diveById(p.id) })),
       legend:(this.domIndex?this.DOMAINS.filter(d=>this.domIndex[d.id]&&this.domIndex[d.id].subs.size):[]).map(d=>({ id:d.id, title:d.title, color:this._c(d.hue,0.78,0.13), onClick:()=>this._diveTo(d.id) })),

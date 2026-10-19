@@ -32,12 +32,25 @@ import type { Section, Entry } from "./sections";
 //               под которым виды и висят.
 //   признаки  — позиция «Признаки федерации»: не понятие, а перечень
 //               признаков другого понятия; крепится к нему.
+//   положение — суждение о понятии, а не его вид и не часть: свойство
+//               («Неотчуждаемость суверенитета»), соотношение, оценка,
+//               возражение. Крепится к понятию, о котором говорит.
+//
+// free — позиции, которые сознательно оставлены вне дерева (например,
+// заметка о самом приёме классификации). Перечисляются явно, чтобы
+// «вне дерева» было решением, а не забывчивостью.
+//
+// Таблицы пишутся строками (см. rows ниже): [заголовок, узел] — позиция
+// уже есть в разделе; [заголовок, описание, узел] — позиция дописывается.
+// Так недостающая ступень деления добавляется там же, где ставится
+// на место, и не может потеряться между двумя файлами.
 //
 // home — ссылка на основное место понятия. Одно понятие живёт во
 // многих разделах; дерево у него одно, остальные места ссылаются туда.
 //
 // Сборку роняют:
-//   • родитель, основание или дом не найдены;
+//   • родитель, основание или дом не найдены; заголовок в разделе
+//     не единственный; дописываемая позиция уже есть;
 //   • цикл по родителям;
 //   • вид без основания или без видового отличия;
 //   • деление, в котором меньше двух видов: один вид — не деление;
@@ -50,13 +63,15 @@ import type { Section, Entry } from "./sections";
 // (виды не пересекаются) и непрерывность (нет пропущенных ступеней).
 // ════════════════════════════════════════════════════════════
 
-type Node =
+export type Node =
   | { genus: string; by: string; diff: string }   // вид
   | { whole: string; by: string }                 // часть
   | { basisOf: string; by: string }               // основание
-  | { signsOf: string };                          // признаки
+  | { signsOf: string }                           // признаки
+  | { about: string; by: string };                // положение
 
-export type TreeTable = Record<string, { complete?: boolean; nodes: Record<string, Node> }>;
+export type TreeSpec = { complete?: boolean; free?: string[]; add?: [string, string][]; nodes: Record<string, Node> };
+export type TreeTable = Record<string, TreeSpec>;
 export type HomeTable = Record<string, Record<string, [string, string]>>;
 
 export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTable[]): void {
@@ -69,6 +84,21 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
       const sec = secById.get(sid);
       if (!sec) { errs.push(`раздел ${sid} не найден`); continue; }
       const where = (t: string) => `${sid} :: «${t}»`;
+
+      // Добор недостающих ступеней — в конец раздела, нумерация продолжается.
+      for (const [t, d] of spec.add || []) {
+        if (find(sec, t)) { errs.push(`${where(t)}: дописывается, но уже есть в разделе`); continue; }
+        if (!d || !d.trim()) errs.push(`${where(t)}: дописывается без описания`);
+        sec.entries.push({ id: sec.entries.length + 1, title: t, description: d });
+      }
+      const count = new Map<string, number>();
+      for (const e of sec.entries) count.set(e.title, (count.get(e.title) || 0) + 1);
+      const refs = new Set([...Object.keys(spec.nodes), ...(spec.free || [])]);
+      for (const n of Object.values(spec.nodes)) {
+        const up = "genus" in n ? n.genus : "whole" in n ? n.whole : "basisOf" in n ? n.basisOf : "signsOf" in n ? n.signsOf : n.about;
+        refs.add(up);
+      }
+      for (const t of refs) if ((count.get(t) || 0) > 1) errs.push(`${where(t)}: заголовок встречается в разделе ${count.get(t)} раза`);
 
       let ord = 0;
       for (const [title, n] of Object.entries(spec.nodes)) {
@@ -86,6 +116,9 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
           Object.assign(e, { up: link(n.basisOf), rel: "основание", by: n.by });
         } else if ("signsOf" in n) {
           Object.assign(e, { up: link(n.signsOf), rel: "признаки" });
+        } else if ("about" in n) {
+          if (!n.by) errs.push(`${where(title)}: положение без подписи группы`);
+          Object.assign(e, { up: link(n.about), rel: "положение", by: n.by });
         }
       }
 
@@ -112,9 +145,15 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
         const has = sec.entries.some((x) => x.up === e.up && x.by === e.by && (x.rel === "вид" || x.rel === "часть"));
         if (!has) errs.push(`${where(e.title)}: основание «${e.by}» не описывает ни одного деления «${e.up}»`);
       }
-      // Раздел, систематизированный целиком: всё в дереве.
+      // Свободные позиции: есть в разделе и действительно вне дерева.
+      const free = new Set(spec.free || []);
+      for (const t of free) {
+        if (!find(sec, t)) errs.push(`${where(t)}: свободная позиция не найдена`);
+        else if (spec.nodes[t] || sec.entries.some((x) => x.up === t)) errs.push(`${where(t)}: объявлена свободной, но стоит в дереве`);
+      }
+      // Раздел, систематизированный целиком: всё в дереве, кроме свободных.
       if (spec.complete) {
-        const placed = (e: Entry) => !!e.up || sec.entries.some((x) => x.up === e.title);
+        const placed = (e: Entry) => !!e.up || free.has(e.title) || sec.entries.some((x) => x.up === e.title);
         for (const e of sec.entries) if (!placed(e)) errs.push(`${where(e.title)}: вне дерева в разделе, отмеченном как систематизированный`);
       }
     }
@@ -143,10 +182,26 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
 }
 
 // Короткие записи для таблиц.
-const G = (genus: string, by: string, diff: string): Node => ({ genus, by, diff });
-const P = (whole: string, by: string): Node => ({ whole, by });
-const B = (basisOf: string, by: string): Node => ({ basisOf, by });
-const Z = (signsOf: string): Node => ({ signsOf });
+export const G = (genus: string, by: string, diff: string): Node => ({ genus, by, diff });
+export const P = (whole: string, by: string): Node => ({ whole, by });
+export const B = (basisOf: string, by: string): Node => ({ basisOf, by });
+export const Z = (signsOf: string): Node => ({ signsOf });
+export const A = (about: string, by: string): Node => ({ about, by });
+
+// Строка таблицы: [заголовок, узел] — позиция уже есть;
+// [заголовок, описание, узел] — позиция дописывается. Узел null — корень.
+export type Row = [string, Node | null] | [string, string, Node | null];
+export function rows(r: Row[], opt: { complete?: boolean; free?: string[] } = {}): TreeSpec {
+  const spec: TreeSpec = { ...opt, add: [], nodes: {} };
+  for (const row of r) {
+    const [t, a, b] = row;
+    const node = row.length === 3 ? b : (a as Node | null);
+    if (row.length === 3) spec.add!.push([t, a as string]);
+    if (spec.nodes[t]) throw new Error(`Систематика: строка «${t}» записана дважды`);
+    if (node) spec.nodes[t] = node;
+  }
+  return spec;
+}
 
 // ── Пилот: форма государства ──────────────────────────────────
 const GLAVA = "по положению главы государства";
@@ -182,11 +237,11 @@ export const tree1: TreeTable = {
       "Форма правления": P("Форма государства", "элементы формы"),
       "Форма государственного устройства": P("Форма государства", "элементы формы"),
       "Политический режим": P("Форма государства", "элементы формы"),
-      "Влияние условий на форму": P("Форма государства", "закономерности формы"),
-      "Изменчивость формы": P("Форма государства", "закономерности формы"),
-      "Расхождение формы и действительности": P("Форма государства", "закономерности формы"),
-      "Размер территории и форма": P("Влияние условий на форму", "условия"),
-      "Состав населения и форма": P("Влияние условий на форму", "условия"),
+      "Влияние условий на форму": A("Форма государства", "закономерности формы"),
+      "Изменчивость формы": A("Форма государства", "закономерности формы"),
+      "Расхождение формы и действительности": A("Форма государства", "закономерности формы"),
+      "Размер территории и форма": A("Влияние условий на форму", "условия"),
+      "Состав населения и форма": A("Влияние условий на форму", "условия"),
 
       // ── Форма правления
       "Монархия": G("Форма правления", GLAVA, "при которой верховная власть принадлежит единоличному главе государства и, как правило, передаётся по наследству"),
@@ -250,7 +305,7 @@ export const tree1: TreeTable = {
       "Федерация": G("Сложная форма устройства", SUVER, "при которой суверенитет принадлежит союзу, а его части обладают собственной государственностью"),
       "Конфедерация": G("Сложная форма устройства", SUVER, "при которой суверенитет сохраняют государства — участники союза"),
       "Признаки конфедерации": Z("Конфедерация"),
-      "Судьба конфедераций": P("Конфедерация", "закономерности"),
+      "Судьба конфедераций": A("Конфедерация", "закономерности"),
 
       "Признаки федерации": Z("Федерация"),
       "Территориальная федерация": G("Федерация", SUBJ, "субъекты которой выделены без учёта состава населения"),
@@ -264,7 +319,7 @@ export const tree1: TreeTable = {
       "Конституционная федерация": G("Федерация", OBRAZ, "образованная и устроенная конституцией союза"),
       "Субъект федерации": P("Федерация", "элементы и институты"),
       "Разграничение ведения в федерации": P("Федерация", "элементы и институты"),
-      "Вопрос о праве выхода": P("Федерация", "элементы и институты"),
+      "Вопрос о праве выхода": A("Федерация", "спорные вопросы"),
 
       "Личная и реальная уния": B("Уния", UNIA),
       "Личная уния": G("Уния", UNIA, "при которой государства связаны лишь общим монархом, а государственные механизмы раздельны"),
@@ -275,7 +330,7 @@ export const tree1: TreeTable = {
       "Антидемократический режим": G("Политический режим", UCHAST, "при котором население устранено от осуществления власти, а права ограничены"),
       "Авторитарный режим": G("Антидемократический режим", OHVAT, "при котором власть сосредоточена, но часть сторон жизни остаётся вне её контроля"),
       "Тоталитарный режим": G("Антидемократический режим", OHVAT, "при котором власть стремится охватить все стороны жизни"),
-      "Соотношение режима и формы правления": P("Политический режим", "положения"),
+      "Соотношение режима и формы правления": A("Политический режим", "соотношения"),
     },
   },
 };
