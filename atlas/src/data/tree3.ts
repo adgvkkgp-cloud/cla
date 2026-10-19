@@ -405,7 +405,7 @@ export const tree3: TreeTable = {
     complete: true,
     // Формулы международного и коллизионного права — к ним при разборе
     // международного частного и публичного права.
-    free: ["Jus cogens", "Обязательства erga omnes", "Pacta sunt servanda", "Rebus sic stantibus", "Оговорка о публичном порядке"],
+    free: ["Jus cogens", "Обязательства erga omnes", "Pacta sunt servanda", "Rebus sic stantibus"],
   }),
 
   "x28-legal-classes": rows([
