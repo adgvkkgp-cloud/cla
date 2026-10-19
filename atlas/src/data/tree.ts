@@ -96,51 +96,55 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
     "genus" in n ? n.genus : "whole" in n ? n.whole : "basisOf" in n ? n.basisOf : "signsOf" in n ? n.signsOf : n.about;
   const specs: [string, Section, TreeSpec][] = [];
 
-  // 1. Добор и узлы.
+  // 1. Добор во всех разделах — раньше узлов: узел может ссылаться
+  // на позицию, которую дописывает таблица другого раздела.
   for (const table of trees) {
     for (const [sid, spec] of Object.entries(table)) {
       const sec = secById.get(sid);
       if (!sec) { errs.push(`раздел ${sid} не найден`); continue; }
       if (specs.some(([x]) => x === sid)) { errs.push(`раздел ${sid} описан в двух таблицах`); continue; }
       specs.push([sid, sec, spec]);
-      const where = (t: string) => `${sid} :: «${t}»`;
-
-      // Добор недостающих ступеней — в конец раздела, нумерация продолжается.
+      // Недостающие ступени — в конец раздела, нумерация продолжается.
       for (const [t, d] of spec.add || []) {
-        if (find(sec, t)) { errs.push(`${where(t)}: дописывается, но уже есть в разделе`); continue; }
-        if (!d || !d.trim()) errs.push(`${where(t)}: дописывается без описания`);
+        if (find(sec, t)) { errs.push(`${sid} :: «${t}»: дописывается, но уже есть в разделе`); continue; }
+        if (!d || !d.trim()) errs.push(`${sid} :: «${t}»: дописывается без описания`);
         sec.entries.push({ id: sec.entries.length + 1, title: t, description: d });
       }
-      for (const t of [...Object.keys(spec.nodes), ...(spec.free || [])]) {
-        const c = count(sec, t);
-        if (c > 1) errs.push(`${where(t)}: заголовок встречается в разделе ${c} раза`);
-      }
+    }
+  }
 
-      let ord = 0;
-      for (const [title, n] of Object.entries(spec.nodes)) {
-        const e = find(sec, title);
-        if (!e) { errs.push(`${where(title)}: позиция не найдена`); continue; }
-        e.o = ++ord;
-        const [us, ut] = split(parentOf(n), sid);
-        const usec = secById.get(us);
-        if (!usec) errs.push(`${where(title)}: раздел родителя ${us} не найден`);
-        else if (!find(usec, ut)) errs.push(`${where(title)}: родитель «${ut}»${us === sid ? "" : " в " + us} не найден`);
-        else if (count(usec, ut) > 1) errs.push(`${where(title)}: родитель «${ut}» в ${us} неоднозначен`);
-        const up = { up: ut, ...(us === sid ? {} : { upS: us }) };
-        if ("genus" in n) {
-          if (!n.by) errs.push(`${where(title)}: вид без основания деления`);
-          if (!n.diff || !n.diff.trim()) errs.push(`${where(title)}: вид без видового отличия`);
-          Object.assign(e, up, { rel: "вид", by: n.by, diff: n.diff });
-        } else if ("whole" in n) {
-          Object.assign(e, up, { rel: "часть", by: n.by });
-        } else if ("basisOf" in n) {
-          Object.assign(e, up, { rel: "основание", by: n.by });
-        } else if ("signsOf" in n) {
-          Object.assign(e, up, { rel: "признаки" });
-        } else {
-          if (!n.by) errs.push(`${where(title)}: положение без подписи группы`);
-          Object.assign(e, up, { rel: "положение", by: n.by });
-        }
+  // 2. Узлы.
+  for (const [sid, sec, spec] of specs) {
+    const where = (t: string) => `${sid} :: «${t}»`;
+    for (const t of [...Object.keys(spec.nodes), ...(spec.free || [])]) {
+      const c = count(sec, t);
+      if (c > 1) errs.push(`${where(t)}: заголовок встречается в разделе ${c} раза`);
+    }
+
+    let ord = 0;
+    for (const [title, n] of Object.entries(spec.nodes)) {
+      const e = find(sec, title);
+      if (!e) { errs.push(`${where(title)}: позиция не найдена`); continue; }
+      e.o = ++ord;
+      const [us, ut] = split(parentOf(n), sid);
+      const usec = secById.get(us);
+      if (!usec) errs.push(`${where(title)}: раздел родителя ${us} не найден`);
+      else if (!find(usec, ut)) errs.push(`${where(title)}: родитель «${ut}»${us === sid ? "" : " в " + us} не найден`);
+      else if (count(usec, ut) > 1) errs.push(`${where(title)}: родитель «${ut}» в ${us} неоднозначен`);
+      const up = { up: ut, ...(us === sid ? {} : { upS: us }) };
+      if ("genus" in n) {
+        if (!n.by) errs.push(`${where(title)}: вид без основания деления`);
+        if (!n.diff || !n.diff.trim()) errs.push(`${where(title)}: вид без видового отличия`);
+        Object.assign(e, up, { rel: "вид", by: n.by, diff: n.diff });
+      } else if ("whole" in n) {
+        Object.assign(e, up, { rel: "часть", by: n.by });
+      } else if ("basisOf" in n) {
+        Object.assign(e, up, { rel: "основание", by: n.by });
+      } else if ("signsOf" in n) {
+        Object.assign(e, up, { rel: "признаки" });
+      } else {
+        if (!n.by) errs.push(`${where(title)}: положение без подписи группы`);
+        Object.assign(e, up, { rel: "положение", by: n.by });
       }
     }
   }
@@ -155,7 +159,7 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
   }
   const inTree = (sid: string, e: Entry) => !!e.up || kids.has(key(sid, e.title));
 
-  // 2. Основное место понятия.
+  // 3. Основное место понятия.
   for (const table of homes) {
     for (const [sid, rows] of Object.entries(table)) {
       const sec = secById.get(sid);
@@ -174,7 +178,7 @@ export function applyTree(sections: Section[], trees: TreeTable[], homes: HomeTa
     }
   }
 
-  // 3. Проверки.
+  // 4. Проверки.
   // Циклы по родителям — в том числе через разделы.
   for (const [sid, sec] of specs) for (const e of sec.entries) {
     const seen = new Set<string>(); let cs = sid; let cur: Entry | undefined = e;
