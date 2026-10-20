@@ -130,6 +130,7 @@ import { tree33, homes33 } from "./tree33";
 import { tree34, homes34 } from "./tree34";
 import { tree35, homes35 } from "./tree35";
 import { tree36, homes36 } from "./tree36";
+import { tree37, homes37 } from "./tree37";
 import { applyFacets, facets1, facets2, facets3, facets4, facets5, facets6, facets7, facets8, facets9, facets10, facets11, facets12, facets13, facets14, facets15, facets16, facets17, facets18, facets19, facets20 } from "./facets";
 import { applyDetails, details1, details2, details3, details4, details5, details6, details7, details8, details9, details10, details11, details12, details13, details14, details15, details16, details17, details18, details19, details20, details21, details22, details23, details24, details25, details26, details27 } from "./details";
 
@@ -1106,7 +1107,7 @@ applyFacets(allSections, [facets1, facets2, facets3, facets4, facets5, facets6, 
 
 // Систематика — род, вид, основание деления — ставится, когда все
 // заголовки окончательны, и до ярлыков.
-applyTree(allSections, [tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9, tree10, tree11, tree12, tree13, tree14, tree15, tree16, tree17, tree18, tree19, tree20, tree21, tree22, tree23, tree24, tree25, tree26, tree27, tree28, tree29, tree30, tree31, tree32, tree33, tree34, tree35, tree36], [homes1, homes2, homes3, homes4, homes5, homes6, homes7, homes8, homes9, homes10, homes11, homes12, homes13, homes14, homes15, homes16, homes17, homes18, homes19, homes20, homes21, homes22, homes23, homes24, homes25, homes26, homes27, homes28, homes29, homes30, homes31, homes32, homes33, homes34, homes35, homes36]);
+applyTree(allSections, [tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8, tree9, tree10, tree11, tree12, tree13, tree14, tree15, tree16, tree17, tree18, tree19, tree20, tree21, tree22, tree23, tree24, tree25, tree26, tree27, tree28, tree29, tree30, tree31, tree32, tree33, tree34, tree35, tree36, tree37], [homes1, homes2, homes3, homes4, homes5, homes6, homes7, homes8, homes9, homes10, homes11, homes12, homes13, homes14, homes15, homes16, homes17, homes18, homes19, homes20, homes21, homes22, homes23, homes24, homes25, homes26, homes27, homes28, homes29, homes30, homes31, homes32, homes33, homes34, homes35, homes36, homes37]);
 
 // Ярлыки проставляются последними — после того, как добор дописал
 // все позиции, чтобы правила прошли и по ним тоже.
