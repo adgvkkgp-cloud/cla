@@ -3,181 +3,154 @@
 //
 //   node tools/build.cjs
 //
-// Порядок: base.json → правки (patch.cjs) → новые разделы
-// (additions.cjs) → перестановка → проверки → HTML.
+// Источники — src/sections/*.cjs по порядку имён файлов. Вид получает
+// определение из рода и отличия; сборка падает, если род не найден,
+// деление состоит из одного вида, имя повторяется где-либо в корпусе,
+// возрастная лексика встретилась рядом с интимной или цвет раздела
+// не стилизован в шаблоне.
 
-const fs = require("path") && require("fs");
+const fs = require("fs");
 const path = require("path");
 
 const root = path.resolve(__dirname, "..");
-const base = JSON.parse(fs.readFileSync(path.join(root, "src/data/base.json"), "utf8"));
-const patch = require(path.join(root, "src/data/patch.cjs"));
-const patch2 = require(path.join(root, "src/data/patch2.cjs"));
-const patch3 = require(path.join(root, "src/data/patch3.cjs"));
-
-let additions = [];
-for (const f of ["src/data/additions.cjs", "src/data/additions2.cjs", "src/data/additions3.cjs"]) {
-  const p = path.join(root, f);
-  if (fs.existsSync(p)) additions = additions.concat(require(p));
-}
-
-const report = [];
-const warn = (m) => report.push(m);
-
-// ── 1. Правки существующих разделов ─────────────────────────
-let data = base.map((s) => ({ ...s, items: s.items.map((i) => ({ ...i })) }));
-
-// удаление позиций
-for (const [secId, names] of Object.entries(patch.dropItems || {})) {
-  const sec = data.find((s) => s.id === secId);
-  if (!sec) { warn(`dropItems: нет раздела ${secId}`); continue; }
-  for (const n of names) {
-    const before = sec.items.length;
-    sec.items = sec.items.filter((i) => i.name !== n);
-    if (sec.items.length === before) warn(`dropItems: не найдено «${n}» в ${secId}`);
-  }
-}
-
-// правки позиций (обе части патча)
-for (const table of [patch.itemPatches, patch2.itemPatches, patch3.itemPatches]) {
-  for (const [secId, map] of Object.entries(table || {})) {
-    const sec = data.find((s) => s.id === secId);
-    if (!sec) { warn(`itemPatches: нет раздела ${secId}`); continue; }
-    for (const [oldName, upd] of Object.entries(map)) {
-      const it = sec.items.find((i) => i.name === oldName);
-      if (!it) { warn(`itemPatches: не найдено «${oldName}» в ${secId}`); continue; }
-      Object.assign(it, upd);
-    }
-  }
-}
-
-// достройка имён в генеративных разделах до уникальных
-let renamed = 0;
-for (const sec of data) renamed += patch2.fixGeneratedNames(sec);
-if (renamed) console.log(`Достроено имён в генеративных разделах: ${renamed}`);
-
-// правки разделов (в т.ч. переименование id)
-for (const [secId, upd] of Object.entries(patch.sectionPatches || {})) {
-  const sec = data.find((s) => s.id === secId);
-  if (!sec) { warn(`sectionPatches: нет раздела ${secId}`); continue; }
-  const { newId, ...rest } = upd;
-  Object.assign(sec, rest);
-  if (newId) sec.id = newId;
-}
-
-// глобальные замены в тексте и тегах
-const applyText = (s) => {
-  if (typeof s !== "string") return s;
-  let out = s;
-  for (const [re, to] of patch.textRewrites || []) out = out.replace(re, to);
-  return out;
+const PALETTE = {
+  teal: "from-emerald-500 to-teal-600", indigo: "from-blue-500 to-indigo-600",
+  rose: "from-pink-500 to-rose-600", amber: "from-amber-400 to-orange-500",
+  cyan: "from-blue-600 to-cyan-500", slate: "from-slate-600 to-blue-700",
+  pink: "from-rose-400 to-pink-600", stone: "from-stone-500 to-slate-700",
+  red: "from-orange-500 to-red-600", aqua: "from-cyan-500 to-teal-600",
+  yellow: "from-yellow-400 to-orange-500", fuchsia: "from-fuchsia-500 to-purple-600",
+  green: "from-green-500 to-emerald-600", violet: "from-violet-500 to-purple-700",
+  lime: "from-lime-500 to-green-600", crimson: "from-red-600 to-rose-700",
+  sky: "from-sky-400 to-blue-500", zinc: "from-slate-600 to-zinc-700",
+  brown: "from-amber-600 to-orange-700", neutral: "from-stone-500 to-neutral-600",
 };
-const applyTag = (t) => {
-  let out = t;
-  for (const [re, to] of patch.tagRewrites || []) if (re.test(out)) { out = out.replace(re, to); break; }
-  return out;
-};
-for (const sec of data) {
-  sec.title = applyText(sec.title);
-  sec.subtitle = applyText(sec.subtitle);
-  for (const it of sec.items) {
-    it.name = applyText(it.name);
-    it.description = applyText(it.description);
-    if (Array.isArray(it.tags)) it.tags = [...new Set(it.tags.map(applyTag))];
-  }
-}
 
-// ── 2. Новые разделы ────────────────────────────────────────
-const existingIds = new Set(data.map((s) => s.id));
-for (const sec of additions) {
-  if (existingIds.has(sec.id)) { warn(`additions: раздел ${sec.id} уже существует`); continue; }
-  existingIds.add(sec.id);
-  data.push(sec);
-}
+const dir = path.join(root, "src/sections");
+const files = fs.readdirSync(dir).filter((f) => f.endsWith(".cjs")).sort();
+const sections = files.flatMap((f) => require(path.join(dir, f)));
 
-// ── 3. Перестановка: интимная топография — в конец ──────────
-const tail = [];
-for (const id of patch.moveToEnd || []) {
-  const idx = data.findIndex((s) => s.id === id);
-  if (idx < 0) { warn(`moveToEnd: нет раздела ${id}`); continue; }
-  tail.push(data.splice(idx, 1)[0]);
-}
-// генеративные переборы всегда в самом низу, интимная топография — перед ними
-const gen = data.filter((s) => s.id.startsWith("gen-"));
-data = data.filter((s) => !s.id.startsWith("gen-"));
-data = data.concat(tail, gen);
-
-// ── 4. Проверки ─────────────────────────────────────────────
 const problems = [];
-const seenSec = new Set();
-let total = 0;
+const norm = (s) => s.toLowerCase().replace(/ё/g, "е").replace(/[«»"]/g, "").replace(/\s+/g, " ").trim();
 
-// вокабуляр, которого в таксономии быть не должно
-const banned = [
-  [/\bnsfw\b/i, "рамка NSFW"],
-  [/🔒/, "иконка-замок"],
-  [/\bssbbw\b/i, "жаргон SSBBW"],
-  [/\bbbw\b/i, "жаргон BBW"],
-  [/\bcamel[- ]?toe\b/i, "жаргон camel toe"],
-  [/\bfat-ass\b/i, "жаргон"],
-  [/\bsex-lines\b/i, "эротическая рамка"],
-];
-// возрастная лексика рядом с интимной — не допускается
-const minorRe = /лоли|shota|loli|подрост|школьн|малолет|тинейдж|\bteen\b|pre-?teen|\bchild\b|детск|препубертат|пубертат|мальчик|девочк/i;
-const intimateRe = /лобк|паховая|пахов|гениталий|гениталии|мошонк|вульв|половые губы|половог члена|полового члена|макрофалл|микропен|депиляц|mons pubis|genital|pubic/i;
-
-for (const sec of data) {
-  if (seenSec.has(sec.id)) problems.push(`повтор id раздела: ${sec.id}`);
-  seenSec.add(sec.id);
-  for (const f of ["id", "title", "subtitle", "icon", "color", "category"]) {
-    if (!sec[f]) problems.push(`${sec.id}: пустое поле «${f}»`);
+// ── 1. Позиции и имена ──────────────────────────────────────
+const byName = new Map(); // норм. имя → { sec, row, node }
+for (const s of sections) {
+  for (const r of s.rows) {
+    const [name, def] = r;
+    if (typeof name !== "string" || !name.trim()) { problems.push(`${s.id}: пустое имя`); continue; }
+    const k = norm(name);
+    if (byName.has(k)) problems.push(`повтор имени «${name}»: ${byName.get(k).sec.id} и ${s.id}`);
+    else byName.set(k, { sec: s, name, def });
   }
-  const secText = `${sec.title} ${sec.subtitle}`;
-  const names = new Set();
-  sec.items.forEach((it, i) => {
-    total++;
-    if (it.id !== i + 1) it.id = i + 1; // нумерация внутри раздела всегда сплошная
-    if (!it.name || !it.description) problems.push(`${sec.id}: пустое поле у позиции ${it.id}`);
-    if (names.has(it.name)) problems.push(`${sec.id}: повтор позиции «${it.name}»`);
-    names.add(it.name);
+}
+const find = (ref) => byName.get(norm(ref.split("|")[0]));
 
-    const text = `${it.name} ${it.description} ${(it.tags || []).join(" ")}`;
-    for (const [re, label] of banned) {
-      if (re.test(text) || re.test(secText)) problems.push(`${sec.id} / ${it.name}: ${label}`);
-    }
-    // ключевая проверка: возрастная лексика не пересекается с интимной
+// ── 2. Определения ─────────────────────────────────────────
+const PREP = /^(с|со|без|в|во|на|по|при|от|до|из|под|над|между|через|для|около|вдоль|против|среди|у|за|перед|после|ниже|выше|свыше|менее|более|больше|меньше|путём|вокруг|внутри|сверх|не (?:менее|более|ниже|выше|больше|меньше))\s/i;
+const end = (t) => (/[.!?]$/.test(t) ? t : t + ".");
+const headOf = (ref) => {
+  const [n, h] = ref.split("|");
+  return h || n.replace(/\s*\([^)]*\)/g, "").trim();
+};
+const divisions = new Map(); // ключ деления → число видов
+const describe = (s, name, def) => {
+  if (typeof def === "string") return end(def.trim());
+  if (!def || !def.k) { problems.push(`${s.id} / ${name}: нет определения`); return ""; }
+  if (def.k === "G") {
+    const p = find(def.genus);
+    if (!p) { problems.push(`${s.id} / ${name}: нет рода «${def.genus}»`); return ""; }
+    if (norm(p.name) === norm(name)) { problems.push(`${s.id} / ${name}: вид сам себе род`); return ""; }
+    const isBasis = p.def && p.def.k === "B";
+    const head = isBasis ? headOf(p.def.genus) : headOf(def.genus);
+    const key = isBasis ? "B:" + norm(p.name) : "G:" + norm(p.name);
+    divisions.set(key, (divisions.get(key) || 0) + 1);
+    // «+» в начале отличия — приставить без запятой (родительный падеж и т. п.)
+    const glued = def.diff.startsWith("+");
+    const d = def.diff.replace(/^\+/, "").trim();
+    const sep = glued || (PREP.test(d) && !/^\S+\s+котор/i.test(d)) ? " " : ", ";
+    return end(head + sep + d) + (def.note ? " " + end(def.note.trim()) : "");
+  }
+  const ref = def.k === "B" ? def.genus : def.k === "P" ? def.whole : def.of;
+  if (!find(ref)) problems.push(`${s.id} / ${name}: нет «${ref}»`);
+  if (def.k === "B") divisions.set("B:" + norm(name), divisions.get("B:" + norm(name)) || 0);
+  return end(def.text.trim());
+};
+
+// Цепочка родов не должна замыкаться.
+for (const [k, v] of byName) {
+  let cur = v, seen = new Set([k]);
+  while (cur && cur.def && cur.def.k === "G") {
+    const p = find(cur.def.genus); if (!p) break;
+    const pk = norm(p.name);
+    if (seen.has(pk)) { problems.push(`цикл родов через «${v.name}»`); break; }
+    seen.add(pk);
+    cur = p.def && p.def.k === "B" ? find(p.def.genus) : p;
+  }
+}
+
+// ── 3. Разделы в формат вьюера ─────────────────────────────
+const banned = [
+  [/\bnsfw\b/i, "рамка NSFW"], [/🔒/, "иконка-замок"], [/\bs?s?bbw\b/i, "жаргон BBW"],
+  [/\bcamel[- ]?toe\b/i, "жаргон camel toe"], [/\bfat-ass\b/i, "жаргон"], [/\bsex-lines\b/i, "эротическая рамка"],
+  [/booru/i, "теги имиджборд"], [/\bthicc\b/i, "жаргон thicc"], [/\bmoobs\b/i, "жаргон"],
+  [/\bperky\b|\bsaggy\b|bubble[- ]butt|underboob|tan[- ]lines/i, "жаргон тегов"], [/арт-тег|арт-референс/i, "рамка тегов"],
+];
+const minorRe = /лоли|shota|loli|подрост|школьн|малолет|тинейдж|\bteen\b|pre-?teen|\bchild\b|детск|препубертат|пубертат|мальчик|девочк|младен|ребён|ребен|дошкол|юношеск/i;
+const intimateRe = /лобк|паховая|пахов|гениталий|гениталии|половой член|половог[оa] член|мошонк|яичк|вульв|половы[ех] губ|клитор|влагалищ|макрофалл|микропен|головк[аиуе] полового|крайн(?:яя|ей) плот|mons pubis|genital|pubic|penis|scrot|vulva|clitor/i;
+
+const out = [];
+let total = 0, species = 0;
+const seenSec = new Set();
+for (const s of sections) {
+  if (seenSec.has(s.id)) problems.push(`повтор id раздела: ${s.id}`);
+  seenSec.add(s.id);
+  const color = PALETTE[s.color];
+  if (!color) problems.push(`${s.id}: цвет «${s.color}» вне палитры`);
+  for (const f of ["id", "title", "subtitle", "icon"]) if (!s[f]) problems.push(`${s.id}: пустое поле «${f}»`);
+  const secText = `${s.title} ${s.subtitle}`;
+  const items = s.rows.map((r, i) => {
+    const [name, def, tags, g] = r;
+    const description = describe(s, name, def);
+    if (def && def.k === "G") species++;
+    const it = {
+      id: i + 1, name, description,
+      tags: tags ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+      gender: g || s.gender,
+    };
+    if (!["male", "female", "any"].includes(it.gender)) problems.push(`${s.id} / ${name}: пол «${it.gender}»`);
+    if (description && norm(description.replace(/\.$/, "")) === norm(name)) problems.push(`${s.id} / ${name}: описание повторяет имя`);
+    if (/\s{2,}|\s[,.;:]/.test(description)) problems.push(`${s.id} / ${name}: лишние пробелы`);
+    const text = `${name} ${description} ${it.tags.join(" ")}`;
+    for (const [re, label] of banned) if (re.test(text) || re.test(secText)) problems.push(`${s.id} / ${name}: ${label}`);
+    // ключевая проверка: возрастная лексика не встречается рядом с интимной
     const scope = `${secText} ${text}`;
-    if (minorRe.test(scope) && intimateRe.test(scope)) {
-      problems.push(`${sec.id} / ${it.name}: возрастная лексика в интимном контексте`);
-    }
+    if (minorRe.test(scope) && intimateRe.test(scope)) problems.push(`${s.id} / ${name}: возрастная лексика в интимном контексте`);
+    total++;
+    return it;
   });
+  if (intimateRe.test(items.map((i) => i.name + " " + i.description).join(" ")) && minorRe.test(secText + " " + items.map((i) => i.name + " " + i.description).join(" ")))
+    problems.push(`${s.id}: возрастная лексика в разделе с интимной`);
+  out.push({ id: s.id, title: s.title, subtitle: s.subtitle, icon: s.icon, color, category: s.category, items });
 }
+for (const [k, n] of divisions) if (n < 2) problems.push(`деление «${k.slice(2)}» из ${n} вида`);
 
-console.log(`Разделов: ${data.length}, позиций: ${total}`);
-if (report.length) {
-  console.log(`\nЗамечания сборки (${report.length}):`);
-  report.forEach((r) => console.log("  " + r));
-}
+const bases = [...divisions.keys()].filter((k) => k.startsWith("B:")).length;
+console.log(`Разделов: ${out.length}, позиций: ${total}, видов: ${species}, делений: ${divisions.size} (с основанием-карточкой ${bases})`);
 if (problems.length) {
   console.error(`\nПРОВЕРКА НЕ ПРОЙДЕНА (${problems.length}):`);
-  problems.slice(0, 60).forEach((p) => console.error("  " + p));
+  problems.slice(0, 80).forEach((p) => console.error("  " + p));
   process.exit(1);
 }
 console.log("Проверки пройдены.");
 
-// ── 5. Сборка HTML ──────────────────────────────────────────
-// data.json пишется всегда: он же используется для проверок и выгрузок
-fs.writeFileSync(path.join(root, "data.json"), JSON.stringify(data));
-
-const tplPath = path.join(root, "src/template.html");
-if (!fs.existsSync(tplPath)) {
-  console.log("Шаблон не найден — записан только data.json");
-  process.exit(0);
-}
-const tpl = fs.readFileSync(tplPath, "utf8");
+// ── 4. Сборка HTML ─────────────────────────────────────────
+fs.writeFileSync(path.join(root, "data.json"), JSON.stringify(out));
+const tpl = fs.readFileSync(path.join(root, "src/template.html"), "utf8");
 const marker = "/*__TAXONOMY__*/";
 if (!tpl.includes(marker)) { console.error("В шаблоне нет метки " + marker); process.exit(1); }
-const html = tpl.replace(marker, JSON.stringify(data));
-const outPath = path.join(root, "..", "TAXONOMY_TELO.html");
+for (const c of Object.values(PALETTE)) for (const cls of c.split(" ")) if (!tpl.includes(cls)) { console.error(`Класс ${cls} не стилизован в шаблоне`); process.exit(1); }
+const html = tpl.replace(marker, JSON.stringify(out));
+const outPath = path.join(root, "TAXONOMY_TELO.html");
 fs.writeFileSync(outPath, html);
 console.log(`Готово: ${path.relative(process.cwd(), outPath)} (${(html.length / 1048576).toFixed(2)} МБ)`);
