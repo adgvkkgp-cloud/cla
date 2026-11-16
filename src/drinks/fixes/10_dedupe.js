@@ -35,4 +35,5 @@ module.exports = T => {
   T.del('r_units', 7);
   T.n('f_travel', 11, 'Мас на Октоберфесте');
   T.n('n_coffee', 45, 'Кофеин в чашке');
+  T.del('n_juice', 33);
 };
