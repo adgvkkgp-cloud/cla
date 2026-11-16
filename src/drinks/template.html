@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>МЕГА-таксономия напитков — вода, чай, кофе и весь алкоголь</title>
+<style>
+  :root{
+    --bg:#0f0f12; --surface:#17171c; --card:#1d1d24; --border:#2c2c38;
+    --text:#ececf2; --muted:#7a7a8c; --gold:#e8b84b; --accent:#ff5a4d;
+    --g1:#e8b84b; --g2:#ff5a4d; --g3:#5ac8e8; --g4:#7ad26a; --g5:#c77dff;
+    --g6:#ff8fb0; --g7:#6ad2b0; --g8:#f0904a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:-1;
+    background:radial-gradient(ellipse at 15% 10%,rgba(232,184,75,.06),transparent 50%),
+               radial-gradient(ellipse at 85% 90%,rgba(255,90,77,.06),transparent 50%)}
+  header{background:var(--surface);border-bottom:2px solid var(--gold);padding:1.1rem 1.4rem .9rem;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px)}
+  h1{font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+  h1 span{color:var(--gold)}
+  .stats{font-size:.78rem;color:var(--muted);margin:.45rem 0 .6rem}
+  .search-wrap{position:relative}
+  .search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:9px 12px 9px 34px;color:var(--text);font-size:.9rem}
+  .search-wrap input:focus{outline:none;border-color:var(--gold)}
+  .search-wrap input::placeholder{color:var(--muted)}
+  .search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.5}
+  .levels{padding:.8rem 1.4rem;background:var(--card);border-bottom:1px solid var(--border)}
+  .levels-title{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+  .level-row{display:flex;flex-wrap:wrap;gap:6px}
+  .level-chip{font-size:.74rem;padding:4px 10px;border-radius:6px;border:1px solid;background:transparent}
+  .filters{display:flex;gap:5px;flex-wrap:wrap;padding:.6rem 1.4rem;background:var(--surface);border-bottom:1px solid var(--border);max-height:118px;overflow-y:auto}
+  .filter-btn{padding:4px 10px;border:1px solid var(--border);border-radius:18px;font-size:.72rem;cursor:pointer;background:var(--card);color:var(--muted);white-space:nowrap;transition:.15s}
+  .filter-btn:hover{border-color:var(--gold);color:var(--text)}
+  .filter-btn.active{background:var(--gold);color:#181818;border-color:var(--gold);font-weight:600}
+  .content{padding:1rem 1.4rem 3rem}
+  .group-divider{display:flex;align-items:center;gap:12px;margin:1.6rem 0 1rem}
+  .group-divider-line{flex:1;height:1px;background:var(--border)}
+  .group-divider-label{font-size:.74rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--gold)}
+  .cat{margin-bottom:1.5rem}
+  .cat-head{display:flex;align-items:baseline;gap:9px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  .cat-name{font-size:1rem;font-weight:700;flex:1}
+  .cat-count{font-size:.72rem;color:var(--muted)}
+  .cat-desc{font-size:.74rem;color:var(--muted);margin-bottom:8px;font-style:italic}
+  .rows{display:flex;flex-direction:column;gap:2px}
+  .row{display:grid;grid-template-columns:46px 1fr;gap:10px;padding:5px 8px;border-radius:6px;font-size:.84rem;align-items:baseline}
+  .row:nth-child(odd){background:rgba(255,255,255,.018)}
+  .row:hover{background:rgba(232,184,75,.07)}
+  .row .num{color:var(--muted);font-size:.72rem;text-align:right;font-variant-numeric:tabular-nums}
+  .row .body .nm{font-weight:600}
+  .row .body .ds{color:var(--muted);font-size:.76rem;margin-left:6px}
+  .no-results{text-align:center;color:var(--muted);padding:3rem 0}
+  footer{padding:1.5rem 1.4rem;color:var(--muted);font-size:.74rem;border-top:1px solid var(--border);text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <h1>🍸 МЕГА-таксономия <span>напитков</span> — вода, чай, кофе и весь алкоголь</h1>
+  <div class="stats" id="stats">Загрузка…</div>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="Поиск: неббиоло, торф, хмель, солера, негрони, мескаль…" oninput="filterAll()">
+  </div>
+</header>
+
+<div class="levels">
+  <div class="levels-title">Как получен напиток — от источника до купажа</div>
+  <div class="level-row">
+    <span class="level-chip" style="border-color:var(--g3);color:var(--g3)">① Вода и сырьё</span>
+    <span class="level-chip" style="border-color:var(--g4);color:var(--g4)">② Настой и экстракция: чай, кофе, тизаны</span>
+    <span class="level-chip" style="border-color:var(--g1);color:var(--g1)">③ Брожение: пиво, вино, сидр, сакэ</span>
+    <span class="level-chip" style="border-color:var(--g2);color:var(--g2)">④ Перегонка: виски, ром, джин, бренди</span>
+    <span class="level-chip" style="border-color:var(--g5);color:var(--g5)">⑤ Купаж и смесь: ликёры, вермуты, коктейли</span>
+  </div>
+  <div class="levels-title" style="margin:.7rem 0 .5rem">Сквозные измерения — свойство любого уровня</div>
+  <div class="level-row">
+    <span class="level-chip" style="border-color:var(--g2);color:var(--g2)">⚗ Технология и дефекты</span>
+    <span class="level-chip" style="border-color:var(--g4);color:var(--g4)">🌍 Сорт, регион, терруар</span>
+    <span class="level-chip" style="border-color:var(--g1);color:var(--g1)">🥃 Подача: бокал, температура, лёд</span>
+    <span class="level-chip" style="border-color:var(--g6);color:var(--g6)">👃 Язык вкуса и паринг</span>
+    <span class="level-chip" style="border-color:var(--g8);color:var(--g8)">⚖ Право, крепость, здоровье</span>
+  </div>
+</div>
+
+<div class="filters" id="filters"></div>
+<div class="content" id="content"></div>
+<footer id="footer"></footer>
+
+<script>
+/* Формат: каждая категория — {g:группа, id, name, emoji, color, desc, items:[["Название","описание"], ...]} */
+const CATS = /*@CATS@*/[];
+
+const plu=(n,a,b,c)=>{const d=n%10,e=n%100;return n+" "+(e>=11&&e<=14?c:d===1?a:d>=2&&d<=4?b:c);};
+let activeFilter="all", searchTerm="";
+const norm=s=>s.toLowerCase().replace(/ё/g,"е");
+
+function renderAll(){
+  const total=CATS.reduce((s,c)=>s+c.items.length,0);
+  const groups=[...new Set(CATS.map(c=>c.g))];
+
+  // фильтры: Все + по группам + по категориям
+  let f=`<button class="filter-btn ${activeFilter==='all'?'active':''}" onclick="setFilter('all')">Всё (${total})</button>`;
+  f+=CATS.map(c=>`<button class="filter-btn ${activeFilter===c.id?'active':''}" onclick="setFilter('${c.id}')">${c.emoji} ${c.name} (${c.items.length})</button>`).join("");
+  document.getElementById("filters").innerHTML=f;
+
+  const view=activeFilter==="all"?CATS:CATS.filter(c=>c.id===activeFilter);
+  const q=norm(searchTerm);
+  let html="", vis=0, visCats=0, gseen=new Set(), globalNum=0;
+
+  // глобальная нумерация считается по всем CATS (как «всего N должностей»)
+  // но отображаем только видимые
+  view.forEach(cat=>{
+    const items=cat.items.filter(it=>!q || norm(it[0]).includes(q) || norm(it[1]).includes(q));
+    if(!items.length) return;
+    if(activeFilter==="all" && !gseen.has(cat.g)){
+      gseen.add(cat.g);
+      html+=`<div class="group-divider"><div class="group-divider-line"></div><div class="group-divider-label">${cat.g}</div><div class="group-divider-line"></div></div>`;
+    }
+    vis+=items.length; visCats++;
+    let n=0;
+    const ALLCAP=50;
+    const limited=(activeFilter==="all" && !q) && items.length>ALLCAP;
+    const shown=limited?items.slice(0,ALLCAP):items;
+    html+=`<div class="cat">
+      <div class="cat-head"><span class="cat-name" style="color:${cat.color};cursor:pointer" onclick="setFilter('${cat.id}')" title="Открыть категорию полностью">${cat.emoji} ${cat.name}</span><span class="cat-count">${items.length} поз.</span></div>
+      <div class="cat-desc">${cat.desc}</div>
+      <div class="rows">
+        ${shown.map(it=>{n++;return `<div class="row"><div class="num">${n}</div><div class="body"><span class="nm">${it[0]}</span><span class="ds">— ${it[1]}</span></div></div>`}).join("")}
+        ${limited?`<div class="row" style="cursor:pointer" onclick="setFilter('${cat.id}')"><div class="num">⋯</div><div class="body"><span class="nm" style="color:var(--gold)">… ещё ${items.length-ALLCAP} — открыть категорию ›</span></div></div>`:""}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById("content").innerHTML = html || `<div class="no-results">Ничего не найдено по запросу «${searchTerm}»</div>`;
+  document.getElementById("stats").textContent=`Показано: ${vis} позиций из ${total} · категорий: ${visCats} из ${CATS.length} · разделов: ${groups.length}`;
+  document.getElementById("footer").innerHTML=`Таксономия напитков: ${plu(CATS.length,"категория","категории","категорий")} в ${plu(groups.length,"разделе","разделах","разделах")} · всего ${plu(total,"позиция","позиции","позиций")}.`;
+}
+function setFilter(id){activeFilter=id;window.scrollTo({top:0});renderAll();}
+function filterAll(){searchTerm=document.getElementById("search").value;renderAll();}
+renderAll();
+</script>
+</body>
+</html>
