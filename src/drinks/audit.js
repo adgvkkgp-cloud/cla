@@ -15,13 +15,14 @@ function audit(CATS) {
     if (!it.d || it.d.length < 20) warn.push('короткое описание: ' + it.n + ' — ' + it.d);
     if (/ {2}|\s[,.;:]|\.\.(?!\.)/.test(t)) errors.push('лишние пробелы или знаки: ' + t.slice(0, 80));
   }
-  const capAfterSemi = items.filter(it => /; [А-ЯЁ]/.test(it.d));
+  // «; Заглавная» в сгенерированных описаниях — след склейки двух фраз через точку с запятой
+  const capAfterSemi = items.filter(it => it.gen && /; [А-ЯЁ]/.test(it.d));
   const descCount = new Map(); for (const it of items) descCount.set(it.d, (descCount.get(it.d) || 0) + 1);
   const repeatedDesc = [...descCount.values()].filter(v => v > 1).reduce((s, v) => s + v, 0);
   const stats = {
     categories: CATS.length, sections: new Set(CATS.map(c => c.g)).size, items: items.length,
     generated: items.filter(i => i.gen).length, curated: items.filter(i => !i.gen).length,
-    dupNames: dups.length, capAfterSemicolon: capAfterSemi.length, repeatedDescriptions: repeatedDesc,
+    dupNames: dups.length, genCapAfterSemicolon: capAfterSemi.length, repeatedDescriptions: repeatedDesc,
     shortDescriptions: items.filter(i => i.d.length < 30).length,
   };
   return {stats, errors, warn, capAfterSemi};

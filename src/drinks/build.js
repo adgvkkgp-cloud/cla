@@ -35,6 +35,7 @@ if (lost.length) throw new Error('категории вне структуры: 
 const empty = CATS.filter(c => !c.items.length).map(c => c.id);
 if (empty.length) throw new Error('пустые категории: ' + empty.join(', '));
 
+if (process.env.DUMP) fs.writeFileSync(process.env.DUMP, JSON.stringify(CATS));
 const r = audit(CATS);
 console.log('правок v1:', nFix, '| операций всего:', log.length);
 console.log(JSON.stringify(r.stats));
